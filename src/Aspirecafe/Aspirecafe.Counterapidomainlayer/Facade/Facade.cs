@@ -26,8 +26,6 @@ namespace AspireCafe.CounterApiDomainLayer.Facade
 
         public async Task<Result<OrderServiceModel>> GetOrderAsync(Guid orderId)
         {
-            //is this request cache bound?
-            //is this request valid?
             if(orderId == Guid.Empty)
             {
                 return Result<OrderServiceModel>.Failure(Error.InvalidInput, new List<string>() { "Order ID cannot be empty." });
@@ -42,8 +40,6 @@ namespace AspireCafe.CounterApiDomainLayer.Facade
 
         public async Task<Result<OrderServiceModel>> SubmitOrderAsync(OrderViewModel order)
         {
-            // is this request cache bound?
-            // is this request valid?
             var validationResult = await _validator.ValidateAsync(order);
             if (!validationResult.IsValid)
             {
