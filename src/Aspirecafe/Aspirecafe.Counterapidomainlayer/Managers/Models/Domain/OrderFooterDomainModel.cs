@@ -16,5 +16,7 @@ namespace AspireCafe.CounterApiDomainLayer.Managers.Models.Domain
         public PaymentStatus PaymentStatus { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public string? Notes { get; set; }
+        public decimal SettledAmount { get; set; }
+        public decimal TipAmount { get; set; }  
     }
 }

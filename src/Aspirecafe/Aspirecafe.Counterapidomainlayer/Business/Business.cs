@@ -25,9 +25,26 @@ namespace AspireCafe.CounterApiDomainLayer.Business
             return model.MapToServiceModel();
         }
 
+        public async Task<OrderServiceModel> PayOrderAsync(OrderPaymentViewModel model)
+        {
+            var data = await _data.PayOrderAsync(model.OrderId, model.PaymentMethod, model.CheckAmount, model.TipAmount);
+            if (data)
+            {
+                var order = await _data.GetOrderAsync(model.OrderId);
+                return order.MapToServiceModel();
+            }
+            return null;
+        }
+
         public async Task<OrderServiceModel> SubmitOrderAsync(OrderViewModel order)
         {
             var model = await _data.SubmitOrderAsync(order.MapToDomainModel());
+            return model.MapToServiceModel();
+        }
+
+        public async Task<OrderServiceModel> UpdateOrderAsync(OrderViewModel order)
+        {
+            var model = await _data.UpdateOrderAsync(order.MapToDomainModel());
             return model.MapToServiceModel();
         }
     }

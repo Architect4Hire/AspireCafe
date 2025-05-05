@@ -13,5 +13,7 @@ namespace AspireCafe.CounterApiDomainLayer.Business
     {
         Task<OrderServiceModel> SubmitOrderAsync(OrderViewModel order);
         Task<OrderServiceModel> GetOrderAsync(Guid orderId);
+        Task<OrderServiceModel> UpdateOrderAsync(OrderViewModel order);
+        Task<OrderServiceModel> PayOrderAsync(OrderPaymentViewModel model);
     }
 }

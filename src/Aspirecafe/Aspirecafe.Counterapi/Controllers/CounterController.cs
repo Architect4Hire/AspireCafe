@@ -75,16 +75,62 @@ namespace AspireCafe.CounterApi.Controllers
             );
         }
 
+        /// <summary>
+        /// Submits an existing order to the system for processing.
+        /// </summary>
+        /// <param name="order">The order details containing order type, customer information, and line items.</param>
+        /// <returns>
+        /// A Result object containing:
+        /// - Success state if the order was submitted successfully
+        /// - Failure state with appropriate error code if submission failed
+        /// </returns>
+        /// <remarks>
+        /// This endpoint handles the initial order creation process. The order goes through validation 
+        /// before being processed. Possible error cases include:
+        /// - InvalidInput: When order details are missing or invalid
+        /// - InternalServerError: When there is a system error processing the order
+        /// </remarks>
+        [ProducesResponseType(typeof(Result<OrderServiceModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result<OrderServiceModel>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Result<OrderServiceModel>), StatusCodes.Status500InternalServerError)]
         [HttpPut("UpdateOrder")]
-        public async Task<IActionResult> UpdateOrder(OrderViewModel order)
+        public async Task<Result<OrderServiceModel>> UpdateOrder(OrderViewModel order)
         {
-            return Ok();
+            var result = await _facade.UpdateOrderAsync(order);
+            return result.Match(
+                onSuccess: () => result,
+                onFailure: error => Result<OrderServiceModel>.Failure(error, result.Messages)
+            );
         }
 
+        /// <summary>
+        /// Processes the payment for an existing order.
+        /// </summary>
+        /// <param name="model">The payment details, including the order ID, payment method, and amounts.</param>
+        /// <returns>
+        /// A <see cref="Result{OrderServiceModel}"/> object containing:
+        /// - The updated order details if the payment is processed successfully.
+        /// - An error code and messages if the payment processing fails.
+        /// </returns>
+        /// <remarks>
+        /// This endpoint handles the payment process for an order. Possible error cases include:
+        /// - <see cref="Error.InvalidInput"/>: When the payment details are missing or invalid.
+        /// - <see cref="Error.NotFound"/>: When the specified order does not exist.
+        /// - <see cref="Error.InternalServerError"/>: When there is a system error processing the payment.
+        /// </remarks>
+        /// <response code="200">Returns the updated order details if the payment is successful.</response>
+        /// <response code="500">Returns an error if there is a server issue.</response>
+        [ProducesResponseType(typeof(Result<OrderServiceModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result<OrderServiceModel>), StatusCodes.Status500InternalServerError)]
+
         [HttpPost("PayOrder")]
-        public async Task<IActionResult> PayOrder(PaymentMethod method)
+        public async Task<Result<OrderServiceModel>> PayOrder(OrderPaymentViewModel model)
         {
-            return Ok();
+            var result = await _facade.PayOrderAsync(model);
+            return result.Match(
+                onSuccess: () => result,
+                onFailure: error => Result<OrderServiceModel>.Failure(error, result.Messages)
+            );
         }
 
     }

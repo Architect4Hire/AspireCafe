@@ -14,5 +14,7 @@ namespace AspireCafe.CounterApiDomainLayer.Facade
     {
         Task<Result<OrderServiceModel>> SubmitOrderAsync(OrderViewModel order);
         Task<Result<OrderServiceModel>> GetOrderAsync(Guid orderId);
+        Task<Result<OrderServiceModel>> UpdateOrderAsync(OrderViewModel order);
+        Task<Result<OrderServiceModel>> PayOrderAsync(OrderPaymentViewModel model);
     }
 }

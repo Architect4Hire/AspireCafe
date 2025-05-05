@@ -1,4 +1,5 @@
 ﻿using AspireCafe.CounterApiDomainLayer.Managers.Models.Domain;
+using AspireCafe.CounterApiDomainLayer.Managers.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,7 @@ namespace AspireCafe.CounterApiDomainLayer.Data
     {
         Task<OrderDomainModel> SubmitOrderAsync(OrderDomainModel order);
         Task<OrderDomainModel> GetOrderAsync(Guid orderId);
+        Task<OrderDomainModel> UpdateOrderAsync(OrderDomainModel order);
+        Task<bool> PayOrderAsync(Guid orderId, PaymentMethod paymentMethod, decimal amount, decimal tip);
     }
 }
