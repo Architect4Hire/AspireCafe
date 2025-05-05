@@ -1,0 +1,6 @@
+@AspireCafe.KitchenApi_HostAddress = http://localhost:5247
+
+GET {{AspireCafe.KitchenApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

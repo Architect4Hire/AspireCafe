@@ -1,0 +1,6 @@
+@AspireCafe.OderSummaryApi_HostAddress = http://localhost:5122
+
+GET {{AspireCafe.OderSummaryApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

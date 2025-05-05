@@ -1,0 +1,6 @@
+@AspireCafe.CounterApi_HostAddress = http://localhost:5127
+
+GET {{AspireCafe.CounterApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
