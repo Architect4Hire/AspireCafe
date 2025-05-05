@@ -24,7 +24,7 @@
     <ProjectReference Include="..\AspireCafe.BaristaApi\AspireCafe.BaristaApi.csproj" />
     <ProjectReference Include="..\AspireCafe.CounterApi\AspireCafe.CounterApi.csproj" />
     <ProjectReference Include="..\AspireCafe.KitchenApi\AspireCafe.KitchenApi.csproj" />
-    <ProjectReference Include="..\AspireCafe.OderSummaryApi\AspireCafe.OderSummaryApi.csproj" />
+    <ProjectReference Include="..\AspireCafe.OderSummaryApi\AspireCafe.OrderSummaryApi.csproj" />
     <ProjectReference Include="..\AspireCafe.ProductApi\AspireCafe.ProductApi.csproj" />
   </ItemGroup>
 

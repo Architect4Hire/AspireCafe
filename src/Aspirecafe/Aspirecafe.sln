@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireCafe.ProductApi", "As
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireCafe.Shared", "AspireCafe.Shared\AspireCafe.Shared.csproj", "{D868A5A5-7E1F-4F4F-BA42-A27EE6483FBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireCafe.OderSummaryApi", "AspireCafe.OderSummaryApi\AspireCafe.OderSummaryApi.csproj", "{FC966E6D-0A40-16AC-A4AE-95394F9F98ED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireCafe.OrderSummaryApi", "AspireCafe.OderSummaryApi\AspireCafe.OrderSummaryApi.csproj", "{FC966E6D-0A40-16AC-A4AE-95394F9F98ED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireCafe.BaristaApiDomainLayer", "AspireCafe.BaristaApiDomainLayer\AspireCafe.BaristaApiDomainLayer.csproj", "{D8C346EC-E6B3-4805-B6E8-8D230C4063E0}"
 EndProject
