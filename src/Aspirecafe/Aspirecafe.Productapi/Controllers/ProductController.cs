@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AspireCafe.ProductApiDomainLayer.Facade;
+using AspireCafe.ProductApiDomainLayer.Managers.Models.Service;
+using AspireCafe.ProductApiDomainLayer.Managers.Models.View;
+using AspireCafe.Shared.Results;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspireCafe.ProductApi.Controllers
@@ -15,32 +19,32 @@ namespace AspireCafe.ProductApi.Controllers
         }
 
         [HttpGet("catalog")]
-        public async Task<Result<OrderServiceModel>> FetchCatalog(OrderViewModel order)
+        public async Task<Result<CatalogServiceModel>> FetchCatalog()
         {
-            var result = await _facade.SubmitOrderAsync(order);
+            var result = await _facade.FetchCatalog();
             return result.Match(
                 onSuccess: () => result,
-                onFailure: error => Result<OrderServiceModel>.Failure(error, result.Messages)
+                onFailure: error => Result<CatalogServiceModel>.Failure(error, result.Messages)
             );
         }
 
         [HttpGet("{productId:guid}")]
-        public async Task<Result<OrderServiceModel>> FetchProductById(Guid productId)
+        public async Task<Result<ProductServiceModel>> FetchProductById(Guid productId)
         {
-            var result = await _facade.SubmitOrderAsync(order);
+            var result = await _facade.FetchProductByIdAsync(productId);
             return result.Match(
                 onSuccess: () => result,
-                onFailure: error => Result<OrderServiceModel>.Failure(error, result.Messages)
+                onFailure: error => Result<ProductServiceModel>.Failure(error, result.Messages)
             );
         }
 
         [HttpPost("metadata")]
-        public async Task<Result<OrderServiceModel>> FetchProductMetadata(ProductMetadataViewModel products)
+        public async Task<Result<List<ProductMetaDataServiceModel>> FetchProductMetadata(ProductMetaDataViewModel products)
         {
-            var result = await _facade.SubmitOrderAsync(order);
+            var result = await _facade.FetchProductMetadataAsync(products);
             return result.Match(
                 onSuccess: () => result,
-                onFailure: error => Result<OrderServiceModel>.Failure(error, result.Messages)
+                onFailure: error => Result<List<ProductMetaDataServiceModel>>.Failure(error, result.Messages)
             );
         }
     }

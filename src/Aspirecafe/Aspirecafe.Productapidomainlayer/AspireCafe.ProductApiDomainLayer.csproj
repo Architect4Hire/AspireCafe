@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AspireCafe.Shared\AspireCafe.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
