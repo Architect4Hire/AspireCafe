@@ -11,6 +11,6 @@ namespace AspireCafe.Shared.Models.Domain
         public Guid Id { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
-        public required string DocumentType { get; set; }
+        public string DocumentType { get; set; } = string.Empty;
     }
 }
