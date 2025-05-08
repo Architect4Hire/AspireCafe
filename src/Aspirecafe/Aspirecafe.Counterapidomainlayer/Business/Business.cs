@@ -2,11 +2,6 @@
 using AspireCafe.CounterApiDomainLayer.Managers.Extensions;
 using AspireCafe.CounterApiDomainLayer.Managers.Models.Service;
 using AspireCafe.CounterApiDomainLayer.Managers.Models.View;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AspireCafe.CounterApiDomainLayer.Business
 {
@@ -39,6 +34,9 @@ namespace AspireCafe.CounterApiDomainLayer.Business
         public async Task<OrderServiceModel> SubmitOrderAsync(OrderViewModel order)
         {
             var model = await _data.SubmitOrderAsync(order.MapToDomainModel());
+            // pull product info from the product api - enrich the metadata
+            // if barista send to the barista api with barista product types
+            // if kitchen send to the kitchen api with kitchen product types
             return model.MapToServiceModel();
         }
 

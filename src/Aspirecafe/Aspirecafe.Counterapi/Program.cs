@@ -1,5 +1,3 @@
-
-using Aspire.Microsoft.EntityFrameworkCore.Cosmos;
 using AspireCafe.CounterApiDomainLayer.Business;
 using AspireCafe.CounterApiDomainLayer.Data;
 using AspireCafe.CounterApiDomainLayer.Facade;
@@ -8,8 +6,6 @@ using AspireCafe.CounterApiDomainLayer.Managers.Validators;
 using AspireCafe.Shared.Extensions;
 using AspireCafe.Shared.Middleware;
 using FluentValidation;
-using Microsoft.Azure.Cosmos;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var builder = WebApplication.CreateBuilder(args);
 
