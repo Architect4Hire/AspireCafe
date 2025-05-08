@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Sdk Name="Aspire.AppHost.Sdk" Version="9.0.0" />
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsAspireHost>true</IsAspireHost>
+    <UserSecretsId>bc001198-becf-4bca-9b09-11f8ae59e2e5</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AspireCafe.BaristaApi\AspireCafe.BaristaApi.csproj" />
+    <ProjectReference Include="..\AspireCafe.CounterApi\AspireCafe.CounterApi.csproj" />
+    <ProjectReference Include="..\AspireCafe.KitchenApi\AspireCafe.KitchenApi.csproj" />
+    <ProjectReference Include="..\AspireCafe.OderSummaryApi\AspireCafe.OrderSummaryApi.csproj" />
+    <ProjectReference Include="..\AspireCafe.ProductApi\AspireCafe.ProductApi.csproj" />
+    <ProjectReference Include="..\AspireCafe.ServiceDefaults\AspireCafe.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+</Project>

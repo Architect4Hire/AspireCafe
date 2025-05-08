@@ -44,6 +44,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireCafe.CounterApi.TestL
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test Projects", "Test Projects", "{8C2423BA-D1AC-4350-9B50-562DB7D4ED5E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireCafe.AppHostAzure", "AppHostAzure\AspireCafe.AppHostAzure.csproj", "{2C87B8A5-1010-48C8-A7D8-A31954943FF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,6 +108,10 @@ Global
 		{F6556B4E-8A03-481E-831F-5789CB24F58D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6556B4E-8A03-481E-831F-5789CB24F58D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6556B4E-8A03-481E-831F-5789CB24F58D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C87B8A5-1010-48C8-A7D8-A31954943FF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C87B8A5-1010-48C8-A7D8-A31954943FF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C87B8A5-1010-48C8-A7D8-A31954943FF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C87B8A5-1010-48C8-A7D8-A31954943FF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
