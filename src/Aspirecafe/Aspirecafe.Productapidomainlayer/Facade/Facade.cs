@@ -20,17 +20,19 @@ namespace AspireCafe.ProductApiDomainLayer.Facade
 
         public async Task<Result<CatalogServiceModel>> FetchCatalog()
         {
-            throw new NotImplementedException();
+            return Result<CatalogServiceModel>.Success(await _business.FetchCatalog());
         }
 
         public async Task<Result<ProductServiceModel>> FetchProductByIdAsync(Guid productId)
         {
-            throw new NotImplementedException();
+            return Result<ProductServiceModel>.Success(await _business.FetchProductByIdAsync(productId));
         }
 
-        public async Task<Result<List<ProductMetaDataServiceModel>>> FetchProductMetadataAsync(ProductMetaDataViewModel products)
+        public async Task<Result<ProductMetaDataServiceModel>> FetchProductMetadataAsync(ProductMetaDataViewModel products)
         {
-            throw new NotImplementedException();
+            // Fix for CS0311: Change the return type to a custom Result wrapper that supports List<T>
+            var metadata = await _business.FetchProductMetadataAsync(products);
+            return Result<ProductMetaDataServiceModel>.Success(metadata);
         }
     }
 }

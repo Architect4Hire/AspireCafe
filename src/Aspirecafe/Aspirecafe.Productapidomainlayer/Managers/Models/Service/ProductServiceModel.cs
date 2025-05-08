@@ -1,4 +1,5 @@
 ﻿using AspireCafe.ProductApiDomainLayer.Managers.Models.Enums;
+using AspireCafe.Shared.Models.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AspireCafe.ProductApiDomainLayer.Managers.Models.Service
 {
-    public class ProductServiceModel
+    public class ProductServiceModel: ServiceBaseModel
     {
         public string ProductId { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;

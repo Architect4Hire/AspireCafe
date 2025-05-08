@@ -1,8 +1,8 @@
 ﻿using AspireCafe.ProductApiDomainLayer.Facade;
 using AspireCafe.ProductApiDomainLayer.Managers.Models.Service;
 using AspireCafe.ProductApiDomainLayer.Managers.Models.View;
+using AspireCafe.Shared.Extensions;
 using AspireCafe.Shared.Results;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspireCafe.ProductApi.Controllers
@@ -39,12 +39,12 @@ namespace AspireCafe.ProductApi.Controllers
         }
 
         [HttpPost("metadata")]
-        public async Task<Result<List<ProductMetaDataServiceModel>> FetchProductMetadata(ProductMetaDataViewModel products)
+        public async Task<Result<ProductMetaDataServiceModel>> FetchProductMetadata(ProductMetaDataViewModel products)
         {
             var result = await _facade.FetchProductMetadataAsync(products);
             return result.Match(
                 onSuccess: () => result,
-                onFailure: error => Result<List<ProductMetaDataServiceModel>>.Failure(error, result.Messages)
+                onFailure: error => Result<ProductMetaDataServiceModel>.Failure(error, result.Messages)
             );
         }
     }

@@ -1,4 +1,5 @@
 ﻿using AspireCafe.ProductApiDomainLayer.Managers.Models.Enums;
+using AspireCafe.Shared.Models.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace AspireCafe.ProductApiDomainLayer.Managers.Models.Service
 {
-    public class ProductMetaDataServiceModel
+    public class ProductMetaDataServiceModel: ServiceBaseModel
     {
-        public Guid ProductId { get; set; }
-        public RouteType RouteType { get; set; }
+        public Dictionary<Guid,RouteType> Metadata { get; set; } = new Dictionary<Guid, RouteType>();
     }
 }

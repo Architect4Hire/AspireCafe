@@ -13,6 +13,6 @@ namespace AspireCafe.ProductApiDomainLayer.Facade
     {
         Task<Result<CatalogServiceModel>> FetchCatalog();
         Task<Result<ProductServiceModel>> FetchProductByIdAsync(Guid productId);
-        Task<Result<List<ProductMetaDataServiceModel>>> FetchProductMetadataAsync(ProductMetaDataViewModel products);
+        Task<Result<ProductMetaDataServiceModel>> FetchProductMetadataAsync(ProductMetaDataViewModel products);
     }
 }

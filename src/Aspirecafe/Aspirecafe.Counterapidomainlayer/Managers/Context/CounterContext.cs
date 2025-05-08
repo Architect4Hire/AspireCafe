@@ -16,7 +16,6 @@ namespace AspireCafe.CounterApiDomainLayer.Managers.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultContainer("AspireCafe");
             modelBuilder.Entity<OrderDomainModel>()
                 .HasPartitionKey(x => x.DocumentType)
                 .ToContainer("orders")

@@ -1,5 +1,4 @@
 ﻿using AspireCafe.CounterApiDomainLayer.Facade;
-using AspireCafe.CounterApiDomainLayer.Managers.Models.Enums;
 using AspireCafe.CounterApiDomainLayer.Managers.Models.Service;
 using AspireCafe.CounterApiDomainLayer.Managers.Models.View;
 using AspireCafe.Shared.Extensions;
