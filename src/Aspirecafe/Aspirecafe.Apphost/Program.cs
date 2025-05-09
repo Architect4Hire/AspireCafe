@@ -8,11 +8,10 @@ var keyvault = builder.AddAzureKeyVaultEmulator("keyvault", ContainerLifetime.Pe
 //database - https://learn.microsoft.com/en-us/dotnet/aspire/database/azure-cosmos-db-integration?tabs=dotnet-cli
 #pragma warning disable CS0618 // Suppress warning for evaluation-only API
 #pragma warning disable ASPIRECOSMOSDB001 // Suppress warning for evaluation-only API
-var cosmos = builder.AddAzureCosmosDB("cosmos").RunAsPreviewEmulator(c =>
+var cosmos = builder.AddAzureCosmosDB("cosmos").RunAsEmulator(c =>
 {
     c.WithLifetime(ContainerLifetime.Persistent);
     c.WithGatewayPort(8081);
-    c.WithDataExplorer();
 });
 var db = cosmos.AddCosmosDatabase("AspireCafe");
 var container = db.AddContainer("orders", "/DocumentType");
