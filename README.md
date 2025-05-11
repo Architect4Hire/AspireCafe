@@ -1,4 +1,4 @@
-The Aspire Café solution showcases a cutting-edge approach to building cloud-native applications using .NET 9 and the new .NET Aspire application stack. This blog post breaks down the architecture, components, and design patterns that make this solution both robust and scalable.
+The Aspire Café solution showcases a cutting-edge approach to building cloud-native applications using .NET 9 and the new .NET Aspire application stack. This readme breaks down the architecture, components, and design patterns that make this solution both robust and scalable.
 
 ### Microservices Architecture
 
