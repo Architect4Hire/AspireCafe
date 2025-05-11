@@ -1,6 +1,3 @@
-I'll help you create detailed technical documentation for the AspireCafe solution. Let me first gather more information about the codebase to provide a comprehensive overview.
-Based on my analysis of the AspireCafe codebase, I'll now create detailed technical documentation for this solution.
-
 # AspireCafe Technical Documentation
 
 ## 1. Solution Overview
