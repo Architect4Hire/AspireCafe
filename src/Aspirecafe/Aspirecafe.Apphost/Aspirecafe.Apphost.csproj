@@ -28,6 +28,7 @@
 		<ProjectReference Include="..\AspireCafe.KitchenApi\AspireCafe.KitchenApi.csproj" />
 		<ProjectReference Include="..\AspireCafe.OderSummaryApi\AspireCafe.OrderSummaryApi.csproj" />
 		<ProjectReference Include="..\AspireCafe.ProductApi\AspireCafe.ProductApi.csproj" />
+		<ProjectReference Include="..\AspireCafe.UI\AspireCafe.UI.esproj" />
 	</ItemGroup>
 
 	<Target Name="RestoreNpm" BeforeTargets="Build" Condition=" '$(DesignTimeBuild)' != 'true' ">
