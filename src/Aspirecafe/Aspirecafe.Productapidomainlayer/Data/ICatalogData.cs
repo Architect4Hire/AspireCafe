@@ -9,11 +9,9 @@ using System.Threading.Tasks;
 
 namespace AspireCafe.ProductApiDomainLayer.Data
 {
-    public class Data : IData
+    public interface ICatalogData
     {
-        public Task<ProductDomainModel> FetchProductByIdAsync(Guid productId)
-        {
-            throw new NotImplementedException();
-        }
+        Task<List<ProductDomainModel>> FetchCatalog();
+        Task<List<ProductDomainModel>> FetchProductMetadataAsync(ProductMetaDataViewModel products);
     }
 }

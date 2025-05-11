@@ -1,4 +1,5 @@
-﻿using AspireCafe.ProductApiDomainLayer.Managers.Models.Service;
+﻿using AspireCafe.ProductApiDomainLayer.Managers.Models.Domain;
+using AspireCafe.ProductApiDomainLayer.Managers.Models.Service;
 using AspireCafe.ProductApiDomainLayer.Managers.Models.View;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,6 @@ namespace AspireCafe.ProductApiDomainLayer.Data
 {
     public interface IData
     {
-        Task<CatalogServiceModel> FetchCatalog();
-        Task<ProductServiceModel> FetchProductByIdAsync(Guid productId);
-        Task<ProductMetaDataServiceModel> FetchProductMetadataAsync(ProductMetaDataViewModel products);
+        Task<ProductDomainModel> FetchProductByIdAsync(Guid productId);
     }
 }

@@ -18,15 +18,7 @@ namespace AspireCafe.ProductApi.Controllers
             _facade = facade;
         }
 
-        [HttpGet("catalog")]
-        public async Task<Result<CatalogServiceModel>> FetchCatalog()
-        {
-            var result = await _facade.FetchCatalog();
-            return result.Match(
-                onSuccess: () => result,
-                onFailure: error => Result<CatalogServiceModel>.Failure(error, result.Messages)
-            );
-        }
+
 
         [HttpGet("{productId:guid}")]
         public async Task<Result<ProductServiceModel>> FetchProductById(Guid productId)
@@ -38,14 +30,6 @@ namespace AspireCafe.ProductApi.Controllers
             );
         }
 
-        [HttpPost("metadata")]
-        public async Task<Result<ProductMetaDataServiceModel>> FetchProductMetadata(ProductMetaDataViewModel products)
-        {
-            var result = await _facade.FetchProductMetadataAsync(products);
-            return result.Match(
-                onSuccess: () => result,
-                onFailure: error => Result<ProductMetaDataServiceModel>.Failure(error, result.Messages)
-            );
-        }
+
     }
 }

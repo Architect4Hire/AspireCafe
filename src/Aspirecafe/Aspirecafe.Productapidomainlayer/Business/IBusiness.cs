@@ -6,8 +6,6 @@ namespace AspireCafe.ProductApiDomainLayer.Business
 {
     public interface IBusiness
     {
-        Task<CatalogServiceModel> FetchCatalog();
         Task<ProductServiceModel> FetchProductByIdAsync(Guid productId);
-        Task<ProductMetaDataServiceModel> FetchProductMetadataAsync(ProductMetaDataViewModel products);
     }
 }

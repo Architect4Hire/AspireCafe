@@ -20,5 +20,6 @@ namespace AspireCafe.ProductApiDomainLayer.Managers.Models.Domain
         public RouteType RouteType { get; set; }
         public string ImageUrl { get; set; } = string.Empty;
         public bool IsAvailable { get; set; }
+        public bool IsActive { get; set; }
     }
 }

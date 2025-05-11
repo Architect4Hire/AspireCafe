@@ -7,7 +7,7 @@ namespace AspireCafe.ProductApiDomainLayer.Managers.Context
     {
         public ProductContext(DbContextOptions options) : base(options) { }
 
-        internal DbSet<ProductDomainModel> Orders { get; set; }
+        internal DbSet<ProductDomainModel> Products { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -9,6 +9,6 @@ namespace AspireCafe.ProductApiDomainLayer.Managers.Models.Service
 {
     public class CatalogServiceModel: ServiceBaseModel
     {
-        public Dictionary<string, List<CatalogServiceModel>> Catalog { get; set; } = new Dictionary<string, List<CatalogServiceModel>>();
+        public Dictionary<string, List<CatalogItemServiceModel>> Catalog { get; set; } = new Dictionary<string, List<CatalogItemServiceModel>>();
     }
 }

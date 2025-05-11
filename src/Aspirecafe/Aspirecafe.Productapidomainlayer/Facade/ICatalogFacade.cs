@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace AspireCafe.ProductApiDomainLayer.Facade
 {
-    public interface IFacade
+    public interface ICatalogFacade
     {
-        Task<Result<ProductServiceModel>> FetchProductByIdAsync(Guid productId);
+        Task<Result<CatalogServiceModel>> FetchCatalog();
+        Task<Result<ProductMetaDataServiceModel>> FetchProductMetadataAsync(ProductMetaDataViewModel products);
     }
 }

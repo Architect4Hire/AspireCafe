@@ -1,11 +1,6 @@
 ﻿using AspireCafe.ProductApiDomainLayer.Data;
+using AspireCafe.ProductApiDomainLayer.Managers.Extensions;
 using AspireCafe.ProductApiDomainLayer.Managers.Models.Service;
-using AspireCafe.ProductApiDomainLayer.Managers.Models.View;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AspireCafe.ProductApiDomainLayer.Business
 {
@@ -18,19 +13,11 @@ namespace AspireCafe.ProductApiDomainLayer.Business
             _data = data;
         }
 
-        public async Task<CatalogServiceModel> FetchCatalog()
-        {
-            return await _data.FetchCatalog();
-        }
-
         public async Task<ProductServiceModel> FetchProductByIdAsync(Guid productId)
         {
-            return await _data.FetchProductByIdAsync(productId);
+            var data = await _data.FetchProductByIdAsync(productId);
+            return data.MapToServiceModel();
         }
 
-        public async Task<ProductMetaDataServiceModel> FetchProductMetadataAsync(ProductMetaDataViewModel products)
-        {
-            return await _data.FetchProductMetadataAsync(products);
-        }
     }
 }
