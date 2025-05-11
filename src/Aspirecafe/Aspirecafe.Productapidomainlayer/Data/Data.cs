@@ -2,6 +2,7 @@
 using AspireCafe.ProductApiDomainLayer.Managers.Models.Domain;
 using AspireCafe.ProductApiDomainLayer.Managers.Models.Service;
 using AspireCafe.ProductApiDomainLayer.Managers.Models.View;
+using AspireCafe.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace AspireCafe.ProductApiDomainLayer.Data
             product.Id = Guid.NewGuid();
             product.CreatedDate = DateTime.UtcNow;
             product.ModifiedDate = DateTime.UtcNow;
+            product.DocumentType = DocumentType.Product.ToString();
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
             return product;
