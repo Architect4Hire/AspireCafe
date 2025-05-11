@@ -2,108 +2,121 @@
 
 ## 1. Solution Overview
 
-AspireCafe is a modern .NET 9 microservices-based application built with C# 13, designed to support cafe operations through a well-architected, distributed system. The solution follows clean architecture principles with clearly defined separation of concerns across multiple specialized APIs.
+AspireCafe is a distributed microservices-based application designed to support cafe operations. It is built on .NET 9 with C# 13 and follows modern architectural patterns such as clean architecture, distributed systems design, and containerized deployment. The solution includes multiple APIs and a front-end UI, orchestrated through a centralized application host.
 
 ## 2. Architecture
 
 ### 2.1 High-Level Architecture
 
-The solution is structured as a distributed system with multiple microservices, each responsible for a specific functional domain:
+The system is composed of the following components:
 
-- **ProductApi**: Manages the product catalog, menu items, and product information
-- **CounterApi**: Handles order processing, payment handling, and counter operations
-- **KitchenApi**: Manages food preparation and kitchen operations
-
-The system is containerized and orchestrated with .NET Aspire for reliable deployment and service management.
+1. **AppHostAzure**: The central orchestrator for all services, managing dependencies and startup order.
+2. **Microservices**:
+   - **ProductApi**: Manages product catalog and metadata.
+   - **CounterApi**: Handles order processing and payment.
+   - **KitchenApi**: Manages kitchen operations like order preparation.
+   - **OrderSummaryApi**: Provides aggregated order summaries.
+   - **BaristaApi**: Manages barista-specific operations.
+3. **UI**: A front-end Angular application for user interaction.
 
 ### 2.2 Design Patterns and Practices
 
 #### 2.2.1 Clean Architecture
 
-The system implements a layered architecture across all services:
+The solution follows clean architecture principles, ensuring separation of concerns:
 
-1. **Presentation Layer**: API controllers exposing RESTful endpoints
-2. **Domain Layer**: Business logic, validation, and domain models
-3. **Data Layer**: Data access and persistence logic
+- **Presentation Layer**: API controllers and Angular UI.
+- **Domain Layer**: Business logic, validation, and domain models.
+- **Data Layer**: Data access and persistence logic.
 
-#### 2.2.2 Facade Pattern
+#### 2.2.2 Distributed Application Pattern
 
-The Facade pattern is used consistently across all services to provide a simplified interface to complex subsystems:
+The `AppHostAzure` project uses the `DistributedApplication` builder to orchestrate the startup of all services and manage their dependencies.
+
+#### 2.2.3 Dependency Injection
+
+All services use dependency injection to manage dependencies, ensuring loose coupling and testability.
+
+#### 2.2.4 Result Pattern
+
+A generic `Result<T>` class is used across all services to handle success and failure scenarios consistently.
+
+#### 2.2.5 Facade Pattern
+
+The Facade pattern is used to simplify interactions with complex subsystems, providing a unified interface for controllers.
+
+## 3. AppHostAzure
+
+The `AppHostAzure` project is the entry point for the entire system. It uses the `DistributedApplication` builder to configure and start all services.
+
+### 3.1 Key Features
+
+- **Centralized Configuration**: Manages connection strings for shared resources like KeyVault, CosmosDB, Redis Cache, and Service Bus.
+- **Service Orchestration**: Ensures services start in the correct order and with the required dependencies.
+- **Scalability**: Designed to support horizontal scaling of services.
+
+### 3.2 Code Example
 
 
 ```csharp
-// Example from ProductApi
-public interface IFacade
-{
-    Task<Result<ProductServiceModel>> FetchProductByIdAsync(Guid productId);
-    Task<Result<ProductServiceModel>> CreateProductAsync(ProductViewModel product);
-    Task<Result<ProductServiceModel>> UpdateProductAsync(ProductViewModel product);
-    Task<Result<ProductServiceModel>> DeleteProductAsync(Guid productId);
-}
+var builder = DistributedApplication.CreateBuilder(args);
+
+// Resources
+var keyvault = builder.AddConnectionString("keyvault");
+var cosmos = builder.AddConnectionString("cosmos");
+var cache = builder.AddConnectionString("cache");
+var servicebus = builder.AddConnectionString("servicebus");
+
+// Services
+var productapi = builder.AddProject<Projects.AspireCafe_ProductApi>("aspirecafe-productapi")
+    .WithReference(keyvault).WaitFor(keyvault)
+    .WithReference(cosmos).WaitFor(cosmos)
+    .WithReference(cache).WaitFor(cache)
+    .WithReference(servicebus).WaitFor(servicebus);
+
+var counterapi = builder.AddProject<Projects.AspireCafe_CounterApi>("aspirecafe-counterapi")
+    .WithReference(keyvault).WaitFor(keyvault)
+    .WithReference(cosmos).WaitFor(cosmos)
+    .WithReference(cache).WaitFor(cache)
+    .WithReference(servicebus).WaitFor(servicebus);
+
+builder.Build().Run();
 
 ```
 
-#### 2.2.3 Result Pattern
+### 3.3 Key Responsibilities
 
-A generic `Result<T>` class provides consistent error handling and success/failure responses:
+- **Dependency Management**: Ensures services like `ProductApi` and `CounterApi` have access to shared resources (e.g., KeyVault, CosmosDB).
+- **Service Startup Order**: Uses `.WaitFor()` to enforce startup dependencies.
 
+## 4. Microservices
 
-```csharp
-public class Result<T> where T : ServiceBaseModel
-{
-    public bool IsSuccess { get; }
-    public bool IsFailure { get; }
-    public List<string> Messages { get; set; }
-    public Error Error { get; }
-    public T? Data { get; set; }
-    
-    // Factory methods
-    public static Result<T> Success(T data);
-    public static Result<T> Failure(Error error, List<string>? messages);
-}
+### 4.1 ProductApi
 
-```
+#### Responsibilities
 
-#### 2.2.4 Repository Pattern
+- Manages product catalog and metadata.
+- Provides CRUD operations for products.
 
-Data access is abstracted through interfaces that follow the Repository pattern.
+#### Key Endpoints
 
-#### 2.2.5 Validation
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/product/{productId:guid}` | GET | Fetches a product by ID. |
+| `/api/product/create` | POST | Creates a new product. |
+| `/api/product/update` | PUT | Updates an existing product. |
+| `/api/product/delete/{productId:guid}` | DELETE | Deletes a product. |
 
-FluentValidation is used for request validation across all services.
+#### Key Patterns
 
-## 3. API Controllers
+- **Facade Pattern**: Simplifies interactions with the business and data layers.
+- **Validation**: Uses FluentValidation for input validation.
 
-### 3.1 ProductApi Controllers
-
-#### 3.1.1 ProductController
-
-Responsible for CRUD operations on individual product entities.
-
-| Endpoint | Method | Description | Status Codes |
-|----------|--------|-------------|-------------|
-| `api/product/{productId:guid}` | GET | Fetches a product by ID | 200, 404, 500 |
-| `api/product/create` | POST | Creates a new product | 201, 400, 500 |
-| `api/product/update` | PUT | Updates an existing product | 200, 400, 404, 500 |
-| `api/product/delete/{productId:guid}` | DELETE | Deletes a product | 200, 404, 500 |
-
-**Key Implementation Details:**
+#### Example Code
 
 
 ```csharp
-// Dependency Injection
-private readonly IFacade _facade;
-
-public ProductController(IFacade facade)
-{
-    _facade = facade;
-}
-
-// Example Endpoint
 [HttpPost("create")]
-[ProducesResponseType(typeof(Result<ProductServiceModel>), 201)]
-[ProducesResponseType(typeof(Result<ProductServiceModel>), 400)]
-[ProducesResponseType(typeof(Result<ProductServiceModel>), 500)]
 public async Task<Result<ProductServiceModel>> CreateProduct(ProductViewModel product)
 {
     var result = await _facade.CreateProductAsync(product);
@@ -115,80 +128,27 @@ public async Task<Result<ProductServiceModel>> CreateProduct(ProductViewModel pr
 
 ```
 
-#### 3.1.2 CatalogController
+### 4.2 CounterApi
 
-Manages the product catalog and product metadata.
+#### Responsibilities
 
-| Endpoint | Method | Description | Status Codes |
-|----------|--------|-------------|-------------|
-| `api/catlog/fetch` | GET | Retrieves the full product catalog | 200, 400, 500 |
-| `api/catlog/fetch/metadata` | POST | Fetches metadata for specific products | 200, 400, 500 |
+- Handles order processing and payment.
+- Manages customer orders at the counter.
 
-**Key Implementation Details:**
+#### Key Endpoints
 
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/counter/submitorder` | POST | Submits a new order. |
+| `/api/counter/getorder/{orderId:guid}` | GET | Retrieves an order by ID. |
+| `/api/counter/updateorder` | PUT | Updates an existing order. |
+| `/api/counter/payorder` | POST | Processes payment for an order. |
 
-```csharp
-// Dependency Injection
-private readonly ICatalogFacade _facade;
-
-public CatlogController(ICatalogFacade facade)
-{
-    _facade = facade;
-}
-
-// Example Endpoint
-[HttpGet("fetch")]
-[ProducesResponseType(typeof(Result<CatalogServiceModel>), 200)]
-[ProducesResponseType(typeof(Result<CatalogServiceModel>), 400)]
-[ProducesResponseType(typeof(Result<CatalogServiceModel>), 500)]
-public async Task<Result<CatalogServiceModel>> FetchCatalog()
-{
-    var result = await _facade.FetchCatalog();
-    return result.Match(
-        onSuccess: () => result,
-        onFailure: error => Result<CatalogServiceModel>.Failure(error, result.Messages)
-    );
-}
-
-```
-
-**Data Models:**
-
-- `CatalogServiceModel`: Contains a dictionary mapping category names to lists of catalog items
-- `CatalogItemServiceModel`: Represents a simplified product view for catalog display
-- `ProductMetaDataViewModel`: Contains a list of product IDs for metadata lookup
-- `ProductMetaDataServiceModel`: Maps product IDs to their routing information
-
-### 3.2 CounterApi Controllers
-
-#### 3.2.1 CounterController
-
-Manages order processing and payment handling at the counter.
-
-| Endpoint | Method | Description | Status Codes |
-|----------|--------|-------------|-------------|
-| `api/counter/submitorder` | POST | Creates a new order | 200, 400, 500 |
-| `api/counter/getorder/{orderId:guid}` | GET | Retrieves an order by ID | 200, 500 |
-| `api/counter/updateorder` | PUT | Updates an existing order | 200, 400, 500 |
-| `api/counter/payorder` | POST | Processes payment for an order | 200, 500 |
-
-**Key Implementation Details:**
+#### Example Code
 
 
 ```csharp
-// Dependency Injection
-private readonly IFacade _facade;
-
-public CounterController(IFacade facade)
-{
-    _facade = facade;
-}
-
-// Example Endpoint
 [HttpPost("SubmitOrder")]
-[ProducesResponseType(typeof(Result<OrderServiceModel>), StatusCodes.Status200OK)]
-[ProducesResponseType(typeof(Result<OrderServiceModel>), StatusCodes.Status400BadRequest)]
-[ProducesResponseType(typeof(Result<OrderServiceModel>), StatusCodes.Status500InternalServerError)]
 public async Task<Result<OrderServiceModel>> SubmitOrder(OrderViewModel order)
 {
     var result = await _facade.SubmitOrderAsync(order);
@@ -200,203 +160,112 @@ public async Task<Result<OrderServiceModel>> SubmitOrder(OrderViewModel order)
 
 ```
 
-**Data Models:**
+### 4.3 KitchenApi
 
-- `OrderViewModel`: Contains order details, line items, and payment information
-- `OrderServiceModel`: Service-layer representation of an order with header, line items, and footer
-- `OrderPaymentViewModel`: Contains payment details for processing order payment
+#### Responsibilities
 
-### 3.3 KitchenApi Controllers
+- Manages kitchen operations like order preparation and cooking status.
+- Tracks kitchen inventory.
 
-The KitchenApi project structure exists but currently does not have implemented controllers. This is likely planned for future development to manage kitchen operations like order preparation, cooking status, and kitchen inventory.
+#### Planned Endpoints
 
-## 4. Model Structure
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/kitchen/prepareorder` | POST | Marks an order as being prepared. |
+| `/api/kitchen/orderstatus/{orderId:guid}` | GET | Retrieves the status of an order. |
 
-### 4.1 Model Layers
+### 4.4 OrderSummaryApi
 
-Each API follows a consistent three-layer model approach:
+#### Responsibilities
 
-1. **View Models**: Used for API requests/responses
-   
-```csharp
-   public class ProductViewModel : ViewModelBase
-   {
-       public Guid ProductId { get; set; }
-       public string Name { get; set; } = string.Empty;
-       public string Description { get; set; } = string.Empty;
-       public decimal Price { get; set; }
-       // Other properties
-   }
-   
-```
+- Provides aggregated order summaries for reporting and analytics.
 
-2. **Service Models**: Used within business logic
-   
-```csharp
-   public class ProductServiceModel : ServiceBaseModel
-   {
-       public string ProductId { get; set; } = string.Empty;
-       public string Name { get; set; } = string.Empty;
-       public string Description { get; set; } = string.Empty;
-       public decimal Price { get; set; }
-       // Other properties
-   }
-   
-```
+#### Planned Endpoints
 
-3. **Domain Models**: Used for persistence operations
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/ordersummary/daily` | GET | Retrieves daily order summaries. |
+| `/api/ordersummary/weekly` | GET | Retrieves weekly order summaries. |
 
-### 4.2 Key Enumerations
+### 4.5 BaristaApi
 
-The system uses several enumerations to maintain data consistency:
+#### Responsibilities
 
-- **ProductType**: Food, Beverage, Dessert, Snack
-- **ProductCategory**: Appetizer, MainCourse
-- **RouteType**: Used for product metadata routing
-- **Error**: None, NotFound, InvalidInput, Unauthorized, Forbidden, InternalServerError
-- **OrderType**: Used in the CounterApi for order classification
-- **PaymentStatus**: Tracks payment state of orders
-- **PaymentMethod**: Defines payment options
+- Manages barista-specific operations like drink preparation and queue management.
 
-## 5. Infrastructure
+#### Planned Endpoints
 
-### 5.1 Data Storage
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/barista/preparedrink` | POST | Marks a drink as being prepared. |
+| `/api/barista/drinkstatus/{drinkId:guid}` | GET | Retrieves the status of a drink. |
 
-Azure Cosmos DB is used for data persistence:
+## 5. UI (Angular)
 
+The front-end Angular application provides a user-friendly interface for interacting with the system.
 
-```csharp
-builder.AddCosmosDbContext<ProductContext>("aspireCafe", "AspireCafe");
-builder.AddCosmosDbContext<CounterContext>("aspireCafe", "AspireCafe");
+### Key Features
 
-```
+- **Responsive Design**: Optimized for both desktop and mobile devices.
+- **Integration**: Communicates with the back-end APIs using RESTful endpoints.
+- **Modular Structure**: Organized into feature modules for scalability.
 
-### 5.2 Caching
+### Key Files
 
-Redis is used for distributed caching in the ProductApi:
+- `angular.json`: Configures the Angular build process.
+- `package.json`: Manages dependencies for the Angular application.
 
+## 6. Shared Resources
 
-```csharp
-builder.AddRedisDistributedCache("cache");
+### 6.1 KeyVault
 
-```
+Used for secure storage of secrets and configuration settings.
 
-### 5.3 Exception Handling
+### 6.2 CosmosDB
 
-Global exception handling is consistent across all APIs:
+The primary database for all services, providing scalable and distributed data storage.
 
+### 6.3 Redis Cache
 
-```csharp
-builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddProblemDetails();
+Used for caching frequently accessed data to improve performance.
 
-```
+### 6.4 Service Bus
 
-### 5.4 API Documentation
+Facilitates asynchronous communication between services.
 
-OpenAPI/Swagger is configured for all API services:
+## 7. Deployment
 
+The solution is containerized and deployed using .NET Aspire. Each service is independently deployable and scalable.
 
-```csharp
-builder.Services.AddOpenApi();
+### Deployment Steps
 
-```
+1. Build the solution using the `.NET 9` SDK.
+2. Deploy containers for each service.
+3. Configure shared resources (KeyVault, CosmosDB, Redis, Service Bus).
+4. Start the `AppHostAzure` project to orchestrate the services.
 
-## 6. Cross-Cutting Concerns
+## 8. Development Workflow
 
-### 6.1 Validation
+### Adding a New Service
 
-FluentValidation is used across all services:
+1. Create a new project for the service.
+2. Define the service's responsibilities and endpoints.
+3. Implement the Facade, Business, and Data layers.
+4. Add the service to `AppHostAzure` with the required dependencies.
 
+### Debugging
 
-```csharp
-builder.Services.AddValidatorsFromAssemblyContaining<ProductViewModelValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<OrderViewModelValidator>();
+- Use logs to trace issues in the `AppHostAzure` startup process.
+- Validate API requests and responses using Swagger/OpenAPI.
+- Check shared resource configurations (KeyVault, CosmosDB, etc.).
 
-```
+## 9. Security Considerations
 
-### 6.2 Result Handling
+- All APIs enforce HTTPS.
+- Secrets are stored securely in KeyVault.
+- Input validation prevents injection attacks.
+- Error messages are sanitized in production.
 
-The `Match` pattern provides elegant result handling across all controllers:
+## 10. Conclusion
 
-
-```csharp
-return result.Match(
-    onSuccess: () => result,
-    onFailure: error => Result<ProductServiceModel>.Failure(error, result.Messages)
-);
-
-```
-
-### 6.3 URL Consistency
-
-All APIs enforce lowercase URLs for consistency:
-
-
-```csharp
-builder.Services.AddRouting(options => options.LowercaseUrls = true);
-
-```
-
-## 7. Request Flow
-
-### 7.1 ProductApi Request Flow
-
-1. Client request arrives at the ProductController or CatalogController
-2. Controller delegates to the appropriate Facade method
-3. Facade performs validation using FluentValidation
-4. Business layer executes business logic
-5. Data layer handles persistence operations
-6. Results flow back through the layers with appropriate success/error handling
-
-### 7.2 CounterApi Request Flow
-
-1. Client request arrives at the CounterController
-2. Controller delegates to the appropriate Facade method
-3. Facade performs validation and prepares the operation
-4. Business layer processes the order or payment
-5. Data layer performs persistence operations
-6. Results flow back with the appropriate status codes and messages
-
-## 8. Deployment
-
-The solution leverages .NET Aspire for deployment orchestration:
-
-
-```csharp
-builder.AddServiceDefaults();
-// Service configuration
-app.MapDefaultEndpoints();
-
-```
-
-## 9. Development Workflow
-
-### 9.1 Adding New Features
-
-1. Define controller endpoints with proper documentation
-2. Implement Facade methods with validation
-3. Implement business logic in the appropriate Business class
-4. Create or update data access methods
-5. Test the full flow
-
-### 9.2 Common Support Scenarios
-
-- **Invalid Input**: Check validation rules and input data structure
-- **Not Found Errors**: Verify entity existence in the database
-- **Internal Server Errors**: Review application logs for exceptions
-
-## 10. Security Considerations
-
-- HTTPS is enforced across all endpoints
-- Authorization middleware is in place
-- Input validation protects against injection attacks
-- Error messages are sanitized in production
-
-## 11. Extensibility
-
-The modular, service-oriented architecture allows for:
-- Adding new controllers with minimal impact on existing ones
-- Extending service capabilities through new endpoints
-- Integrating additional services (like the planned KitchenApi)
-- Adding new data models and business logic
+AspireCafe is a robust, scalable, and maintainable system designed to support modern cafe operations. Its modular architecture and use of best practices make it easy to extend and support.
