@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AspireCafe.Shared.Models.View
 {
-    public class ViewBaseModel
+    public class ViewModelBase
     {
     }
 }

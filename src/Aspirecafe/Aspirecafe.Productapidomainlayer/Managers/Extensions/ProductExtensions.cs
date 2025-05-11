@@ -1,17 +1,34 @@
 ﻿using AspireCafe.ProductApiDomainLayer.Managers.Models.Domain;
 using AspireCafe.ProductApiDomainLayer.Managers.Models.Enums;
 using AspireCafe.ProductApiDomainLayer.Managers.Models.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AspireCafe.ProductApiDomainLayer.Managers.Models.View;
 
 namespace AspireCafe.ProductApiDomainLayer.Managers.Extensions
 {
     public static class ProductExtensions
     {
         #region ViewModel -> DomainModel Mappers
+
+        public static ProductDomainModel MapToDomainModel(this ProductViewModel model)
+        {
+            if (model == null) throw new ArgumentNullException(nameof(model));
+            return new ProductDomainModel
+            {
+                Id = Guid.NewGuid(),
+                Name = model.Name,
+                Description = model.Description,
+                Price = model.Price,
+                ProductType = model.ProductType,
+                ProductCategory = model.ProductCategory,
+                ImageUrl = model.ImageUrl,
+                IsActive = model.IsActive,
+                IsAvailable = model.IsAvailable,
+                ProductSubCategory = model.ProductSubCategory,
+                ProductStatus = model.ProductStatus,
+                RouteType = model.RouteType,
+            };
+        }
+
         #endregion
 
         #region DomainModel -> ServiceModel Mappers 

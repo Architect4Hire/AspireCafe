@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AspireCafe.CounterApiDomainLayer.Managers.Models.View
 {
-    public class OrderViewModel:ViewBaseModel
+    public class OrderViewModel:ViewModelBase
     {
         public Guid? OrderId { get; set; }
         public OrderType OrderType { get; set; }

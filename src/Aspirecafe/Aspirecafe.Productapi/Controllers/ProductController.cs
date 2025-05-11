@@ -30,6 +30,36 @@ namespace AspireCafe.ProductApi.Controllers
             );
         }
 
+        [HttpPost("create")]
+        public async Task<Result<ProductServiceModel>> CreateProduct(ProductViewModel product)
+        {
+            var result = await _facade.CreateProductAsync(product);
+            return result.Match(
+                onSuccess: () => result,
+                onFailure: error => Result<ProductServiceModel>.Failure(error, result.Messages)
+            );
+        }
+
+        [HttpPut("update")]
+        public async Task<Result<ProductServiceModel>> UpdateProduct(ProductViewModel product)
+        {
+            var result = await _facade.UpdateProductAsync(product);
+            return result.Match(
+                onSuccess: () => result,
+                onFailure: error => Result<ProductServiceModel>.Failure(error, result.Messages)
+            );
+        }
+
+        [HttpDelete("delete/{productId:guid}")]
+        public async Task<Result<ProductServiceModel>> DeleteProduct(Guid productId)
+        {
+            var result = await _facade.DeleteProductAsync(productId);
+            return result.Match(
+                onSuccess: () => result,
+                onFailure: error => Result<ProductServiceModel>.Failure(error, result.Messages)
+            );
+        }
+
 
     }
 }

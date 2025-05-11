@@ -12,5 +12,8 @@ namespace AspireCafe.ProductApiDomainLayer.Facade
     public interface IFacade
     {
         Task<Result<ProductServiceModel>> FetchProductByIdAsync(Guid productId);
+        Task<Result<ProductServiceModel>> CreateProductAsync(ProductViewModel product);
+        Task<Result<ProductServiceModel>> UpdateProductAsync(ProductViewModel product);
+        Task<Result<ProductServiceModel>> DeleteProductAsync(Guid productId);
     }
 }

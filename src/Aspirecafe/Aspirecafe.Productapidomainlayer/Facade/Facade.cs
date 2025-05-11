@@ -21,9 +21,27 @@ namespace AspireCafe.ProductApiDomainLayer.Facade
             _business = business;
         }
 
+        public async Task<Result<ProductServiceModel>> CreateProductAsync(ProductViewModel product)
+        {
+            var data = await _business.CreateProductAsync(product);
+            return Result<ProductServiceModel>.Success(data);
+        }
+
+        public async Task<Result<ProductServiceModel>> DeleteProductAsync(Guid productId)
+        {
+            var data = await _business.DeleteProductAsync(productId);
+            return Result<ProductServiceModel>.Success(data);
+        }
+
         public async Task<Result<ProductServiceModel>> FetchProductByIdAsync(Guid productId)
         {
             return Result<ProductServiceModel>.Success(await _business.FetchProductByIdAsync(productId));
+        }
+
+        public async Task<Result<ProductServiceModel>> UpdateProductAsync(ProductViewModel product)
+        {
+            var data = await _business.UpdateProductAsync(product);
+            return Result<ProductServiceModel>.Success(data);
         }
     }
 }
