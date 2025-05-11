@@ -18,8 +18,6 @@ namespace AspireCafe.ProductApi.Controllers
             _facade = facade;
         }
 
-
-
         /// <summary>
         /// Fetches a product by its unique identifier.
         /// </summary>
