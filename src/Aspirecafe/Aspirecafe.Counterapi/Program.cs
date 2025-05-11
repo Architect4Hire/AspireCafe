@@ -27,6 +27,9 @@ builder.Services.AddValidatorsFromAssemblyContaining<OrderViewModelValidator>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
+//force lowercase routes (for consistency with other services)
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
 var app = builder.Build();
 
 
