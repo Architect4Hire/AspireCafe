@@ -22,7 +22,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AspiireCafe.UI\AspireCafe.UI\AspireCafe.UI.esproj" />
 		<ProjectReference Include="..\AspireCafe.BaristaApi\AspireCafe.BaristaApi.csproj" />
 		<ProjectReference Include="..\AspireCafe.CounterApi\AspireCafe.CounterApi.csproj" />
 		<ProjectReference Include="..\AspireCafe.KitchenApi\AspireCafe.KitchenApi.csproj" />
@@ -30,7 +29,6 @@
 		<ProjectReference Include="..\AspireCafe.ProductApi\AspireCafe.ProductApi.csproj" />
 		<ProjectReference Include="..\AspireCafe.UI\AspireCafe.UI.esproj" />
 	</ItemGroup>
-
 	<Target Name="RestoreNpm" BeforeTargets="Build" Condition=" '$(DesignTimeBuild)' != 'true' ">
 		<ItemGroup>
 			<PackageJsons Include="..\*\package.json" />
@@ -40,5 +38,4 @@
 		<Message Importance="Normal" Text="Installing npm packages for %(PackageJsons.RelativeDir)" Condition="!Exists('%(PackageJsons.RootDir)%(PackageJsons.Directory)/node_modules')" />
 		<Exec Command="npm install" WorkingDirectory="%(PackageJsons.RootDir)%(PackageJsons.Directory)" Condition="!Exists('%(PackageJsons.RootDir)%(PackageJsons.Directory)/node_modules')" />
 	</Target>
-
 </Project>
