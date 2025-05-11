@@ -15,4 +15,8 @@
 		<ProjectReference Include="..\AspireCafe.Shared\AspireCafe.Shared.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Managers\Exceptions\" />
+	</ItemGroup>
+
 </Project>
