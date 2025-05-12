@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 AddDatabases(builder); //service based configuration - shouldn't be loaded in a shared extension method
 AddScopes(builder); //service based configuration - shouldn't be loaded in a shared extension method
-AddFleuntValidation(builder); //service based configuration - shouldn't be loaded in a shared extension method
+AddFluentValidation(builder); //service based configuration - shouldn't be loaded in a shared extension method
 AddVersioning(builder); //might be able to be abstracted out with default version loaded as a parameter
 AddExceptionHandling(builder); //should be abstracted away
 AddUniversalConfigurations(builder); //should be abstracted away
@@ -37,7 +37,7 @@ void AddScopes(WebApplicationBuilder builder)
     builder.Services.AddScoped<IData, Data>();
 }
 
-void AddFleuntValidation(WebApplicationBuilder builder)
+void AddFluentValidation(WebApplicationBuilder builder)
 {
     builder.Services.AddValidatorsFromAssemblyContaining<OrderViewModelValidator>();
 }
