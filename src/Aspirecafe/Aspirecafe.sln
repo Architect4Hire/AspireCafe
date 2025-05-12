@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireCafe.AppHost", "AspireCafe.AppHost\AspireCafe.AppHost.csproj", "{90856AE9-767E-43C0-81E8-3393E0089527}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireCafe.Intel64", "AspireCafe.AppHost\AspireCafe.Intel64.csproj", "{90856AE9-767E-43C0-81E8-3393E0089527}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireCafe.ServiceDefaults", "AspireCafe.ServiceDefaults\AspireCafe.ServiceDefaults.csproj", "{0AC558A7-D1D8-CCF8-FC63-51D1DDA870C6}"
 EndProject
@@ -44,13 +44,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireCafe.CounterApi.TestL
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test Projects", "Test Projects", "{8C2423BA-D1AC-4350-9B50-562DB7D4ED5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireCafe.AppHostAzure", "AppHostAzure\AspireCafe.AppHostAzure.csproj", "{2C87B8A5-1010-48C8-A7D8-A31954943FF3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireCafe.Azure", "AppHostAzure\AspireCafe.Azure.csproj", "{2C87B8A5-1010-48C8-A7D8-A31954943FF3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{061A445C-A570-4F19-8B24-A95B03D27209}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "AspireCafe.UI", "AspireCafe.UI\AspireCafe.UI.esproj", "{0114E2FB-AC99-9CFA-1E04-25C0A2C0A020}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hosts", "Hosts", "{8469568D-FCAC-4D45-B9EF-4F7AC51AFE0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireCafe.Arm64", "AspireCafe.Arm64\AspireCafe.Arm64.csproj", "{A2724CEF-CF01-4930-B7E1-DE81296B672E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -124,6 +126,10 @@ Global
 		{0114E2FB-AC99-9CFA-1E04-25C0A2C0A020}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0114E2FB-AC99-9CFA-1E04-25C0A2C0A020}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0114E2FB-AC99-9CFA-1E04-25C0A2C0A020}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{A2724CEF-CF01-4930-B7E1-DE81296B672E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2724CEF-CF01-4930-B7E1-DE81296B672E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2724CEF-CF01-4930-B7E1-DE81296B672E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2724CEF-CF01-4930-B7E1-DE81296B672E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -145,6 +151,7 @@ Global
 		{F6556B4E-8A03-481E-831F-5789CB24F58D} = {8C2423BA-D1AC-4350-9B50-562DB7D4ED5E}
 		{2C87B8A5-1010-48C8-A7D8-A31954943FF3} = {8469568D-FCAC-4D45-B9EF-4F7AC51AFE0A}
 		{0114E2FB-AC99-9CFA-1E04-25C0A2C0A020} = {061A445C-A570-4F19-8B24-A95B03D27209}
+		{A2724CEF-CF01-4930-B7E1-DE81296B672E} = {8469568D-FCAC-4D45-B9EF-4F7AC51AFE0A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {28703359-652E-4C8D-9510-28EA89C9877A}

@@ -30,6 +30,17 @@ builder.Services.AddProblemDetails();
 //force lowercase routes (for consistency with other services)
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
+/* API VERSIONING */
+
+builder.Services.AddApiVersioning(config =>
+{
+    config.DefaultApiVersion = new ApiVersion(1, 0);
+    config.AssumeDefaultVersionWhenUnspecified = true;
+    config.ReportApiVersions = true;
+});
+
+/* END API VERSIONING */
+
 var app = builder.Build();
 
 
