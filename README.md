@@ -26,7 +26,7 @@ The **AspireCafe.UI** project is an Angular-based single-page application (SPA) 
 
 ### **.NET Aspire Application Host**
 
-The solution uses two application host projects for managing service orchestration and infrastructure:
+The solution uses three application host projects for managing service orchestration and infrastructure:
 
 1. **Aspirecafe.Intel64**:
    - Configures local development with emulators for Azure services.
@@ -60,9 +60,9 @@ These services are containerized for local development, ensuring consistency acr
 Each microservice follows a clean, layered architecture:
 
 - **API Layer**: Handles HTTP requests and responses (e.g., `CounterController`).
-- **Facade Layer**: Orchestrates business logic and validation (e.g., `Facade.cs`).
-- **Business Layer**: Implements core business rules (e.g., `IBusiness`).
-- **Data Layer**: Manages data access and persistence (e.g., `IData`).
+- **Facade Layer**: Orchestrates business logic and validation (e.g., `Facade.cs implementing IFacde.cs`).
+- **Business Layer**: Implements core business rules (e.g., `Business.cs implementing IBusiness.cs`).
+- **Data Layer**: Manages data access and persistence (e.g., `Data.cs implementing IData.cs`).
 
 This separation of concerns ensures maintainability and testability.
 
