@@ -181,8 +181,8 @@ All APIs follow RESTful design principles with standardized patterns:
 Each service maintains a consistent model hierarchy:
 
 - **Domain Models**: Core internal representation (e.g., `ProductDomainModel`)
-- **Service Models**: For inter-layer communication (e.g., `ProductServiceModel`)
-- **View Models**: For API request/response (e.g., `ProductViewModel`)
+- **Service Models**: For outgoing communication (e.g., `ProductServiceModel`)
+- **View Models**: For incoming communication (e.g., `ProductViewModel`)
 
 ### 6.2 Base Models
 
