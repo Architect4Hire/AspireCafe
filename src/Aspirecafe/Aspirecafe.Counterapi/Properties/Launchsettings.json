@@ -16,7 +16,7 @@
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7107;http://localhost:5127",
       "launchBrowser": true,
-      "launchUrl": "scalar"
+      "launchUrl": "scalar/v1"
     },
     "Container (Dockerfile)": {
       "commandName": "Docker",

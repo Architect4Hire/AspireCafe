@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AspireCafe.CounterApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     public class CounterController : ControllerBase
     {
