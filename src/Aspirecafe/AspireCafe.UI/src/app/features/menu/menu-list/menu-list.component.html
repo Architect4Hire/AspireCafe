@@ -1,0 +1,62 @@
+<app-navbar></app-navbar>
+
+<div class="menu-container">
+  <div class="menu-header">
+    <h1>Menu</h1>
+    <p>Select items to add to the current order</p>
+  </div>
+
+  <div class="menu-filters">
+    <div class="search-bar">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        (input)="onSearch()"
+        placeholder="Search menu items..." 
+        class="search-input"
+      >
+    </div>
+
+    <div class="category-filters">
+      <button 
+        class="category-button" 
+        [class.active]="selectedCategory === ''"
+        (click)="onCategoryChange('')"
+      >
+        All
+      </button>
+      <button 
+        *ngFor="let category of categories" 
+        class="category-button" 
+        [class.active]="selectedCategory === category"
+        (click)="onCategoryChange(category)"
+      >
+        {{ category | titlecase }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <div class="spinner"></div>
+    <p>Loading menu items...</p>
+  </div>
+
+  <div *ngIf="!isLoading" class="menu-items-grid">
+    <div *ngFor="let item of filteredItems" class="menu-item-card">
+      <div class="menu-item-image" [style.backgroundImage]="'url(' + (item.imageUrl || 'assets/images/default-food.jpg') + ')'">
+        <span class="menu-item-price">{{ item.price | currency }}</span>
+      </div>
+      <div class="menu-item-content">
+        <h3 class="menu-item-name">{{ item.name }}</h3>
+        <p class="menu-item-description">{{ item.description }}</p>
+        <button (click)="addItemToOrder(item)" class="add-item-button">
+          <i class="fas fa-plus"></i> Add to Order
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="filteredItems.length === 0 && !isLoading" class="no-items-message">
+      <p>No menu items found matching your criteria.</p>
+    </div>
+  </div>
+</div>

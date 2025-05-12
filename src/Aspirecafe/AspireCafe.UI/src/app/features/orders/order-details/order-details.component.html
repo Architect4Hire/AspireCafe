@@ -1,0 +1,134 @@
+<app-navbar></app-navbar>
+
+<div class="order-details-container">
+  <div class="back-button" (click)="goBack()">
+    <i class="fas fa-arrow-left"></i> Back to Orders
+  </div>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <div class="spinner"></div>
+    <p>Loading order details...</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    <p>{{ errorMessage }}</p>
+    <button (click)="goBack()" class="btn-primary">Go Back</button>
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && order" class="order-details">
+    <div class="order-header">
+      <div class="order-info">
+        <h1>Order #{{ order.id.slice(-4) }}</h1>
+        <p class="order-date">{{ order.createdAt | date: 'medium' }}</p>
+        <div class="order-status">
+          <span class="status-badge" [ngClass]="getStatusClass(order.status)">
+            {{ order.status }}
+          </span>
+        </div>
+      </div>
+
+      <div class="order-customer">
+        <p *ngIf="order.customerName"><strong>Customer:</strong> {{ order.customerName }}</p>
+        <p *ngIf="order.tableNumber"><strong>Table:</strong> {{ order.tableNumber }}</p>
+      </div>
+    </div>
+
+    <div class="order-content">
+      <div class="order-items">
+        <h2>Order Items</h2>
+        
+        <div class="table-responsive">
+          <table class="items-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of order.items">
+                <td>{{ item.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.unitPrice | currency }}</td>
+                <td>{{ item.quantity * item.unitPrice | currency }}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="3" class="total-label">Total</td>
+                <td class="total-value">{{ order.total | currency }}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <div class="order-actions">
+        <div class="action-section">
+          <h3>Update Status</h3>
+          <div class="status-buttons">
+            <button 
+              (click)="updateStatus('pending')" 
+              [disabled]="order.status === 'pending' || order.status === 'completed' || order.status === 'cancelled'"
+              class="btn-status pending"
+            >
+              Pending
+            </button>
+            <button 
+              (click)="updateStatus('preparing')" 
+              [disabled]="order.status === 'preparing' || order.status === 'completed' || order.status === 'cancelled'"
+              class="btn-status preparing"
+            >
+              Preparing
+            </button>
+            <button 
+              (click)="updateStatus('ready')" 
+              [disabled]="order.status === 'ready' || order.status === 'completed' || order.status === 'cancelled'"
+              class="btn-status ready"
+            >
+              Ready
+            </button>
+            <button 
+              (click)="updateStatus('completed')" 
+              [disabled]="order.status === 'completed' || order.status === 'cancelled'"
+              class="btn-status completed"
+            >
+              Completed
+            </button>
+            <button 
+              (click)="updateStatus('cancelled')" 
+              [disabled]="order.status === 'cancelled' || order.status === 'completed'"
+              class="btn-status cancelled"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+
+        <div class="action-section" *ngIf="order.paymentStatus === 'unpaid'">
+          <h3>Process Payment</h3>
+          <div class="payment-buttons">
+            <button (click)="processPayment('cash')" class="btn-payment cash">
+              <i class="fas fa-money-bill-wave"></i> Cash
+            </button>
+            <button (click)="processPayment('card')" class="btn-payment card">
+              <i class="fas fa-credit-card"></i> Card
+            </button>
+            <button (click)="processPayment('mobile')" class="btn-payment mobile">
+              <i class="fas fa-mobile-alt"></i> Mobile
+            </button>
+          </div>
+        </div>
+
+        <div class="payment-info" *ngIf="order.paymentStatus === 'paid'">
+          <h3>Payment Information</h3>
+          <p><strong>Status:</strong> <span class="payment-status paid">Paid</span></p>
+          <p><strong>Method:</strong> {{ order.paymentMethod }}</p>
+          <p><strong>Date:</strong> {{ order.updatedAt | date: 'medium' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

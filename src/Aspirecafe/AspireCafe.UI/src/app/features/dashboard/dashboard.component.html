@@ -1,0 +1,95 @@
+<app-navbar></app-navbar>
+
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <h1>Welcome, {{ userName }}</h1>
+    <p>{{ today | date: 'EEEE, MMMM d, y' }}</p>
+  </header>
+
+  <div class="stats-container">
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-chart-line"></i>
+      </div>
+      <div class="stat-content">
+        <h3>Today's Sales</h3>
+        <p class="stat-value">{{ todaySales | currency }}</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-clipboard-list"></i>
+      </div>
+      <div class="stat-content">
+        <h3>Pending Orders</h3>
+        <p class="stat-value">{{ pendingOrdersCount }}</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="stat-content">
+        <h3>Active Tables</h3>
+        <p class="stat-value">{{ recentOrders.length }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="recent-orders">
+    <div class="section-header">
+      <h2>Recent Orders</h2>
+      <a routerLink="/orders" class="view-all">View All</a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Time</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of recentOrders">
+            <td># {{ order.id.slice(-4) }}</td>
+            <td>{{ order.createdAt | date: 'shortTime' }}</td>
+            <td>{{ order.items.length }} items</td>
+            <td>{{ order.total | currency }}</td>
+            <td>
+              <span class="status-badge" [ngClass]="getOrderStatusClass(order.status)">
+                {{ order.status }}
+              </span>
+            </td>
+          </tr>
+          <tr *ngIf="recentOrders.length === 0">
+            <td colspan="5" class="no-orders">No recent orders</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="quick-actions">
+    <h2>Quick Actions</h2>
+    <div class="action-buttons">
+      <a routerLink="/menu" class="action-button">
+        <i class="fas fa-coffee"></i>
+        <span>New Order</span>
+      </a>
+      <a routerLink="/orders" class="action-button">
+        <i class="fas fa-list-alt"></i>
+        <span>Manage Orders</span>
+      </a>
+      <a routerLink="/checkout" class="action-button">
+        <i class="fas fa-cash-register"></i>
+        <span>Checkout</span>
+      </a>
+    </div>
+  </div>
+</div>

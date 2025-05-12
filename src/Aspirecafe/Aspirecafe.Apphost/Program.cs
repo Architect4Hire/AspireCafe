@@ -41,8 +41,9 @@ var kitchenapi = builder.AddProject<Projects.AspireCafe_KitchenApi>("aspirecafe-
 var productapi = builder.AddProject<Projects.AspireCafe_ProductApi>("aspirecafe-productapi").WithReference(keyvault).WaitFor(keyvault).WithReference(cosmos).WaitFor(cosmos).WithReference(cache).WaitFor(cache).WithReference(servicebus).WaitFor(servicebus);
 var ordersummaryapi = builder.AddProject<Projects.AspireCafe_OrderSummaryApi>("aspirecafe-odersummaryapi").WithReference(keyvault).WaitFor(keyvault).WithReference(cosmos).WaitFor(cosmos).WithReference(cache).WaitFor(cache).WithReference(servicebus).WaitFor(servicebus);
 var angular = builder.AddNpmApp("aspirecafe-ui", "../AspireCafe.UI/")
- .WithHttpEndpoint(env: "PORT", port: 4200)
- .WithExternalHttpEndpoints();
+    .WithHttpEndpoint(env: "PORT")
+    .WithExternalHttpEndpoints()
+    .PublishAsDockerFile();
 builder.Build().Run();
 
 

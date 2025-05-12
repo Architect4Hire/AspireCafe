@@ -1,0 +1,88 @@
+<app-navbar></app-navbar>
+
+<div class="orders-container">
+  <div class="orders-header">
+    <h1>Orders</h1>
+    <p>Manage and view all orders</p>
+  </div>
+
+  <div class="orders-filters">
+    <div class="search-bar">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        (input)="onSearch()"
+        placeholder="Search by order ID or customer name..." 
+        class="search-input"
+      >
+    </div>
+
+    <div class="status-filter">
+      <label for="status-select">Filter by status:</label>
+      <select 
+        id="status-select" 
+        [(ngModel)]="statusFilter" 
+        (change)="onStatusChange()"
+        class="status-select"
+      >
+        <option value="all">All Orders</option>
+        <option value="pending">Pending</option>
+        <option value="preparing">Preparing</option>
+        <option value="ready">Ready</option>
+        <option value="completed">Completed</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <div class="spinner"></div>
+    <p>Loading orders...</p>
+  </div>
+
+  <div *ngIf="!isLoading" class="orders-list">
+    <div class="table-responsive">
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Date & Time</th>
+            <th>Customer</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Payment</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of filteredOrders">
+            <td># {{ order.id.slice(-4) }}</td>
+            <td>{{ order.createdAt | date: 'short' }}</td>
+            <td>{{ order.customerName || 'Walk-in' }}</td>
+            <td>{{ order.items.length }} item(s)</td>
+            <td>{{ order.total | currency }}</td>
+            <td>
+              <span class="status-badge" [ngClass]="getStatusClass(order.status)">
+                {{ order.status }}
+              </span>
+            </td>
+            <td>
+              <span class="payment-status" [class.paid]="order.paymentStatus === 'paid'">
+                {{ order.paymentStatus }}
+              </span>
+            </td>
+            <td>
+              <a [routerLink]="['/orders', order.id]" class="view-order-btn">
+                View Details
+              </a>
+            </td>
+          </tr>
+          <tr *ngIf="filteredOrders.length === 0 && !isLoading">
+            <td colspan="8" class="no-orders">No orders found matching your criteria.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

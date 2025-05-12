@@ -1,0 +1,50 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-logo">
+      <a routerLink="/dashboard">
+        <span class="logo-text">Cafe POS</span>
+      </a>
+    </div>
+
+    <div class="navbar-menu" [class.is-active]="isMenuOpen">
+      <div class="navbar-start">
+        <a routerLink="/dashboard" routerLinkActive="active" class="navbar-item">
+          Dashboard
+        </a>
+        <a routerLink="/menu" routerLinkActive="active" class="navbar-item">
+          Menu
+        </a>
+        <a routerLink="/orders" routerLinkActive="active" class="navbar-item">
+          Orders
+        </a>
+        <a routerLink="/checkout" routerLinkActive="active" class="navbar-item">
+          Checkout
+          <span *ngIf="currentOrderCount > 0" class="order-badge">
+            {{ currentOrderCount }}
+          </span>
+        </a>
+      </div>
+
+      <div class="navbar-end">
+        <div class="navbar-item has-dropdown" (click)="$event.stopPropagation()" [class.is-active]="isMenuOpen">
+          <a class="navbar-link" (click)="toggleMenu()">
+            <span class="user-name">{{ currentUser?.fullName }}</span>
+            <span class="user-role">{{ currentUser?.role }}</span>
+          </a>
+
+          <div class="navbar-dropdown">
+            <a class="navbar-item" (click)="logout()">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="navbar-burger" [class.is-active]="isMenuOpen" (click)="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</nav>

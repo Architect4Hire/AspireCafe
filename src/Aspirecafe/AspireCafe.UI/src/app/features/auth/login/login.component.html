@@ -1,0 +1,57 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>Cafe POS Login</h1>
+      <p>Enter your credentials to access the system</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input 
+          type="text" 
+          id="username" 
+          formControlName="username" 
+          placeholder="Enter your username"
+          [class.is-invalid]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
+        >
+        <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="error-message">
+          Username is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          formControlName="password" 
+          placeholder="Enter your password"
+          [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+        >
+        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error-message">
+          Password is required
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert-error">
+        {{ errorMessage }}
+      </div>
+
+      <button 
+        type="submit" 
+        [disabled]="loginForm.invalid || isLoading" 
+        class="btn-login"
+      >
+        <span *ngIf="isLoading">Logging in...</span>
+        <span *ngIf="!isLoading">Login</span>
+      </button>
+
+      <div class="login-hint">
+        <p>Demo users:</p>
+        <p>Username: admin, Password: password</p>
+        <p>Username: staff, Password: password</p>
+      </div>
+    </form>
+  </div>
+</div>
