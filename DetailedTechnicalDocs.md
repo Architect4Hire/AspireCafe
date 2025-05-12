@@ -66,9 +66,9 @@ Each microservice follows a consistent layered architecture:
 
 - **Responsibility**: Contains domain entities, value objects, and business models
 - **Components**: Various model types:
-  - Domain Models (e.g., `ProductDomainModel`) - internal representation
-  - Service Models (e.g., `ProductServiceModel`) - for inter-layer communication 
-  - View Models (e.g., `ProductViewModel`) - for API request/response
+  - Domain Models (e.g., `ProductDomainModel`) - database POCO with light events if needed
+  - Service Models (e.g., `ProductServiceModel`) - POCO for responses from ActionMethods 
+  - View Models (e.g., `ProductViewModel`) - incoming POCO for requests for ActionMethods
 
 ## 4. Design Patterns and Practices
 
