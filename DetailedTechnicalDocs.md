@@ -1,271 +1,351 @@
-# AspireCafe System - Technical Documentation
+# AspireCafe - Technical Documentation
 
-## 1. Solution Overview
+## 1. System Overview
 
-AspireCafe is a distributed microservices-based application designed to support cafe operations. It is built on .NET 9 with C# 13 and follows modern architectural patterns such as clean architecture, distributed systems design, and containerized deployment. The solution includes multiple APIs and a front-end UI, orchestrated through a centralized application host.
+AspireCafe is a cloud-native, microservices-based point-of-sale system designed for cafes. The solution follows a modern distributed architecture that leverages .NET 9 Aspire for cloud-native capabilities and Angular 19 for the frontend user interface.
 
-## 2. Architecture
+## 2. Architectural Overview
 
-### 2.1 High-Level Architecture
+### 2.1 System Architecture
 
-The system is composed of the following components:
+AspireCafe follows a microservices architecture with the following core components:
 
-1. **AppHostAzure**: The central orchestrator for all services, managing dependencies and startup order.
-2. **Microservices**:
-   - **ProductApi**: Manages product catalog and metadata.
-   - **CounterApi**: Handles order processing and payment.
-   - **KitchenApi**: Manages kitchen operations like order preparation.
-   - **OrderSummaryApi**: Provides aggregated order summaries.
-   - **BaristaApi**: Manages barista-specific operations.
-3. **UI**: A front-end Angular application for user interaction.
+- **Frontend**: Angular 19-based UI application
+- **Backend Microservices**:
+  - Product API: Manages product catalog and inventory
+  - Counter API: Handles customer orders and payments
+  - Kitchen API: Manages food preparation workflow
+  - Barista API: Manages beverage preparation workflow
+  - Order Summary API: Provides order analytics and reporting
 
-### 2.2 Design Patterns and Practices
+### 2.2 Deployment Architecture
 
-#### 2.2.1 Clean Architecture
+The solution is designed to be cloud-native and can be deployed in the following ways:
 
-The solution follows clean architecture principles, ensuring separation of concerns:
+- **Azure Cloud Deployment**: Using AppHost.Azure
+- **Local Development**:
+  - Intel64 systems: Using AppHost.Intel64
+  - ARM64 systems (Apple Silicon/Mx Chipset): Using AppHost.Arm64
 
-- **Presentation Layer**: API controllers and Angular UI.
-- **Domain Layer**: Business logic, validation, and domain models.
-- **Data Layer**: Data access and persistence logic.
+### 2.3 Communication Patterns
 
-#### 2.2.2 Distributed Application Pattern
+The system uses a combination of:
+- **Synchronous Communication**: RESTful APIs for direct service-to-service communication
+- **Asynchronous Communication**: Azure Service Bus for event-driven messaging between services
 
-The `AppHostAzure` project uses the `DistributedApplication` builder to orchestrate the startup of all services and manage their dependencies.
+## 3. Layer Architecture
 
-#### 2.2.3 Dependency Injection
+Each microservice follows a consistent layered architecture:
 
-All services use dependency injection to manage dependencies, ensuring loose coupling and testability.
+### 3.1 API Layer
 
-#### 2.2.4 Result Pattern
+- **Responsibility**: Exposes HTTP endpoints, handles request/response formatting, and applies API versioning
+- **Components**: API Controllers, API versioning configuration, Swagger/OpenAPI documentation
+- **Key Implementation**: Controllers inherit from `ControllerBase` and use attributes like `[ApiController]` and `[Route]`
 
-A generic `Result<T>` class is used across all services to handle success and failure scenarios consistently.
+### 3.2 Facade Layer
 
-#### 2.2.5 Facade Pattern
+- **Responsibility**: Orchestrates multiple business operations and simplifies the API layer interface
+- **Pattern**: Implements the Facade design pattern
+- **Components**: Interface (e.g., `IFacade`, `ICatalogFacade`) and implementation classes
 
-The Facade pattern is used to simplify interactions with complex subsystems, providing a unified interface for controllers.
+### 3.3 Business Layer
 
-## 3. AppHostAzure
+- **Responsibility**: Contains business logic and business rules
+- **Components**: Business managers and services (e.g., `IBusiness`, `ICatalogBusiness`)
+- **Key Implementation**: Business classes contain the application's core logic
 
-The `AppHostAzure` project is the entry point for the entire system. It uses the `DistributedApplication` builder to configure and start all services.
+### 3.4 Data Access Layer
 
-### 3.1 Key Features
+- **Responsibility**: Handles data persistence and retrieval from databases
+- **Pattern**: Repository pattern
+- **Components**: Data access interfaces (e.g., `IData`, `ICatalogData`) and implementations
+- **Database Technology**: Azure Cosmos DB, accessed via Entity Framework Core
 
-- **Centralized Configuration**: Manages connection strings for shared resources like KeyVault, CosmosDB, Redis Cache, and Service Bus.
-- **Service Orchestration**: Ensures services start in the correct order and with the required dependencies.
-- **Scalability**: Designed to support horizontal scaling of services.
+### 3.5 Domain Layer
 
-### 3.2 Code Example
+- **Responsibility**: Contains domain entities, value objects, and business models
+- **Components**: Various model types:
+  - Domain Models (e.g., `ProductDomainModel`) - internal representation
+  - Service Models (e.g., `ProductServiceModel`) - for inter-layer communication 
+  - View Models (e.g., `ProductViewModel`) - for API request/response
+
+## 4. Design Patterns and Practices
+
+### 4.1 Repository Pattern
+
+Applied in the data access layer to abstract database operations:
 
 
 ```csharp
-var builder = DistributedApplication.CreateBuilder(args);
+public interface IData
+{
+    Task<ProductDomainModel> FetchProductByIdAsync(Guid productId);
+    Task<ProductDomainModel> CreateProductAsync(ProductDomainModel product);
+    Task<ProductDomainModel> UpdateProductAsync(ProductDomainModel product);
+    Task<ProductDomainModel> DeleteProductAsync(Guid productId);
+}
 
-// Resources
+```
+
+### 4.2 Facade Pattern
+
+Used to simplify complex subsystems and provide a unified interface:
+
+
+```csharp
+public class Facade : IFacade
+{
+    private readonly IBusiness _business;
+    
+    public Facade(IBusiness business)
+    {
+        _business = business;
+    }
+    
+    // Facade methods that delegate to business layer
+}
+
+```
+
+### 4.3 Dependency Injection
+
+Consistently used throughout the system for loose coupling:
+
+
+```csharp
+// In Program.cs
+void AddScopes(WebApplicationBuilder builder)
+{
+    builder.Services.AddScoped<IFacade, Facade>();
+    builder.Services.AddScoped<IBusiness, Business>();
+    builder.Services.AddScoped<IData, Data>();
+}
+
+```
+
+### 4.4 Model Mapping Pattern
+
+Systematic transformation between different model types:
+
+
+```csharp
+// Business layer - converting domain models to service models
+public async Task<ProductServiceModel> FetchProductByIdAsync(Guid productId)
+{
+    var data = await _data.FetchProductByIdAsync(productId);
+    return data.MapToServiceModel();
+}
+
+```
+
+### 4.5 Result Pattern
+
+Used for consistent error handling and operation results:
+
+
+```csharp
+// Controller returning a Result object
+[HttpGet("fetch")]
+public async Task<Result<CatalogServiceModel>> FetchCatalog()
+{
+    var result = await _facade.FetchCatalog();
+    return result.Match(
+        onSuccess: () => result,
+        onFailure: error => Result<CatalogServiceModel>.Failure(error, result.Messages)
+    );
+}
+
+```
+
+## 5. API Structure
+
+### 5.1 RESTful API Design
+
+All APIs follow RESTful design principles with standardized patterns:
+
+- **Route Structure**: `api/[controller]/[action]`
+- **HTTP Methods**: GET, POST, PUT, DELETE for appropriate operations
+- **Response Format**: Consistent use of the Result pattern for all responses
+- **Versioning**: API versioning through URL segment, header, or query string
+
+### 5.2 API Documentation
+
+- OpenAPI (Swagger) integration for all services
+- XML comments for API controllers and methods
+
+## 6. Data Models
+
+### 6.1 Model Hierarchy
+
+Each service maintains a consistent model hierarchy:
+
+- **Domain Models**: Core internal representation (e.g., `ProductDomainModel`)
+- **Service Models**: For inter-layer communication (e.g., `ProductServiceModel`)
+- **View Models**: For API request/response (e.g., `ProductViewModel`)
+
+### 6.2 Base Models
+
+- `DomainBaseModel`: Common properties for domain entities
+- `ServiceBaseModel`: Common properties for service layer models
+- `ViewModelBase`: Common properties for API models
+
+## 7. Cloud-Native Features
+
+### 7.1 .NET Aspire Integration
+
+AspireCafe leverages .NET Aspire for cloud-native capabilities:
+
+
+```csharp
+// AppHostAzure/Program.cs
+var builder = DistributedApplication.CreateBuilder(args);
+//resources
 var keyvault = builder.AddConnectionString("keyvault");
 var cosmos = builder.AddConnectionString("cosmos");
 var cache = builder.AddConnectionString("cache");
 var servicebus = builder.AddConnectionString("servicebus");
 
-// Services
-var productapi = builder.AddProject<Projects.AspireCafe_ProductApi>("aspirecafe-productapi")
-    .WithReference(keyvault).WaitFor(keyvault)
-    .WithReference(cosmos).WaitFor(cosmos)
-    .WithReference(cache).WaitFor(cache)
-    .WithReference(servicebus).WaitFor(servicebus);
-
-var counterapi = builder.AddProject<Projects.AspireCafe_CounterApi>("aspirecafe-counterapi")
-    .WithReference(keyvault).WaitFor(keyvault)
-    .WithReference(cosmos).WaitFor(cosmos)
-    .WithReference(cache).WaitFor(cache)
-    .WithReference(servicebus).WaitFor(servicebus);
-
-builder.Build().Run();
-
 ```
 
-### 3.3 Key Responsibilities
+### 7.2 Azure Service Integration
 
-- **Dependency Management**: Ensures services like `ProductApi` and `CounterApi` have access to shared resources (e.g., KeyVault, CosmosDB).
-- **Service Startup Order**: Uses `.WaitFor()` to enforce startup dependencies.
+- **Azure Cosmos DB**: Primary data store for all services
+- **Azure Redis Cache**: Distributed caching
+- **Azure Service Bus**: Messaging and event propagation
+- **Azure Key Vault**: Secure configuration and secrets management
 
-## 4. Microservices
+### 7.3 Observability
 
-### 4.1 ProductApi
+- Distributed tracing through .NET Aspire
+- Service health endpoints
+- Standardized logging and metrics
 
-#### Responsibilities
+## 8. Frontend Architecture (Angular)
 
-- Manages product catalog and metadata.
-- Provides CRUD operations for products.
+### 8.1 Component Structure
 
-#### Key Endpoints
+- Feature-based organization
+- Shared components for reusability
+- Smart and presentation components pattern
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/product/{productId:guid}` | GET | Fetches a product by ID. |
-| `/api/product/create` | POST | Creates a new product. |
-| `/api/product/update` | PUT | Updates an existing product. |
-| `/api/product/delete/{productId:guid}` | DELETE | Deletes a product. |
+### 8.2 State Management
 
-#### Key Patterns
+- RxJS for reactive state management
+- Services for data fetching and manipulation
 
-- **Facade Pattern**: Simplifies interactions with the business and data layers.
-- **Validation**: Uses FluentValidation for input validation.
-
-#### Example Code
+### 8.3 API Integration
 
 
-```csharp
-[HttpPost("create")]
-public async Task<Result<ProductServiceModel>> CreateProduct(ProductViewModel product)
-{
-    var result = await _facade.CreateProductAsync(product);
-    return result.Match(
-        onSuccess: () => result,
-        onFailure: error => Result<ProductServiceModel>.Failure(error, result.Messages)
-    );
+```typescript
+// Example order service implementation
+loadOrder(id: string): void {
+  this.orderService.getOrder(id).subscribe({
+    next: (order) => {
+      this.order = order;
+      this.isLoading = false;
+    },
+    error: (error) => {
+      console.error('Error loading order', error);
+      this.errorMessage = 'Failed to load order details';
+      this.isLoading = false;
+    }
+  });
 }
 
 ```
 
-### 4.2 CounterApi
+## 9. Validation and Error Handling
 
-#### Responsibilities
+### 9.1 Input Validation
 
-- Handles order processing and payment.
-- Manages customer orders at the counter.
-
-#### Key Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/counter/submitorder` | POST | Submits a new order. |
-| `/api/counter/getorder/{orderId:guid}` | GET | Retrieves an order by ID. |
-| `/api/counter/updateorder` | PUT | Updates an existing order. |
-| `/api/counter/payorder` | POST | Processes payment for an order. |
-
-#### Example Code
+- FluentValidation for request validation:
 
 
 ```csharp
-[HttpPost("SubmitOrder")]
-public async Task<Result<OrderServiceModel>> SubmitOrder(OrderViewModel order)
-{
-    var result = await _facade.SubmitOrderAsync(order);
-    return result.Match(
-        onSuccess: () => result,
-        onFailure: error => Result<OrderServiceModel>.Failure(error, result.Messages)
-    );
-}
+// Program.cs
+builder.Services.AddValidatorsFromAssemblyContaining<OrderViewModelValidator>();
 
 ```
 
-### 4.3 KitchenApi
+### 9.2 Global Exception Handling
 
-#### Responsibilities
+- Centralized exception middleware:
 
-- Manages kitchen operations like order preparation and cooking status.
-- Tracks kitchen inventory.
 
-#### Planned Endpoints
+```csharp
+// Program.cs
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/kitchen/prepareorder` | POST | Marks an order as being prepared. |
-| `/api/kitchen/orderstatus/{orderId:guid}` | GET | Retrieves the status of an order. |
+```
 
-### 4.4 OrderSummaryApi
+## 10. Security Considerations
 
-#### Responsibilities
+- HTTPS enforcement for all services
+- Authentication and authorization framework
+- Azure Key Vault integration for secrets management
 
-- Provides aggregated order summaries for reporting and analytics.
+## 11. Development Environment Setup
 
-#### Planned Endpoints
+### 11.1 Prerequisites
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/ordersummary/daily` | GET | Retrieves daily order summaries. |
-| `/api/ordersummary/weekly` | GET | Retrieves weekly order summaries. |
+- .NET 9 SDK
+- Node.js (latest LTS)
+- Angular CLI 19.x
+- Visual Studio 2022 or Visual Studio Code
+- Docker Desktop (for containerized development)
 
-### 4.5 BaristaApi
+### 11.2 Running the Solution Locally
 
-#### Responsibilities
+1. Clone the repository
+2. Open the solution in Visual Studio 2022
+3. Set the appropriate AppHost project as startup (Intel64/Arm64)
+4. Press F5 to build and run
+5. Access the Aspire dashboard for service monitoring
 
-- Manages barista-specific operations like drink preparation and queue management.
+## 12. Common Development Tasks
 
-#### Planned Endpoints
+### 12.1 Adding a New Endpoint
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/barista/preparedrink` | POST | Marks a drink as being prepared. |
-| `/api/barista/drinkstatus/{drinkId:guid}` | GET | Retrieves the status of a drink. |
+1. Define view and service models
+2. Implement business logic in the appropriate business class
+3. Add controller method with proper attributes
+4. Update API documentation
 
-## 5. UI (Angular)
+### 12.2 Modifying Data Models
 
-The front-end Angular application provides a user-friendly interface for interacting with the system.
+1. Update domain model
+2. Update corresponding service and view models
+3. Update mapping extensions
+4. Update database context if schema changes are required
+5. Update validation rules if necessary
 
-### Key Features
+## 13. Testing Strategy
 
-- **Responsive Design**: Optimized for both desktop and mobile devices.
-- **Integration**: Communicates with the back-end APIs using RESTful endpoints.
-- **Modular Structure**: Organized into feature modules for scalability.
+- Unit tests for business logic
+- Integration tests for API endpoints
+- End-to-end tests for complete flows
 
-### Key Files
+## 14. Deployment Procedures
 
-- `angular.json`: Configures the Angular build process.
-- `package.json`: Manages dependencies for the Angular application.
+### 14.1 Azure Deployment
 
-## 6. Shared Resources
+- CI/CD pipeline integration
+- Infrastructure as Code using Azure Resource Manager templates
+- Blue-green deployment strategy
 
-### 6.1 KeyVault
+### 14.2 Configuration Management
 
-Used for secure storage of secrets and configuration settings.
+- Environment-specific configuration
+- Secret management through Azure Key Vault
 
-### 6.2 CosmosDB
+## 15. Maintenance and Troubleshooting
 
-The primary database for all services, providing scalable and distributed data storage.
+- Aspire dashboard for service monitoring
+- Logging and diagnostics configuration
+- Health check endpoints
 
-### 6.3 Redis Cache
+---
 
-Used for caching frequently accessed data to improve performance.
-
-### 6.4 Service Bus
-
-Facilitates asynchronous communication between services.
-
-## 7. Deployment
-
-The solution is containerized and deployed using .NET Aspire. Each service is independently deployable and scalable.
-
-### Deployment Steps
-
-1. Build the solution using the `.NET 9` SDK.
-2. Deploy containers for each service.
-3. Configure shared resources (KeyVault, CosmosDB, Redis, Service Bus).
-4. Start the `AppHostAzure` project to orchestrate the services.
-
-## 8. Development Workflow
-
-### Adding a New Service
-
-1. Create a new project for the service.
-2. Define the service's responsibilities and endpoints.
-3. Implement the Facade, Business, and Data layers.
-4. Add the service to `AppHostAzure` with the required dependencies.
-
-### Debugging
-
-- Use logs to trace issues in the `AppHostAzure` startup process.
-- Validate API requests and responses using Swagger/OpenAPI.
-- Check shared resource configurations (KeyVault, CosmosDB, etc.).
-
-## 9. Security Considerations
-
-- All APIs enforce HTTPS.
-- Secrets are stored securely in KeyVault.
-- Input validation prevents injection attacks.
-- Error messages are sanitized in production.
-
-## 10. Conclusion
-
-AspireCafe is a robust, scalable, and maintainable system designed to support modern cafe operations. Its modular architecture and use of best practices make it easy to extend and support.
+This documentation provides a comprehensive overview of the AspireCafe solution's architecture, design patterns, and implementation details. Developers and support engineers can use this as a reference for understanding, maintaining, and extending the system.
