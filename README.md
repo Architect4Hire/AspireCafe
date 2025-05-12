@@ -1,7 +1,3 @@
-Here’s a detailed description of the architecture, software components, patterns, and practices utilized in the AspireCafe solution, along with suggestions for future improvements:
-
----
-
 # AspireCafe: A Modern Cloud-Native Architecture with .NET 9
 
 The AspireCafe solution demonstrates a modern approach to building distributed, cloud-native applications using .NET 9 and the .NET Aspire application stack. This blog post explores the architecture, components, and design patterns that make this solution scalable, maintainable, and future-proof.
@@ -168,9 +164,17 @@ Controllers use XML comments and `ProducesResponseType` attributes to generate c
 /// Creates a new product.
 /// </summary>
 /// <param name="product">The product details to be created.</param>
-/// <returns>A <see cref="Result{T}"/> containing the created product.</returns>
+/// <returns>
+/// A <see cref="Result{T}"/> containing a <see cref="ProductServiceModel"/> if the operation is successful.
+/// Returns a failure result with error details if the operation fails.
+/// </returns>
+/// <response code="201">Indicates that the product was created successfully.</response>
+/// <response code="400">Indicates a bad request due to invalid input.</response>
+/// <response code="500">Indicates an internal server error.</response>
 [HttpPost("create")]
 [ProducesResponseType(typeof(Result<ProductServiceModel>), 201)]
+[ProducesResponseType(typeof(Result<ProductServiceModel>), 400)]
+[ProducesResponseType(typeof(Result<ProductServiceModel>), 500)]
 
 ```
 
