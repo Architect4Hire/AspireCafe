@@ -1,10 +1,5 @@
 ﻿using AspireCafe.CounterApiDomainLayer.Managers.Models.Domain;
-using AspireCafe.CounterApiDomainLayer.Managers.Models.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AspireCafe.Shared.Enums;
 
 namespace AspireCafe.CounterApiDomainLayer.Data
 {

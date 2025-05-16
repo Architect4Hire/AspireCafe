@@ -1,14 +1,7 @@
 ﻿using AspireCafe.ProductApiDomainLayer.Managers.Context;
 using AspireCafe.ProductApiDomainLayer.Managers.Models.Domain;
-using AspireCafe.ProductApiDomainLayer.Managers.Models.Service;
-using AspireCafe.ProductApiDomainLayer.Managers.Models.View;
 using AspireCafe.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AspireCafe.ProductApiDomainLayer.Data
 {

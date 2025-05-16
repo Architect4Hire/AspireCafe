@@ -1,7 +1,7 @@
 ﻿using AspireCafe.ProductApiDomainLayer.Facade;
-using AspireCafe.ProductApiDomainLayer.Managers.Models.Service;
-using AspireCafe.ProductApiDomainLayer.Managers.Models.View;
 using AspireCafe.Shared.Extensions;
+using AspireCafe.Shared.Models.Service.Product;
+using AspireCafe.Shared.Models.View.Product;
 using AspireCafe.Shared.Results;
 using Microsoft.AspNetCore.Mvc;
 

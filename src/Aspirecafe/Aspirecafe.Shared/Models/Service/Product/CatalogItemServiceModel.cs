@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AspireCafe.ProductApiDomainLayer.Managers.Models.Service
+namespace AspireCafe.Shared.Models.Service.Product
 {
     public class CatalogItemServiceModel
     {

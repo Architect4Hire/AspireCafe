@@ -1,12 +1,6 @@
-﻿using AspireCafe.ProductApiDomainLayer.Managers.Models.Enums;
-using AspireCafe.Shared.Models.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AspireCafe.Shared.Enums;
 
-namespace AspireCafe.ProductApiDomainLayer.Managers.Models.Service
+namespace AspireCafe.Shared.Models.Service.Product
 {
     public class ProductServiceModel: ServiceBaseModel
     {

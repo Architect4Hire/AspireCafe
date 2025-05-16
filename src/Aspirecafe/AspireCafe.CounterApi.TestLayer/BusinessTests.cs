@@ -1,8 +1,8 @@
 ﻿using AspireCafe.CounterApiDomainLayer.Business;
 using AspireCafe.CounterApiDomainLayer.Data;
 using AspireCafe.CounterApiDomainLayer.Managers.Models.Domain;
-using AspireCafe.CounterApiDomainLayer.Managers.Models.Enums;
-using AspireCafe.CounterApiDomainLayer.Managers.Models.View;
+using AspireCafe.Shared.Enums;
+using AspireCafe.Shared.Models.View.Counter;
 using Moq;
 
 namespace AspireCafe.CounterApi.TestLayer

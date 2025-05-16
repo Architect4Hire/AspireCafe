@@ -1,7 +1,7 @@
 ﻿using AspireCafe.CounterApiDomainLayer.Data;
 using AspireCafe.CounterApiDomainLayer.Managers.Extensions;
-using AspireCafe.CounterApiDomainLayer.Managers.Models.Service;
-using AspireCafe.CounterApiDomainLayer.Managers.Models.View;
+using AspireCafe.Shared.Models.Service.Counter;
+using AspireCafe.Shared.Models.View.Counter;
 
 namespace AspireCafe.CounterApiDomainLayer.Business
 {

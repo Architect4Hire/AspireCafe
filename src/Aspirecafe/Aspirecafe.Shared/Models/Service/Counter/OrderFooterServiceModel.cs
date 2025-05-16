@@ -1,11 +1,4 @@
-﻿using AspireCafe.CounterApiDomainLayer.Managers.Models.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AspireCafe.CounterApiDomainLayer.Managers.Models.Service
+﻿namespace AspireCafe.Shared.Models.Service.Counter
 {
     public class OrderFooterServiceModel
     {

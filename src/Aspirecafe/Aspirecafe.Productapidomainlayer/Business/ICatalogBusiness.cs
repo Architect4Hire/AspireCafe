@@ -1,10 +1,5 @@
-﻿using AspireCafe.ProductApiDomainLayer.Managers.Models.Service;
-using AspireCafe.ProductApiDomainLayer.Managers.Models.View;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AspireCafe.Shared.Models.Service.Product;
+using AspireCafe.Shared.Models.View.Product;
 
 namespace AspireCafe.ProductApiDomainLayer.Business
 {

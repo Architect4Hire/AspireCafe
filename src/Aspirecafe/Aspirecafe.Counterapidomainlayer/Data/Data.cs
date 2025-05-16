@@ -1,6 +1,5 @@
 ﻿using AspireCafe.CounterApiDomainLayer.Managers.Context;
 using AspireCafe.CounterApiDomainLayer.Managers.Models.Domain;
-using AspireCafe.CounterApiDomainLayer.Managers.Models.Enums;
 using AspireCafe.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 
