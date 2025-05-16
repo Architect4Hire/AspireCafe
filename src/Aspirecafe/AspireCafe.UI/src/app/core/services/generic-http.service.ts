@@ -34,6 +34,16 @@ export class GenericHttpService {
     return this.http.put<T>(url, body, { headers });
   }
 
+  patch<T>(tokenOrUrl: string, body: any, headers?: HttpHeaders | { [header: string]: string | string[] }): Observable<T> {
+    const url = this.resolveUrl(tokenOrUrl);
+    return this.http.patch<T>(url, body, { headers });
+  }
+
+  options<T>(tokenOrUrl: string, headers?: HttpHeaders | { [header: string]: string | string[] }): Observable<T> {
+    const url = this.resolveUrl(tokenOrUrl);
+    return this.http.options<T>(url, { headers });
+  }
+
   delete<T>(tokenOrUrl: string, headers?: HttpHeaders | {[header: string]: string | string[]}): Observable<T> {
     const url = this.resolveUrl(tokenOrUrl);
     return this.http.delete<T>(url, { headers });
