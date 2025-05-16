@@ -43,6 +43,11 @@ namespace AspireCafe.Shared.Extensions
             app.MapControllers();
         }
 
+        public static void AddSeq(this WebApplicationBuilder builder)
+        {
+            builder.AddSeqEndpoint("seq");
+        }
+
         public static void AddVersioning(this WebApplicationBuilder builder, int primaryVersion)
         {
             builder.Services.AddApiVersioning(options =>

@@ -74,6 +74,7 @@ public static class Extensions
                .UseAzureMonitor();
         }
 
+
         return builder;
     }
 

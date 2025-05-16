@@ -18,6 +18,7 @@ void SetUpBuilder(WebApplicationBuilder builder)
     builder.AddVersioning(1);
     builder.AddExceptionHandling();
     builder.AddUniversalConfigurations();
+    builder.AddSeq(); //if you choose to opt in to save your traces
 }
 
 void SetUpApp(WebApplication app)
