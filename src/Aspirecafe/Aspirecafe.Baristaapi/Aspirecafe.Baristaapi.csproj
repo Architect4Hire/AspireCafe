@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AspireCafe.BaristaApiDomainLayer\AspireCafe.BaristaApiDomainLayer.csproj" />
     <ProjectReference Include="..\AspireCafe.ServiceDefaults\AspireCafe.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\AspireCafe.Shared\AspireCafe.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

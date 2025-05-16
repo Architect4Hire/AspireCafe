@@ -17,6 +17,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Aspire.Hosting.NodeJs" Version="9.2.1" />
+		<PackageReference Include="Aspire.Hosting.Seq" Version="9.2.1" />
 		<ProjectReference Include="..\AspireCafe.BaristaApi\AspireCafe.BaristaApi.csproj" />
 		<ProjectReference Include="..\AspireCafe.CounterApi\AspireCafe.CounterApi.csproj" />
 		<ProjectReference Include="..\AspireCafe.KitchenApi\AspireCafe.KitchenApi.csproj" />

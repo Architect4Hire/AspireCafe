@@ -6,6 +6,8 @@ The AspireCafe solution demonstrates a modern approach to building distributed, 
 
 ## **Architecture Overview**
 
+ ![System Architecture](https://github.com/Architect4Hire/AspireCafe/blob/dev/images/system.png)
+
 AspireCafe is a **microservices-based architecture** designed to manage various aspects of a cafe's operations. Each microservice is independently deployable and responsible for a specific domain, ensuring modularity and scalability.
 
 ### **Core Microservices**
