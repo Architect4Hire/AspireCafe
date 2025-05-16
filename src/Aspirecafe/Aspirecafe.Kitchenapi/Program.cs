@@ -1,35 +1,48 @@
 using AspireCafe.BaristaApiDomainLayer.Facade;
 using AspireCafe.KitchenApiDomainLayer.Business;
 using AspireCafe.KitchenApiDomainLayer.Data;
+using AspireCafe.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.AddServiceDefaults();
-
-// Add services to the container.
-
-builder.Services.AddScoped<IFacade, Facade>();
-builder.Services.AddScoped<IBusiness, Business>();
-builder.Services.AddScoped<IData, Data>();
-
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
+SetUpBuilder(builder);
 var app = builder.Build();
+SetUpApp(app);
+app.Run();
 
-app.MapDefaultEndpoints();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+void SetUpBuilder(WebApplicationBuilder builder)
 {
-    app.MapOpenApi();
+    builder.AddServiceDefaults();
+    AddDatabases(builder); //service based configuration - shouldn't be loaded in a shared extension method
+    AddScopes(builder); //service based configuration - shouldn't be loaded in a shared extension method
+    AddFluentValidation(builder); //service based configuration - shouldn't be loaded in a shared extension method
+    builder.AddVersioning(1);
+    builder.AddExceptionHandling();
+    builder.AddUniversalConfigurations();
 }
 
-app.UseHttpsRedirection();
+void SetUpApp(WebApplication app)
+{
+    app.MapDefaultEndpoints();
+    if (app.Environment.IsDevelopment())
+    {
+        app.ConfigureOpenApiAndScaler();
+    }
+    app.ConfigureApplicationDefaults();
+}
+void AddDatabases(WebApplicationBuilder builder)
+{
+}
 
-app.UseAuthorization();
+void AddScopes(WebApplicationBuilder builder)
+{
+    builder.Services.AddScoped<IFacade, Facade>();
+    builder.Services.AddScoped<IBusiness, Business>();
+    builder.Services.AddScoped<IData, Data>();
+}
 
-app.MapControllers();
+void AddFluentValidation(WebApplicationBuilder builder)
+{
+    
+}
 
-app.Run();
+
