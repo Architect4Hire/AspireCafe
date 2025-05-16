@@ -18,7 +18,7 @@ AspireCafe follows a microservices architecture with the following core componen
   - Barista API: Manages beverage preparation workflow
   - Order Summary API: Provides order analytics and reporting
 
-  ![System Architecture](../images/system.png)
+  ![System Architecture](../../images/system.png)
 
 ### 2.2 Deployment Architecture
 
