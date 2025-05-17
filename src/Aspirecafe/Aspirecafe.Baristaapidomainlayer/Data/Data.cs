@@ -1,4 +1,4 @@
-﻿using AspireCafe.CounterApiDomainLayer.Managers.Context;
+﻿using AspireCafe.BaristaApiDomainLayer.Managers.Context;
 using AspireCafe.Shared.Enums;
 using AspireCafe.Shared.Models.Domain.Orders;
 using Microsoft.EntityFrameworkCore;

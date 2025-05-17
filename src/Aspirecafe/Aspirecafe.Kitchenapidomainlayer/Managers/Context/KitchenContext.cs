@@ -1,11 +1,11 @@
 ﻿using AspireCafe.Shared.Models.Domain.Orders;
 using Microsoft.EntityFrameworkCore;
 
-namespace AspireCafe.BaristaApiDomainLayer.Managers.Context
+namespace AspireCafe.KitchenApiDomainLayer.Managers.Context
 {
-    public class BaristaContext : DbContext
+    public class KitchenContext : DbContext
     {
-        public BaristaContext(DbContextOptions options) : base(options) { }
+        public KitchenContext(DbContextOptions options) : base(options) { }
 
         internal DbSet<ProcessingOrderDomainModel> Orders { get; set; }
 
@@ -13,7 +13,7 @@ namespace AspireCafe.BaristaApiDomainLayer.Managers.Context
         {
             modelBuilder.Entity<ProcessingOrderDomainModel>()
                 .HasPartitionKey(x => x.DocumentType)
-                .ToContainer("barista")
+                .ToContainer("kitchen")
                 .HasKey(x => x.Id);
         }
     }

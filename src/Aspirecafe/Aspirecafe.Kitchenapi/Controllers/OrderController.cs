@@ -2,7 +2,8 @@
 using AspireCafe.Shared.Models.Service.OrderUpdate;
 using AspireCafe.Shared.Results;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.TeamFoundation.Build.WebApi;
+using AspireCafe.Shared.Extensions;
+using AspireCafe.Shared.Enums;
 
 namespace AspireCafe.KitchenApi.Controllers
 {
@@ -17,10 +18,10 @@ namespace AspireCafe.KitchenApi.Controllers
             _facade = facade;
         }
 
-        [HttpPut("update/status/{orderId:guid}/{orderProcessStation:string}")]
-        public async Task<Result<OrderUpdateServiceModel>> UpdateOrderStatus(Guid orderId, string OrderProcessStation)
+        [HttpPut("update/status/{orderId:guid}/{orderProcessStation:OrderProcessStation}/{orderProcessStatus:OrderProcessStatus}")]
+        public async Task<Result<OrderUpdateServiceModel>> UpdateOrderStatus(Guid orderId, OrderProcessStation orderProcessStation, OrderProcessStatus orderProcessStatus)
         {
-            var result = await _facade.UpdateOrderStatusAsync(orderId, OrderProcessStation);
+            var result = await _facade.UpdateOrderStatusAsync(orderId, orderProcessStation, orderProcessStatus);
             return result.Match(
                 onSuccess: () => result,
                 onFailure: error => Result<OrderUpdateServiceModel>.Failure(error, result.Messages)
