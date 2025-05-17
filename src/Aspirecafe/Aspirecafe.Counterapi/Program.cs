@@ -25,6 +25,7 @@ void SetUpBuilder(WebApplicationBuilder builder)
     builder.AddUniversalConfigurations();
     builder.AddSeq(); //if you choose to opt in to save your traces
     AddHttpClient(builder);
+    AddServiceBus(builder);
 }
 
 void SetUpApp(WebApplication app)
@@ -35,6 +36,12 @@ void SetUpApp(WebApplication app)
         app.ConfigureOpenApiAndScaler();
     }
     app.ConfigureApplicationDefaults();
+}
+
+void AddServiceBus(WebApplicationBuilder builder)
+{
+    builder.AddAzureServiceBusClient("serviceBusConnection");
+
 }
 
 void AddHttpClient(WebApplicationBuilder builder)

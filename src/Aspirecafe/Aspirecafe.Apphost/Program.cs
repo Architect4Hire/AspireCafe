@@ -30,7 +30,11 @@ var servicebus = builder.AddAzureServiceBus("servicebus").RunAsEmulator(e =>
     e.WithHostPort(8080);
 });
 var topic = servicebus.AddServiceBusTopic("purchased-orders");
-topic.AddServiceBusSubscription("default").WithProperties(p =>
+topic.AddServiceBusSubscription("barista").WithProperties(p =>
+{
+    p.MaxDeliveryCount = 5;
+});
+topic.AddServiceBusSubscription("kitchen").WithProperties(p =>
 {
     p.MaxDeliveryCount = 5;
 });

@@ -4,6 +4,32 @@
 
 AspireCafe is a cloud-native, microservices-based point-of-sale system designed for cafes. The solution follows a modern distributed architecture that leverages .NET 9 Aspire for cloud-native capabilities and Angular 19 for the frontend user interface.
 
+AspireCafe/
+├── src/
+│   └── Aspirecafe/
+│       ├── Aspirecafe.sln                 # Main solution file
+│       ├── AspireCafe.UI/                 # Angular frontend
+│       ├── Aspirecafe.Productapi/         # Product catalog API
+│       ├── Aspirecafe.Productapidomainlayer/ # Domain layer for Product API
+│       ├── AspireCafe.Counterapi/         # Order processing API
+│       ├── AspireCafe.Counterapidomainlayer/ # Domain layer for Counter API
+│       ├── AspireCafe.Kitchenapi/         # Food preparation API
+│       ├── AspireCafe.Kitchenapidomainlayer/ # Domain layer for Kitchen API
+│       ├── AspireCafe.Baristaapi/         # Beverage preparation API 
+│       ├── AspireCafe.Baristaapidomainlayer/ # Domain layer for Barista API
+│       ├── AspireCafe.OrderSummaryapi/    # Order analytics API
+│       ├── AspireCafe.ServiceDefaults/    # Shared service defaults
+│       ├── Aspirecafe.Apphost/            # .NET Aspire application host
+│       ├── AppHostAzure/                  # Azure deployment host
+│       ├── AspireCafe.Arm64/              # ARM64 deployment host
+│       └── [Test Projects]/               # Various test projects
+├── data/                                  # Sample data files
+│   ├── orders.json
+│   └── products.json
+├── docs/                                  # Documentation
+│   └── diagrams/                          # System diagrams
+└── images/                                # Images for documentation
+
 ## 2. Architectural Overview
 
 ### 2.1 System Architecture
