@@ -33,7 +33,7 @@ namespace AspireCafe.CounterApiDomainLayer.Data
             order.Footer.SettledAmount = amount;
             order.Footer.TipAmount = tip;
             order.Footer.PaymentStatus = PaymentStatus.Paid;
-            order.Footer.OrderStatus = OrderStatus.Completed;
+            order.Footer.OrderStatus = OrderStatus.Delivered;
             order.ModifiedDate = DateTime.UtcNow;
             _context.Orders.Update(order);
             await _context.SaveChangesAsync();

@@ -20,6 +20,8 @@ var cosmos = builder.AddAzureCosmosDB("cosmos").RunAsEmulator(c =>
 });
 var db = cosmos.AddCosmosDatabase("AspireCafe");
 var container = db.AddContainer("orders", "/DocumentType");
+var container3 = db.AddContainer("barista", "/DocumentType");
+var container4 = db.AddContainer("kitchen", "/DocumentType");
 var container2 = db.AddContainer("products", "/DocumentType");
 #pragma warning restore CS0618 // Restore warning
 #pragma warning restore ASPIRECOSMOSDB001 // Restore warning
@@ -34,11 +36,11 @@ var servicebus = builder.AddAzureServiceBus("servicebus").RunAsEmulator(e =>
     e.WithHostPort(8080);
 });
 var topic = servicebus.AddServiceBusTopic("purchased-orders");
-topic.AddServiceBusSubscription("barista").WithProperties(p =>
+topic.AddServiceBusSubscription("barista-orders").WithProperties(p =>
 {
     p.MaxDeliveryCount = 5;
 });
-topic.AddServiceBusSubscription("kitchen").WithProperties(p =>
+topic.AddServiceBusSubscription("kitchen-orders").WithProperties(p =>
 {
     p.MaxDeliveryCount = 5;
 });

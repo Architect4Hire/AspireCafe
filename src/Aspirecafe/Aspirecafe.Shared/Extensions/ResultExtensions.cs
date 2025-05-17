@@ -1,11 +1,6 @@
 ﻿using AspireCafe.Shared.Enums;
 using AspireCafe.Shared.Models.Service;
 using AspireCafe.Shared.Results;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AspireCafe.Shared.Extensions
 {

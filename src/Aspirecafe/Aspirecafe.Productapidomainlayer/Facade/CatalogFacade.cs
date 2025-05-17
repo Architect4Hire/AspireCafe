@@ -33,7 +33,6 @@ namespace AspireCafe.ProductApiDomainLayer.Facade
 
         public async Task<Result<ProductMetaDataServiceModel>> FetchProductMetadataAsync(ProductMetaDataViewModel products)
         {
-            // Fix for CS0311: Change the return type to a custom Result wrapper that supports List<T>
             var metadata = await _business.FetchProductMetadataAsync(products);
             return Result<ProductMetaDataServiceModel>.Success(metadata);
         }
