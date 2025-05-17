@@ -4,6 +4,8 @@ using AspireCafe.CounterApiDomainLayer.Managers.Models.Domain;
 using AspireCafe.Shared.Enums;
 using AspireCafe.Shared.HttpClients;
 using AspireCafe.Shared.Models.View.Counter;
+using Azure.Messaging.ServiceBus;
+using Microsoft.Extensions.Configuration;
 using Moq;
 
 namespace AspireCafe.CounterApi.TestLayer
@@ -18,8 +20,14 @@ namespace AspireCafe.CounterApi.TestLayer
         [TestInitialize]
         public void Setup()
         {
-            _dataMock = new Mock<IData>();
-            _business = new Business(_dataMock.Object,_productHttpClientMock.Object);
+            _dataMock = new Mock<IData>(MockBehavior.Strict);
+            _productHttpClientMock = new Mock<IProductHttpClient>(MockBehavior.Strict);
+            var configMock = new Mock<IConfiguration>();
+            _business = new Business(
+                _dataMock.Object,
+                _productHttpClientMock.Object,
+                configMock.Object
+            );
         }
 
         [TestMethod]

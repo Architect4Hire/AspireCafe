@@ -3,10 +3,15 @@ using AspireCafe.CounterApiDomainLayer.Managers.Extensions;
 using AspireCafe.CounterApiDomainLayer.Managers.Models.Domain;
 using AspireCafe.Shared.Enums;
 using AspireCafe.Shared.HttpClients;
+using AspireCafe.Shared.Models.Message.Barista;
+using AspireCafe.Shared.Models.Message.Kitchen;
 using AspireCafe.Shared.Models.Message.Shared;
 using AspireCafe.Shared.Models.Service.Counter;
 using AspireCafe.Shared.Models.View.Counter;
 using AspireCafe.Shared.Models.View.Product;
+using Azure.Messaging.ServiceBus;
+using Microsoft.Extensions.Configuration;
+using System.Text.Json;
 
 namespace AspireCafe.CounterApiDomainLayer.Business
 {
@@ -14,11 +19,13 @@ namespace AspireCafe.CounterApiDomainLayer.Business
     {
         private readonly IData _data;
         private readonly IProductHttpClient _productClient;
+        private ServiceBusClient _serviceBusClient;
 
-        public Business(IData data, IProductHttpClient product)
+        public Business(IData data, IProductHttpClient product, IConfiguration config)
         {
             _data = data;
             _productClient = product;
+            _serviceBusClient = new ServiceBusClient(config.GetConnectionString("serviceBusConnection"));
         }
 
         public async Task<OrderServiceModel> GetOrderAsync(Guid orderId)
@@ -70,6 +77,22 @@ namespace AspireCafe.CounterApiDomainLayer.Business
                     }));
                 }
             }
+            //send to service bus for background processes
+            await SendOrderToServiceBusAsync("barista", barista,
+                () => new BaristaOrderMessageModel
+                {
+                    CustomerName = domainModel.Header.CustomerName,
+                    TableNumber = domainModel.Header.TableNumber.GetValueOrDefault(),
+                    Items = barista
+                });
+
+            await SendOrderToServiceBusAsync("kitchen", kitchen,
+                () => new KitchenOrderMessageModel
+                {
+                    CustomerName = domainModel.Header.CustomerName,
+                    TableNumber = domainModel.Header.TableNumber.GetValueOrDefault(),
+                    Items = kitchen
+                });
             // TODO: Send barista and kitchen lists to their respective APIs if needed
             return domainModel.MapToServiceModel();
         }
@@ -79,5 +102,32 @@ namespace AspireCafe.CounterApiDomainLayer.Business
             var model = await _data.UpdateOrderAsync(order.MapToDomainModel());
             return model.MapToServiceModel();
         }
+
+        #region private methods
+
+        private async Task SendOrderToServiceBusAsync<T>(string queueName,List<ProductInfoMessageModel> items,Func<T> messageFactory)
+        {
+            if (items == null || items.Count == 0)
+                return;
+
+            await using var sender = _serviceBusClient.CreateSender(queueName);
+            using ServiceBusMessageBatch messageBatch = await sender.CreateMessageBatchAsync();
+            var message = new ServiceBusMessage(JsonSerializer.Serialize(messageFactory()));
+
+            if (!messageBatch.TryAddMessage(message))
+                throw new Exception($"Couldn't route order to the service bus subscription - {queueName}");
+
+            try
+            {
+                await sender.SendMessagesAsync(messageBatch);
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception as needed
+                throw new Exception($"Failed to send message batch to {queueName}: {ex.Message}", ex);
+            }
+        }
+
+        #endregion
     }
 }

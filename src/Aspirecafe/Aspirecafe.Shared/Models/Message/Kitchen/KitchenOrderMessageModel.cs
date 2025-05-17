@@ -4,8 +4,8 @@ namespace AspireCafe.Shared.Models.Message.Kitchen
 {
     public class KitchenOrderMessageModel:MessageBaseModel
     {
-        public int CustomerName { get; set; }
-        public int TableName { get; set; }
+        public string CustomerName { get; set; }
+        public int TableNumber { get; set; }
         public List<ProductInfoMessageModel> Items { get; set; }
 
         public KitchenOrderMessageModel()
