@@ -20,6 +20,8 @@ var cosmos = builder.AddAzureCosmosDB("cosmos").RunAsPreviewEmulator(c =>
 });
 var db = cosmos.AddCosmosDatabase("AspireCafe");
 var container = db.AddContainer("orders", "/DocumentType");
+var container3 = db.AddContainer("barista", "/DocumentType");
+var container4 = db.AddContainer("kitchen", "/DocumentType");
 var container2 = db.AddContainer("products", "/DocumentType");
 #pragma warning restore CS0618 // Restore warning
 #pragma warning restore ASPIRECOSMOSDB001 // Restore warning

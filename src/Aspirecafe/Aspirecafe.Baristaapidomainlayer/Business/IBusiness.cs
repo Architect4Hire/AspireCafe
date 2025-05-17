@@ -1,4 +1,8 @@
-﻿using System;
+﻿using AspireCafe.Shared.Enums;
+using AspireCafe.Shared.Models.Domain.Orders;
+using AspireCafe.Shared.Models.Service.OrderUpdate;
+using AspireCafe.Shared.Results;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +12,8 @@ namespace AspireCafe.BaristaApiDomainLayer.Business
 {
     public interface IBusiness
     {
+        Task<OrderUpdateServiceModel> UpdateOrderStatusAsync(Guid orderId, OrderProcessStation orderProcessStation, OrderProcessStatus orderProcessStatus);
+        Task<OrderGridServiceModel> FetchActiveOrdersAsync();
+        Task<OrderUpdateServiceModel> AddOrderAsync(ProcessingOrderDomainModel order);
     }
 }

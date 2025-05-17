@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AspireCafe.Shared.Enums;
+using AspireCafe.Shared.Models.Domain.Orders;
 
 namespace AspireCafe.BaristaApiDomainLayer.Data
 {
     public interface IData
     {
+        Task<ProcessingOrderDomainModel> AddOrderAsync(ProcessingOrderDomainModel order);
+        Task<ProcessingOrderDomainModel> UpdateOrderStatusAsync(Guid orderId, OrderProcessStation orderProcessStation, OrderProcessStatus orderProcessStatus);
+        Task<List<ProcessingOrderDomainModel>> FetchActiveOrdersAsync();
     }
 }
