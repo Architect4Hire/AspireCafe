@@ -4,7 +4,9 @@ using AspireCafe.CounterApiDomainLayer.Facade;
 using AspireCafe.CounterApiDomainLayer.Managers.Context;
 using AspireCafe.CounterApiDomainLayer.Managers.Validators;
 using AspireCafe.Shared.Extensions;
+using AspireCafe.Shared.HttpClients;
 using FluentValidation;
+using Refit;
 
 var builder = WebApplication.CreateBuilder(args);
 SetUpBuilder(builder); 
@@ -22,6 +24,7 @@ void SetUpBuilder(WebApplicationBuilder builder)
     builder.AddExceptionHandling();
     builder.AddUniversalConfigurations();
     builder.AddSeq(); //if you choose to opt in to save your traces
+    AddHttpClient(builder);
 }
 
 void SetUpApp(WebApplication app)
@@ -33,6 +36,13 @@ void SetUpApp(WebApplication app)
     }
     app.ConfigureApplicationDefaults();
 }
+
+void AddHttpClient(WebApplicationBuilder builder)
+{
+    builder.Services.AddRefitClient<IProductHttpClient>()
+        .ConfigureHttpClient(c => c.BaseAddress = new Uri(builder.Configuration["productApi"]));
+}
+
 void AddDatabases(WebApplicationBuilder builder)
 {
     builder.AddCosmosDbContext<CounterContext>("aspireCafe", "AspireCafe");
