@@ -4,7 +4,10 @@ using System.Net.Sockets;
 var builder = DistributedApplication.CreateBuilder(args);
 
 //key vault - https://jamesgould.dev/posts/Azure-Key-Vault-Emulator/
-var keyvault = builder.AddAzureKeyVaultEmulator("keyvault", ContainerLifetime.Persistent);
+var keyvault = builder.AddAzureKeyVaultEmulator("keyvault", new KeyVaultEmulatorOptions
+{
+    Lifetime = ContainerLifetime.Persistent
+});
 
 //database - https://learn.microsoft.com/en-us/dotnet/aspire/database/azure-cosmos-db-integration?tabs=dotnet-cli
 #pragma warning disable CS0618 // Suppress warning for evaluation-only API
@@ -31,7 +34,11 @@ var servicebus = builder.AddAzureServiceBus("servicebus").RunAsEmulator(e =>
     e.WithHostPort(8080);
 });
 var topic = servicebus.AddServiceBusTopic("purchased-orders");
-topic.AddServiceBusSubscription("default").WithProperties(p =>
+topic.AddServiceBusSubscription("barista").WithProperties(p =>
+{
+    p.MaxDeliveryCount = 5;
+});
+topic.AddServiceBusSubscription("kitchen").WithProperties(p =>
 {
     p.MaxDeliveryCount = 5;
 });
