@@ -1,8 +1,9 @@
 ﻿using AspireCafe.CounterApiDomainLayer.Business;
 using AspireCafe.CounterApiDomainLayer.Data;
 using AspireCafe.CounterApiDomainLayer.Managers.Models.Domain;
-using AspireCafe.CounterApiDomainLayer.Managers.Models.Enums;
-using AspireCafe.CounterApiDomainLayer.Managers.Models.View;
+using AspireCafe.Shared.Enums;
+using AspireCafe.Shared.HttpClients;
+using AspireCafe.Shared.Models.View.Counter;
 using Moq;
 
 namespace AspireCafe.CounterApi.TestLayer
@@ -11,13 +12,14 @@ namespace AspireCafe.CounterApi.TestLayer
     public class BusinessTests
     {
         private Mock<IData> _dataMock;
+        private Mock<IProductHttpClient> _productHttpClientMock;
         private Business _business;
 
         [TestInitialize]
         public void Setup()
         {
             _dataMock = new Mock<IData>();
-            _business = new Business(_dataMock.Object);
+            _business = new Business(_dataMock.Object,_productHttpClientMock.Object);
         }
 
         [TestMethod]

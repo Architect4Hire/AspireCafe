@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AspireCafe.CounterApiDomainLayer.Managers.Models.View
+namespace AspireCafe.Shared.Models.View.Counter
 {
     public class LineItemViewModel
     {

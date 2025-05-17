@@ -1,10 +1,5 @@
-﻿using AspireCafe.ProductApiDomainLayer.Managers.Models.Enums;
+﻿using AspireCafe.Shared.Enums;
 using AspireCafe.Shared.Models.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AspireCafe.ProductApiDomainLayer.Managers.Models.Domain
 {

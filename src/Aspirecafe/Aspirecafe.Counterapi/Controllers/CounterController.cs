@@ -1,7 +1,7 @@
 ﻿using AspireCafe.CounterApiDomainLayer.Facade;
-using AspireCafe.CounterApiDomainLayer.Managers.Models.Service;
-using AspireCafe.CounterApiDomainLayer.Managers.Models.View;
 using AspireCafe.Shared.Extensions;
+using AspireCafe.Shared.Models.Service.Counter;
+using AspireCafe.Shared.Models.View.Counter;
 using AspireCafe.Shared.Results;
 using Microsoft.AspNetCore.Mvc;
 

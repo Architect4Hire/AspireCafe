@@ -1,7 +1,6 @@
-﻿using AspireCafe.ProductApiDomainLayer.Managers.Models.Enums;
-using AspireCafe.Shared.Models.View;
+﻿using AspireCafe.Shared.Enums;
 
-namespace AspireCafe.ProductApiDomainLayer.Managers.Models.View
+namespace AspireCafe.Shared.Models.View.Product
 {
     public class ProductViewModel:ViewModelBase
     {

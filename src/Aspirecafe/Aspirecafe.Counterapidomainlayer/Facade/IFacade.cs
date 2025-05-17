@@ -1,12 +1,6 @@
-﻿using AspireCafe.CounterApiDomainLayer.Managers.Models.Service;
-using AspireCafe.CounterApiDomainLayer.Managers.Models.View;
+﻿using AspireCafe.Shared.Models.Service.Counter;
+using AspireCafe.Shared.Models.View.Counter;
 using AspireCafe.Shared.Results;
-using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AspireCafe.CounterApiDomainLayer.Facade
 {

@@ -1,0 +1,21 @@
+﻿using AspireCafe.Shared.Models.Message.Shared;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AspireCafe.Shared.Models.Message.Barista
+{
+    public class BaristaOrderMessageModel : MessageBaseModel
+    {
+        public int CustomerName { get; set; }
+        public int TableName { get; set; }
+        public List<ProductInfoMessageModel> Items { get; set; }
+
+        public BaristaOrderMessageModel()
+        {
+            Items = new List<ProductInfoMessageModel>();
+        }
+    }
+}

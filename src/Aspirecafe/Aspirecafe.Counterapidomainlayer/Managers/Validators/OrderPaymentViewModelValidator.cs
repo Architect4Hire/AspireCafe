@@ -1,4 +1,4 @@
-﻿using AspireCafe.CounterApiDomainLayer.Managers.Models.View;
+﻿using AspireCafe.Shared.Models.View.Counter;
 using FluentValidation;
 
 namespace AspireCafe.CounterApiDomainLayer.Managers.Validators

@@ -1,4 +1,4 @@
-﻿using AspireCafe.ProductApiDomainLayer.Managers.Models.View;
+﻿using AspireCafe.Shared.Models.View.Product;
 using FluentValidation;
 
 namespace AspireCafe.ProductApiDomainLayer.Managers.Validators

@@ -1,8 +1,8 @@
 ﻿using AspireCafe.ProductApiDomainLayer.Business;
-using AspireCafe.ProductApiDomainLayer.Managers.Models.Service;
-using AspireCafe.ProductApiDomainLayer.Managers.Models.View;
 using AspireCafe.ProductApiDomainLayer.Managers.Validators;
 using AspireCafe.Shared.Enums;
+using AspireCafe.Shared.Models.Service.Product;
+using AspireCafe.Shared.Models.View.Product;
 using AspireCafe.Shared.Results;
 using Microsoft.Extensions.Caching.Distributed;
 

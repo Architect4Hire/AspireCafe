@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AspireCafe.ProductApiDomainLayer.Managers.Models.View
+namespace AspireCafe.Shared.Models.View.Product
 {
     public class ProductMetaDataViewModel
     {
