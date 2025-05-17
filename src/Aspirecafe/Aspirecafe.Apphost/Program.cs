@@ -1,10 +1,14 @@
 using AzureKeyVaultEmulator.Aspire.Hosting;
 using System.Net.Sockets;
 
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 //key vault - https://jamesgould.dev/posts/Azure-Key-Vault-Emulator/
-var keyvault = builder.AddAzureKeyVaultEmulator("keyvault", ContainerLifetime.Persistent);
+var keyvault = builder.AddAzureKeyVaultEmulator("keyvault", new KeyVaultEmulatorOptions
+{
+    Lifetime = ContainerLifetime.Persistent
+});
 
 //database - https://learn.microsoft.com/en-us/dotnet/aspire/database/azure-cosmos-db-integration?tabs=dotnet-cli
 #pragma warning disable CS0618 // Suppress warning for evaluation-only API

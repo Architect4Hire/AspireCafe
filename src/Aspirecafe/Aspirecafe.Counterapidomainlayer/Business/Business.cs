@@ -83,7 +83,8 @@ namespace AspireCafe.CounterApiDomainLayer.Business
                 {
                     CustomerName = domainModel.Header.CustomerName,
                     TableNumber = domainModel.Header.TableNumber.GetValueOrDefault(),
-                    Items = barista
+                    Items = barista,
+                    RouteType = RouteType.Barista
                 });
 
             await SendOrderToServiceBusAsync("kitchen", kitchen,
@@ -91,7 +92,8 @@ namespace AspireCafe.CounterApiDomainLayer.Business
                 {
                     CustomerName = domainModel.Header.CustomerName,
                     TableNumber = domainModel.Header.TableNumber.GetValueOrDefault(),
-                    Items = kitchen
+                    Items = kitchen,
+                    RouteType = RouteType.Kitchen
                 });
             // TODO: Send barista and kitchen lists to their respective APIs if needed
             return domainModel.MapToServiceModel();
@@ -105,17 +107,17 @@ namespace AspireCafe.CounterApiDomainLayer.Business
 
         #region private methods
 
-        private async Task SendOrderToServiceBusAsync<T>(string queueName,List<ProductInfoMessageModel> items,Func<T> messageFactory)
+        private async Task SendOrderToServiceBusAsync<T>(string topicName,List<ProductInfoMessageModel> items,Func<T> messageFactory)
         {
             if (items == null || items.Count == 0)
                 return;
 
-            await using var sender = _serviceBusClient.CreateSender(queueName);
+            await using var sender = _serviceBusClient.CreateSender("purchased-orders");
             using ServiceBusMessageBatch messageBatch = await sender.CreateMessageBatchAsync();
             var message = new ServiceBusMessage(JsonSerializer.Serialize(messageFactory()));
 
             if (!messageBatch.TryAddMessage(message))
-                throw new Exception($"Couldn't route order to the service bus subscription - {queueName}");
+                throw new Exception($"Couldn't route order to the service bus subscription - {topicName}");
 
             try
             {
@@ -124,7 +126,7 @@ namespace AspireCafe.CounterApiDomainLayer.Business
             catch (Exception ex)
             {
                 // Log or handle the exception as needed
-                throw new Exception($"Failed to send message batch to {queueName}: {ex.Message}", ex);
+                throw new Exception($"Failed to send message batch to {topicName}: {ex.Message}", ex);
             }
         }
 
