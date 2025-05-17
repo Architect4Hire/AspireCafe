@@ -1,4 +1,6 @@
-﻿namespace AspireCafe.Shared.Enums
+﻿using Microsoft.AspNetCore.Routing;
+
+namespace AspireCafe.Shared.Enums
 {
     public enum DocumentType
     {
