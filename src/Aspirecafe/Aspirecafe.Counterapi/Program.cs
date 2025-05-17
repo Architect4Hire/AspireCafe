@@ -47,7 +47,7 @@ void AddServiceBus(WebApplicationBuilder builder)
 void AddHttpClient(WebApplicationBuilder builder)
 {
     builder.Services.AddRefitClient<IProductHttpClient>()
-        .ConfigureHttpClient(c => c.BaseAddress = new Uri(builder.Configuration["productApi"]));
+        .ConfigureHttpClient(c => c.BaseAddress = new Uri(builder.Configuration["productApi"] ?? ""));
 }
 
 void AddDatabases(WebApplicationBuilder builder)

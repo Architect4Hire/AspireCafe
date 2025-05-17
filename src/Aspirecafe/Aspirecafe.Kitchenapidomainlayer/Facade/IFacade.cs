@@ -3,7 +3,7 @@ using AspireCafe.Shared.Models.Domain.Orders;
 using AspireCafe.Shared.Models.Service.OrderUpdate;
 using AspireCafe.Shared.Results;
 
-namespace AspireCafe.BaristaApiDomainLayer.Facade
+namespace AspireCafe.KitchenApiDomainLayer.Facade
 {
     public interface IFacade
     {
