@@ -30,8 +30,8 @@ void AddRouteConstraints(WebApplicationBuilder builder)
 {
     builder.Services.Configure<RouteOptions>(options =>
     {
-        options.ConstraintMap.Add("OrderProcessStation", typeof(OrderProcessStation));
-        options.ConstraintMap.Add("OrderProcessStatus", typeof(OrderProcessStatus));
+        options.ConstraintMap.Add("OrderProcessStation", typeof(OrderProcessStationRouteConstraint));
+        options.ConstraintMap.Add("OrderProcessStatus", typeof(OrderProcessStatusRouteConstraint));
     });
 }
 
