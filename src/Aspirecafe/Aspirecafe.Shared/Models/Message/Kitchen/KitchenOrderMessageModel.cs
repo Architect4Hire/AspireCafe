@@ -1,4 +1,5 @@
-﻿using AspireCafe.Shared.Models.Message.Shared;
+﻿using AspireCafe.Shared.Enums;
+using AspireCafe.Shared.Models.Message.Shared;
 
 namespace AspireCafe.Shared.Models.Message.Kitchen
 {
@@ -7,6 +8,7 @@ namespace AspireCafe.Shared.Models.Message.Kitchen
         public string CustomerName { get; set; }
         public int TableNumber { get; set; }
         public List<ProductInfoMessageModel> Items { get; set; }
+        public RouteType RouteType { get; set; }
 
         public KitchenOrderMessageModel()
         {
