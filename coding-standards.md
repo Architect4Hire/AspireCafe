@@ -500,9 +500,9 @@ builder.AddRedisDistributedCache("cache");
 The solution follows a consistent approach to model mapping:
 
 1. **Model Types**
-   - **View Models**: DTOs for external API interactions
+   - **View Models**: DTOs for incoming API interactions
    - **Domain Models**: Internal representation within the domain layer
-   - **Service Models**: Models returned from the business layer to the facade
+   - **Service Models**: Models returned from the business layer to the facade (outbound DTO)
 
 2. **Mapping Approach**
 ```csharp
