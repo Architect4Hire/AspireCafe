@@ -513,7 +513,199 @@ public async Task<ProductServiceModel> CreateProductAsync(ProductViewModel produ
    }
 ```
 
-## 10. Implementation Checklist
+## 10. General Coding Principles
+
+### SOLID Principles
+- **Single Responsibility**: Each class should have only one reason to change
+- **Open/Closed**: Classes should be open for extension but closed for modification
+- **Liskov Substitution**: Derived classes must be substitutable for their base classes
+- **Interface Segregation**: Clients shouldn't depend on interfaces they don't use
+- **Dependency Inversion**: Depend on abstractions, not concretions
+
+### Self-documenting Code
+- Write code that clearly expresses intent without requiring extensive comments
+- Use meaningful method and variable names that describe their purpose
+- Break complex logic into well-named helper methods
+
+```csharp
+// Avoid this
+public bool Check(Order o)
+{
+    return o.Items.Any(i => i.Price > 50);
+}
+
+// Prefer this
+public bool ContainsHighValueItems(Order order)
+{
+    return order.Items.Any(item => item.Price > Constants.HighValueThreshold);
+}
+```
+
+### Method Design
+- Keep methods short and focused on a single responsibility
+- Methods should ideally be less than 30 lines
+- Extract complex conditionals into readable predicate methods
+
+## 11. Code Structure & Formatting
+
+### Naming Conventions (Enhanced)
+- Use descriptive, intention-revealing names
+- Avoid abbreviations unless they're widely understood
+- Be consistent with existing codebase conventions
+
+### Constants and Magic Numbers
+- Replace magic numbers with named constants
+- Define constants in a logical location (class-specific or application-wide)
+
+```csharp
+// Avoid
+if (product.Price > 50)
+
+// Prefer
+private const decimal HighValueThreshold = 50m;
+
+if (product.Price > HighValueThreshold)
+```
+
+### Code Grouping
+- Group related methods and properties together
+- Maintain a consistent order of members:
+  1. Private fields
+  2. Properties
+  3. Constructors
+  4. Public methods
+  5. Private methods
+
+## 12. Error Handling & Logging (Enhanced)
+
+### Exception Handling
+- Never silently catch exceptions without appropriate handling
+- Use specific exception types rather than generic exceptions
+- Implement retry logic for transient failures using Polly
+
+```csharp
+// Implement retry policy
+var retryPolicy = Policy
+    .Handle<HttpRequestException>()
+    .WaitAndRetryAsync(3, retryAttempt => 
+        TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+
+await retryPolicy.ExecuteAsync(async () => await httpClient.GetAsync(url));
+```
+
+### Structured Logging
+- Use structured logging for better searchability
+- Include contextual information in log messages
+- Log appropriate levels (Debug, Info, Warning, Error)
+
+```csharp
+// Structured logging with context
+logger.LogInformation(
+    "Order {OrderId} created for customer {CustomerId} with {ItemCount} items",
+    order.Id, order.CustomerId, order.Items.Count);
+```
+
+## 13. Performance & Security (Enhanced)
+
+### Asynchronous Programming
+- Use async/await for I/O-bound operations
+- Avoid blocking calls in async methods
+- Use ConfigureAwait(false) when appropriate in library code
+
+```csharp
+// Proper async implementation
+public async Task<OrderStatus> CheckOrderStatusAsync(Guid orderId)
+{
+    var order = await _repository.GetOrderByIdAsync(orderId)
+        .ConfigureAwait(false);
+    return order?.Status ?? OrderStatus.NotFound;
+}
+```
+
+### Caching Strategy
+- Implement caching for frequently accessed, rarely changing data
+- Use appropriate cache invalidation strategies
+- Consider distributed caching for multi-instance environments
+
+```csharp
+public async Task<List<ProductCategory>> GetCategoriesAsync()
+{
+    return await _cache.GetOrCreateAsync("product-categories", async entry => {
+        entry.SetAbsoluteExpiration(TimeSpan.FromHours(24));
+        return await _repository.GetAllCategoriesAsync();
+    });
+}
+```
+
+### Input Validation and Security
+- Validate all input at the system boundaries
+- Use Anti-XSRF tokens for forms
+- Implement proper authentication and authorization
+
+## 14. Testing Best Practices
+
+### Unit Testing
+- Write unit tests for all business logic
+- Follow Arrange-Act-Assert pattern
+- Use mocking frameworks for dependencies
+
+```csharp
+[Fact]
+public async Task CreateOrder_WithValidItems_ReturnsSuccess()
+{
+    // Arrange
+    var orderViewModel = new OrderViewModel { /* test data */ };
+    _mockValidator.Setup(v => v.ValidateAsync(It.IsAny<OrderViewModel>(), default))
+        .ReturnsAsync(new ValidationResult());
+    
+    // Act
+    var result = await _facade.CreateOrderAsync(orderViewModel);
+    
+    // Assert
+    Assert.True(result.IsSuccess);
+    Assert.NotNull(result.Data);
+    Assert.NotEqual(Guid.Empty, result.Data.Id);
+}
+```
+
+### Test Coverage
+- Aim for high test coverage of business-critical code
+- Focus on testing behavior, not implementation details
+- Include edge cases and error conditions in tests
+
+### CI/CD Integration
+- Run tests automatically in CI/CD pipeline
+- Maintain a quality gate based on test pass rate
+- Include static code analysis with tools like SonarQube
+
+## 15. API Design Principles (Enhanced)
+
+### REST Best Practices
+- Use appropriate HTTP methods for operations
+- Return meaningful HTTP status codes
+- Design resource-focused endpoints
+
+```csharp
+// Resource-based endpoint design
+[HttpGet]                 // GET /api/v1/products - List all products
+[HttpGet("{id}")]         // GET /api/v1/products/123 - Get one product
+[HttpPost]                // POST /api/v1/products - Create product
+[HttpPut("{id}")]         // PUT /api/v1/products/123 - Update product
+[HttpDelete("{id}")]      // DELETE /api/v1/products/123 - Delete product
+```
+
+### API Versioning (Enhanced)
+- Support multiple versions simultaneously during transitions
+- Document deprecation schedules for older versions
+- Use Swagger/OpenAPI to document all versions
+
+## Conclusion
+
+These enhanced coding standards build on the existing foundation to promote maintainable, secure, and efficient code. By following these practices consistently across all services in the Aspire Cafe solution, teams can ensure a cohesive codebase that's easier to maintain and extend.
+
+Remember that coding standards should evolve with the project and technology landscape. Regularly review and update these standards as the team identifies new best practices or challenges.
+
+## Implementation Checklist
 
 When implementing a new API endpoint, follow these steps:
 
@@ -547,6 +739,3 @@ When implementing a new API endpoint, follow these steps:
    - Create or update validator class for view model
    - Implement FluentValidation rules
 
-## Conclusion
-
-Following these patterns and practices will ensure consistency across the Aspire Cafe microservices solution. The architecture provides clean separation of concerns, maintainability, and testability while leveraging cloud-native capabilities for scalability and resilience.
