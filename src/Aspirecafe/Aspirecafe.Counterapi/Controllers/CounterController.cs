@@ -3,10 +3,12 @@ using AspireCafe.Shared.Extensions;
 using AspireCafe.Shared.Models.Service.Counter;
 using AspireCafe.Shared.Models.View.Counter;
 using AspireCafe.Shared.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspireCafe.CounterApi.Controllers
 {
+    [Authorize]
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     public class CounterController : ControllerBase
@@ -37,13 +39,10 @@ namespace AspireCafe.CounterApi.Controllers
         [ProducesResponseType(typeof(Result<OrderServiceModel>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Result<OrderServiceModel>), StatusCodes.Status500InternalServerError)]
         [HttpPost("SubmitOrder")]
-        public async Task<Result<OrderServiceModel>> SubmitOrder(OrderViewModel order)
+        public async Task<IActionResult> SubmitOrder(OrderViewModel order)
         {
             var result = await _facade.SubmitOrderAsync(order);
-            return result.Match(
-                onSuccess: () => result,
-                onFailure: error => Result<OrderServiceModel>.Failure(error, result.Messages)
-            );
+            return result.Match();
         }
 
         /// <summary>
@@ -65,13 +64,10 @@ namespace AspireCafe.CounterApi.Controllers
         [ProducesResponseType(typeof(Result<OrderServiceModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Result<OrderServiceModel>), StatusCodes.Status500InternalServerError)]
         [HttpGet("GetOrder/{orderId:guid}")]
-        public async Task<Result<OrderServiceModel>> GetOrder(Guid orderId)
+        public async Task<IActionResult> GetOrder(Guid orderId)
         {
             var result = await _facade.GetOrderAsync(orderId);
-            return result.Match(
-                onSuccess: () => result,
-                onFailure: error => Result<OrderServiceModel>.Failure(error, result.Messages)
-            );
+            return result.Match();
         }
 
         /// <summary>
@@ -93,13 +89,10 @@ namespace AspireCafe.CounterApi.Controllers
         [ProducesResponseType(typeof(Result<OrderServiceModel>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Result<OrderServiceModel>), StatusCodes.Status500InternalServerError)]
         [HttpPut("UpdateOrder")]
-        public async Task<Result<OrderServiceModel>> UpdateOrder(OrderViewModel order)
+        public async Task<IActionResult> UpdateOrder(OrderViewModel order)
         {
             var result = await _facade.UpdateOrderAsync(order);
-            return result.Match(
-                onSuccess: () => result,
-                onFailure: error => Result<OrderServiceModel>.Failure(error, result.Messages)
-            );
+            return result.Match();
         }
 
         /// <summary>
@@ -123,13 +116,10 @@ namespace AspireCafe.CounterApi.Controllers
         [ProducesResponseType(typeof(Result<OrderServiceModel>), StatusCodes.Status500InternalServerError)]
 
         [HttpPost("PayOrder")]
-        public async Task<Result<OrderServiceModel>> PayOrder(OrderPaymentViewModel model)
+        public async Task<IActionResult> PayOrder(OrderPaymentViewModel model)
         {
             var result = await _facade.PayOrderAsync(model);
-            return result.Match(
-                onSuccess: () => result,
-                onFailure: error => Result<OrderServiceModel>.Failure(error, result.Messages)
-            );
+            return result.Match();
         }
 
     }

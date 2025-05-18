@@ -13,7 +13,7 @@ namespace AspireCafe.AuthenticationDomainLayer.Business
             // TODO: Implement real authentication logic
             if (username == "admin" && password == "password")
             {
-                var key = Encoding.UTF8.GetBytes("your-256-bit-secret"); // TODO: Use secure config
+                var key = Encoding.UTF8.GetBytes("super-secret-scary-password-a4h-aspire"); // TODO: Use secure config
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
@@ -35,7 +35,7 @@ namespace AspireCafe.AuthenticationDomainLayer.Business
         {
             // JWT validation logic
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes("your-256-bit-secret"); // TODO: Use secure config
+            var key = Encoding.UTF8.GetBytes("super-secret-scary-password-a4h-aspire"); // TODO: Use secure config
             var validationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
