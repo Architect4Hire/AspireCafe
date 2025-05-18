@@ -76,7 +76,6 @@ void SetUpApp(WebApplication app)
 void AddServiceBus(WebApplicationBuilder builder)
 {
     builder.AddAzureServiceBusClient("serviceBusConnection");
-
 }
 
 void AddHttpClient(WebApplicationBuilder builder)
