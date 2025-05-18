@@ -5,8 +5,6 @@ The AspireCafe solution demonstrates a modern approach to building distributed, 
 I'll examine the available code to create functional and technical requirements for the AspireCafe system.
 Based on my analysis of the AspireCafe solution code, I'll provide comprehensive functional and technical requirements.
 
-# AspireCafe System Requirements Document
-
 ## 1. Functional Requirements
 
 ### 1.1 Product Management
