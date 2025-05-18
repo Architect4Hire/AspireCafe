@@ -95,6 +95,7 @@ namespace AspireCafe.Shared.Enums
 
     public enum OrderProcessStation
     {
+        Expo = 0,
         Bar = 1,
         Saute = 2,
         Grill = 3,

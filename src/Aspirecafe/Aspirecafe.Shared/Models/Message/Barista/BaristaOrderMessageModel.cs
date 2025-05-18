@@ -10,6 +10,7 @@ namespace AspireCafe.Shared.Models.Message.Barista
 {
     public class BaristaOrderMessageModel : MessageBaseModel
     {
+        public Guid OrderId { get; set; }
         public string CustomerName { get; set; }
         public int TableNumber { get; set; }
         public List<ProductInfoMessageModel> Items { get; set; }

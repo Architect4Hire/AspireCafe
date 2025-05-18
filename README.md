@@ -3,6 +3,69 @@
 The AspireCafe solution demonstrates a modern approach to building distributed, cloud-native applications using .NET 9 and the .NET Aspire application stack. This blog post explores the architecture, components, and design patterns that make this solution scalable, maintainable, and future-proof.
 
 ---
+## **System and Functional Requirements**
+
+## Functional Requirements
+
+1. **Product Management**
+   - Maintain a catalog of products with categories, subcategories, descriptions, images, and pricing
+   - Support caching of catalog data to improve performance (30-minute cache validity)
+   - Allow product metadata retrieval to determine routing to appropriate preparation stations
+
+2. **Order Processing**
+   - Enable customers to place orders with multiple items
+   - Capture customer name and table number with each order
+   - Calculate order totals correctly
+   - Generate and display order confirmation with reference numbers
+   - Route order items to appropriate preparation stations (Barista or Kitchen)
+
+3. **Order Workflow Management**
+   - Track order status through various stages (Pending, Processing, Complete)
+   - Support separate workflows for beverage and food preparation
+   - Maintain order history and processing status
+
+4. **Reporting and Analytics**
+   - Provide order summary and analytics functionality
+
+## Technical Requirements
+
+1. **Cloud-Native Architecture**
+   - Implement microservices architecture with separate APIs for each functional domain
+   - Use .NET 9 Aspire for cloud-native application development
+   - Support deployment to Azure and local development environments (Intel64/ARM64)
+
+2. **Event-Driven Communication**
+   - Utilize Azure Service Bus with topics/subscriptions for asynchronous communication
+   - Implement message retry mechanisms (5 max delivery attempts)
+   - Use publisher-subscriber model for order routing
+
+3. **Data Management**
+   - Use CosmosDB for document storage with appropriate containers
+   - Implement Redis caching with cache-aside pattern for performance optimization
+   - Store different document types in separate containers (orders, barista, kitchen, products)
+
+4. **Security**
+   - Integrate with Azure Key Vault for secrets management
+
+5. **Observability**
+   - Implement comprehensive logging and tracing with OpenTelemetry
+   - Export telemetry to Azure Monitor and OTLP endpoints when configured
+   - Support Seq for local log aggregation and viewing
+
+6. **UI Requirements**
+   - Develop responsive Angular 19 frontend
+   - Support real-time order status updates
+   - Implement intuitive checkout flow
+   - Follow component-based architecture with reactive programming
+
+7. **Resilience**
+   - Implement HTTP resilience with retry policies
+   - Configure appropriate timeouts for service communications
+   - Use health checks for service status monitoring
+
+8. **Testing**
+   - Support integration testing of distributed applications
+   - Enable unit testing for components and services
 
 ## **Architecture Overview**
 
