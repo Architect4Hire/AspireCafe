@@ -1,296 +1,174 @@
-# AspireCafe: A Modern Cloud-Native Architecture with .NET 9
+# Aspire Cafe Solution Overview
 
-The AspireCafe solution demonstrates a modern approach to building distributed, cloud-native applications using .NET 9 and the .NET Aspire application stack. This document explores the architecture, components, and design patterns that make this solution scalable, maintainable, and future-proof.
+## Functional and Technical Requirements
 
-I'll examine the available code to create functional and technical requirements for the AspireCafe system.
-Based on my analysis of the AspireCafe solution code, I'll provide comprehensive functional and technical requirements.
+### Functional Requirements
+Aspire Cafe implements a comprehensive café point-of-sale system with the following key capabilities:
 
-## 1. Functional Requirements
+1. **Product Management**
+   - Complete product catalog with food/beverage categorization
+   - Product routing to specific preparation stations
+   - Full CRUD operations and availability tracking
 
-### 1.1 Product Management
-1. **Product Catalog**
-   - System shall maintain a catalog of cafe products
-   - System shall categorize products by type (food, beverage)
-   - System shall support product subcategories
-   - System shall provide metadata for routing products to appropriate preparation stations
+2. **Order Processing**
+   - Customer order creation with details (customer, table, items)
+   - Order calculation with subtotal, tax, and tip
+   - Order routing and lifecycle tracking
+   - Multi-payment method support with validation
 
-2. **Product Operations**
-   - System shall allow creating new products with details (name, description, price, image)
-   - System shall support updating existing product information
-   - System shall support product deletion
-   - System shall track product availability status
+3. **Kitchen & Barista Operations**
+   - Specialized displays for kitchen and barista staff
+   - Preparation status tracking
+   - Multiple preparation station support (Grill, Fry, Pantry)
+   - Item readiness tracking
 
-3. **Product Querying**
-   - System shall provide product metadata lookup by ID
-   - System shall support retrieval of the full product catalog
-   - System shall return appropriate error messages for invalid product requests
+4. **Reporting & Analytics**
+   - Order analytics and summaries
+   - Historical data querying
+   - Business insights generation
 
-### 1.2 Order Processing
-1. **Order Creation**
-   - System shall support creating new customer orders
-   - System shall capture order details (customer name, table number, items, quantities)
-   - System shall calculate order totals (subtotal, tax, tip)
-   - System shall assign unique identifiers to orders
+5. **Security**
+   - User authentication
+   - Token validation
+   - Secure login mechanisms
 
-2. **Order Workflow**
-   - System shall track order status throughout its lifecycle
-   - System shall route order items to appropriate preparation stations (Kitchen or Barista)
-   - System shall support status updates at different preparation stations
-   - System shall track order progress through states: Waiting, Received, Preparing, Ready, Delivered, Cancelled
+### Technical Requirements
+The solution is built on modern cloud-native technologies:
 
-3. **Payment Processing**
-   - System shall support multiple payment methods (Cash, Card, Mobile Payment)
-   - System shall track payment status for each order
-   - System shall process payments with tip calculations
-   - System shall validate payment information
+1. **Architecture**
+   - Microservices-based design using .NET 9 and Aspire
+   - Multi-target deployment (Azure, ARM64, Intel64)
+   - Service discovery for communication
 
-### 1.3 Kitchen Operations
-1. **Food Preparation Workflow**
-   - System shall display active food orders to kitchen staff
-   - System shall allow updating food preparation status
-   - System shall support multiple preparation stations (Grill, Fry, Pantry, etc.)
-   - System shall track food item readiness
+2. **Data Storage**
+   - CosmosDB for persistent storage
+   - Redis for distributed caching
+   - Service-isolated data contexts
 
-### 1.4 Barista Operations
-1. **Beverage Preparation Workflow**
-   - System shall display active beverage orders to barista staff
-   - System shall allow updating beverage preparation status
-   - System shall track beverage item readiness
+3. **Communication**
+   - Azure Service Bus for async messaging
+   - RESTful API design with versioning
+   - Result pattern for error handling
 
-### 1.5 Order Summary and Reporting
-1. **Order Analytics**
-   - System shall provide summary views of orders
-   - System shall support querying historical order data
-   - System shall offer reporting capabilities for business insights
+4. **Frontend**
+   - Angular 19 with component architecture
+   - Reactive programming (RxJS)
+   - HTTP clients for API consumption
 
-### 1.6 Authentication and Security
-1. **User Authentication**
-   - System shall authenticate users before granting access
-   - System shall validate authentication tokens
-   - System shall support secure login mechanisms
+5. **Cross-Cutting Concerns**
+   - FluentValidation for input validation
+   - Distributed tracing and centralized logging (Seq)
+   - Health monitoring endpoints
+   - Secure authentication
 
-## 2. Technical Requirements
+## Architecture Overview
 
-### 2.1 Architecture
-1. **Microservices Architecture**
-   - System shall implement a microservices-based architecture
-   - System shall include the following services:
-     - Product API: Managing product catalog
-     - Counter API: Processing orders and payments
-     - Kitchen API: Managing food preparation
-     - Barista API: Managing beverage preparation
-     - Order Summary API: Providing analytics
-     - Authentication API: Handling user authentication
-     - Proxy API: Routing client requests to appropriate services
+Aspire Cafe is built as a cloud-native, microservices-based application using .NET 9 Aspire, with an Angular 19 frontend. The solution follows a clean multi-layered architecture with a clear separation of concerns:
 
-2. **Cloud-Native Design**
-   - System shall implement .NET Aspire cloud-native application framework
-   - System shall support deployment to Azure cloud services
-   - System shall include application hosts for different deployment targets (Azure, ARM64, Intel64)
-   - System shall use service discovery for inter-service communication
+### Solution Structure
 
-### 2.2 Data Storage
-1. **Database Requirements**
-   - System shall use CosmosDB for persistent data storage
-   - Each microservice shall maintain its own data context
-   - System shall implement proper data models for each domain
-
-2. **Caching**
-   - System shall implement Redis distributed caching
-   - Product catalog shall utilize caching for improved performance
-
-### 2.3 Communication
-1. **Messaging**
-   - System shall use Azure Service Bus for asynchronous communication between services
-   - System shall implement proper messaging patterns for order processing workflow
-
-2. **API Design**
-   - All APIs shall follow RESTful design principles
-   - System shall implement API versioning
-   - System shall provide appropriate error handling and response formatting
-   - System shall use Result pattern for consistent response handling
-
-### 2.4 Frontend
-1. **UI Framework**
-   - System shall implement Angular 19 for the frontend application
-   - UI shall follow component-based architecture
-   - UI shall implement reactive programming with RxJS
-
-2. **Frontend-Backend Integration**
-   - Frontend shall consume backend APIs through HTTP clients
-   - System shall implement strongly-typed API clients using Refit
-
-### 2.5 Cross-Cutting Concerns
-1. **Validation**
-   - System shall implement FluentValidation for input validation
-   - Each API shall validate incoming requests before processing
-
-2. **Observability**
-   - System shall implement distributed tracing
-   - System shall utilize Seq for logging
-   - System shall provide health monitoring endpoints
-
-3. **Security**
-   - System shall implement secure authentication mechanisms
-   - System shall validate authentication tokens for protected operations
-   - System shall handle sensitive data securely
-
-### 2.6 Development and Deployment
-1. **Development Environment**
-   - System shall support local development using .NET Aspire
-   - System shall provide consistent development experience across platforms
-
-2. **Deployment**
-   - System shall support deployment to Azure cloud services
-   - System shall include deployment configurations for different environments
-
-3. **Testing**
-   - System shall include unit testing with appropriate test frameworks
-   - System shall support end-to-end testing of the application
-
-## 3. Non-Functional Requirements
-
-### 3.1 Performance
-1. System shall respond to user interactions within acceptable time limits
-2. System shall handle concurrent orders efficiently
-3. System shall utilize caching for frequently accessed data
-
-### 3.2 Scalability
-1. System architecture shall support horizontal scaling of individual services
-2. System shall handle increased load during peak cafe hours
-
-### 3.3 Reliability
-1. System shall maintain data consistency across services
-2. System shall implement proper error handling and recovery
-3. System shall provide appropriate fallback mechanisms
-
-### 3.4 Usability
-1. UI shall provide intuitive navigation for cafe staff
-2. System shall support responsive design for various device sizes
-3. System shall minimize steps required for common operations
-
-### 3.5 Maintainability
-1. Code shall follow clean architecture principles
-2. System shall implement consistent design patterns across services
-3. System shall include appropriate documentation
-
-## **Architecture Overview**
-
- ![System Architecture](https://github.com/Architect4Hire/AspireCafe/blob/dev/images/system.png)
-
-AspireCafe is a **microservices-based architecture** designed to manage various aspects of a cafe's operations. Each microservice is independently deployable and responsible for a specific domain, ensuring modularity and scalability.
-
-### **Core Microservices**
-
-1. **Product API**: Manages the product catalog and inventory.
-2. **Counter API**: Handles order creation, payment processing, and order state management.
-3. **Kitchen API**: Manages food preparation workflows.
-4. **Barista API**: Handles beverage preparation workflows.
-5. **Order Summary API**: Aggregates and summarizes order data for reporting and analytics.
-6. **Authentication API**: Handles user identity and authorization using JWT token
-
-### **Frontend**
-
-The **AspireCafe.UI** project is an Angular-based single-page application (SPA) that provides a user-friendly interface for interacting with the backend services. It is containerized and integrated into the overall solution using the `.WithNpmApp()` method in the application host.
-
----
-
-## **Key Technical Components**
-
-### **.NET Aspire Application Host**
-
-The solution uses three application host projects for managing service orchestration and infrastructure:
-
-1. **Aspirecafe.Intel64**:
-   - Configures local development with emulators for Azure services.
-   - Provides a seamless development experience with consistent dependencies.
-
-2. **Aspirecafe.Azure**:
-   - Configures production-ready services using Azure connection strings.
-   - Ensures secure and scalable deployment in the cloud.
-
-3. **Aspirecafe.AMD64**:
-   - Configures local development with emulators for Azure services for AMD chipsets (Mac Silicon).
-   - Provides a seamless development experience with consistent dependencies.
-
-### **Cloud-Native Infrastructure**
-
-The solution integrates with several Azure services for robust infrastructure:
-
-- **Azure Cosmos DB**: Document database for storing product and order data.
-- **Redis Cache**: Distributed caching for performance optimization.
-- **Azure Service Bus**: Message broker for asynchronous communication between services.
-- **Azure Key Vault**: Secure storage for credentials and configuration.
-- **API Gateway**: YARP reverse proxy routes requests to appropriate microservices
-- **Seq**: Centralized logging and diagnostic service
-
-These services are containerized for local development, ensuring consistency across environments.
-
----
-
-## **Design Patterns and Practices**
-
-### **1. Layered Architecture**
-
-Each microservice follows a clean, layered architecture:
-
-- **API Layer**: Handles HTTP requests and responses (e.g., `CounterController`).
-- **Facade Layer**: Orchestrates business logic and validation (e.g., `Facade.cs implementing IFacde.cs`).
-- **Business Layer**: Implements core business rules (e.g., `Business.cs implementing IBusiness.cs`).
-- **Data Layer**: Manages data access and persistence (e.g., `Data.cs implementing IData.cs`).
-
-This separation of concerns ensures maintainability and testability.
-
----
-
-### **2. Dependency Injection**
-
-The solution uses dependency injection extensively to decouple components:
-
-
-```csharp
-builder.Services.AddScoped<IFacade, Facade>();
-builder.Services.AddScoped<IBusiness, Business>();
-builder.Services.AddScoped<IData, Data>();
+The solution is divided into multiple microservices, each responsible for a specific business domain:
 
 ```
+Aspire Cafe
+├── Aspire Cafe.UI                  # Angular frontend
+├── Aspire Cafe.ProductApi          # Product catalog management
+├── Aspire Cafe.CounterApi          # Order processing and payment
+├── Aspire Cafe.KitchenApi          # Food preparation workflow
+├── Aspire Cafe.BaristaApi          # Beverage preparation workflow
+├── Aspire Cafe.OrderSummaryApi     # Order analytics and reporting
+├── Aspire Cafe.ServiceDefaults     # Shared service configurations
+├── Aspire Cafe.Shared              # Shared models and utilities
+├── AppHost.Azure                  # Azure deployment host
+├── AppHost.Arm64                  # Local ARM deployment host
+└── AppHost.Intel64                # Local Intel64 deployment host
+```
 
-This approach enhances modularity and makes the system easier to test.
+### Layer Architecture (Per Microservice)
 
----
+Each microservice follows a layered architecture:
 
-### **3. Façade Pattern**
+1. **API Layer**: Controllers handling HTTP requests and responses
+2. **Domain Layer**: Business logic and domain models
+   - **Facade**: Simplifies client interaction with complex subsystems
+   - **Business**: Contains core business logic
+   - **Data**: Data access and repository implementation
+3. **Shared Layer**: Cross-cutting concerns, common models, and utilities
 
-The Façade pattern simplifies the interaction between the API layer and the business logic:
+## Design Patterns and Implementation
 
+### 1. Repository Pattern
+
+The Repository Pattern abstracts data access logic and provides a clean API for working with domain models.
+
+**Example implementation (interfaces):**
+
+```csharp
+// Interface definition
+public interface IData
+{
+    Task<ProcessingOrderDomainModel> AddOrderAsync(ProcessingOrderDomainModel order);
+    Task<ProcessingOrderDomainModel> UpdateOrderStatusAsync(Guid orderId, OrderProcessStation orderProcessStation, OrderProcessStatus orderProcessStatus);
+    Task<List<ProcessingOrderDomainModel>> FetchActiveOrdersAsync();
+}
+```
+
+**Value**: This pattern decouples the application from specific data storage implementations, making it easier to change data sources or add caching mechanisms without affecting business logic.
+
+### 2. Facade Pattern
+
+The Facade Pattern provides a simplified interface to a complex subsystem, hiding implementation details from clients.
+
+**Example implementation:**
 
 ```csharp
 public class Facade : IFacade
 {
     private readonly IBusiness _business;
-    private readonly OrderViewModelValidator _validator;
 
-    public async Task<Result<OrderServiceModel>> SubmitOrderAsync(OrderViewModel order)
+    public Facade(IBusiness business)
     {
-        var validationResult = await _validator.ValidateAsync(order);
-        if (!validationResult.IsValid)
+        _business = business;
+    }
+
+    public async Task<Result<OrderUpdateServiceModel>> UpdateOrderStatusAsync(Guid orderId, OrderProcessStation orderProcessStation, OrderProcessStatus orderProcessStatus)
+    {
+        if (orderId == Guid.Empty)
         {
-            return Result<OrderServiceModel>.Failure(Error.InvalidInput, validationResult.Errors.Select(x => x.ErrorMessage).ToList());
+            return Result<OrderUpdateServiceModel>.Failure(Error.InvalidInput, new List<string>() { "Invalid Metadata" });
         }
-        return Result<OrderServiceModel>.Success(await _business.SubmitOrderAsync(order));
+        var result = await _business.UpdateOrderStatusAsync(orderId, orderProcessStation, orderProcessStatus);
+        if (result == null)
+        {
+            return Result<OrderUpdateServiceModel>.Failure(Error.NotFound, new List<string>() { "Order not found." });
+        }
+        return Result<OrderUpdateServiceModel>.Success(result);
     }
 }
-
 ```
 
-This pattern abstracts complex business logic and validation, providing a clean interface to the API layer.
+**Value**: The Facade pattern simplifies client code by providing a unified interface to complex subsystems. It handles validation, error conditions, and wraps business logic results in a consistent Result<T> pattern.
 
----
+### 3. Dependency Injection
 
-### **4. Result Pattern**
+The solution uses built-in .NET dependency injection to manage service lifetimes and dependencies.
 
-A custom `Result<T>` type is used for consistent error handling:
+**Example configuration:**
 
+```csharp
+void AddScopes(WebApplicationBuilder builder)
+{
+    builder.Services.AddScoped<IFacade, Facade>();
+    builder.Services.AddScoped<IBusiness, Business>();
+    builder.Services.AddScoped<IData, Data>();
+}
+```
+
+**Value**: DI promotes loose coupling, makes testing easier through mocking, and facilitates configuration of service lifetimes.
+
+### 4. Result Pattern
+
+A custom Result<T> pattern handles operation outcomes, providing a consistent approach to success and error handling.
 
 ```csharp
 public class Result<T> where T : ServiceBaseModel
@@ -304,87 +182,175 @@ public class Result<T> where T : ServiceBaseModel
     public static Result<T> Success(T data) => new(true, Error.None, null, data);
     public static Result<T> Failure(Error error, List<string>? messages) => new(false, error, messages, null);
 }
-
 ```
 
-This approach avoids exception-based flow control and provides clear error information.
-
----
-
-### **5. Validation Pattern**
-
-The solution uses **FluentValidation** for input validation:
-
+Extension methods for consistent API responses:
 
 ```csharp
-var validationResult = await _validator.ValidateAsync(product);
-if (!validationResult.IsValid)
+public static IActionResult Match<TModel>(this Result<TModel> result) where TModel : ServiceBaseModel
 {
-    return Result<ProductServiceModel>.Failure(Error.InvalidInput, validationResult.Errors.Select(x => x.ErrorMessage).ToList());
+    if (result.IsSuccess)
+    {
+        return new OkObjectResult(result);
+    }
+
+    return result.Error switch
+    {
+        Error.NotFound => new NotFoundObjectResult(result),
+        Error.InvalidInput => new BadRequestObjectResult(result),
+        Error.Unauthorized => new UnauthorizedObjectResult(result),
+        Error.Forbidden => new ForbidResult(),
+        Error.InternalServerError => new ObjectResult(result) { StatusCode = 500 },
+        _ => new ObjectResult(result) { StatusCode = 500 }
+    };
+}
+```
+
+**Value**: This pattern provides consistent error handling and response formatting across all APIs, improving developer experience and client code predictability.
+
+### 5. Model Segregation
+
+The solution uses different model types for different layers:
+
+- **DomainModel**: Core business entities used within domain layer
+- **ViewModel**: DTOs for API inputs 
+- **ServiceModel**: DTOs for API responses
+
+**Example:**
+
+```csharp
+// Domain model (internal use)
+public class OrderProcessingLineItem
+{
+    public string ProductName { get; set; }
+    public string Notes { get; set; }
 }
 
+// ViewModel (API input)
+public interface IFacade
+{
+    Task<Result<ProductServiceModel>> CreateProductAsync(ProductViewModel product);
+}
+
+// ServiceModel (API output)
+public interface IBusiness
+{
+    Task<ProductServiceModel> FetchProductByIdAsync(Guid productId);
+}
 ```
 
-This ensures robust input validation before business operations.
+**Value**: This separation prevents leaking implementation details, makes API contracts clearer, and allows each layer to have models specifically tailored to its needs.
 
----
+### 6. API Controller Design
 
-### **6. API Documentation**
-
-Controllers use XML comments and `ProducesResponseType` attributes to generate comprehensive API documentation:
-
+Controllers are kept thin, delegating logic to the underlying layers:
 
 ```csharp
-/// <summary>
-/// Creates a new product.
-/// </summary>
-/// <param name="product">The product details to be created.</param>
-/// <returns>
-/// A <see cref="Result{T}"/> containing a <see cref="ProductServiceModel"/> if the operation is successful.
-/// Returns a failure result with error details if the operation fails.
-/// </returns>
-/// <response code="201">Indicates that the product was created successfully.</response>
-/// <response code="400">Indicates a bad request due to invalid input.</response>
-/// <response code="500">Indicates an internal server error.</response>
-[HttpPost("create")]
-[ProducesResponseType(typeof(Result<ProductServiceModel>), 201)]
-[ProducesResponseType(typeof(Result<ProductServiceModel>), 400)]
-[ProducesResponseType(typeof(Result<ProductServiceModel>), 500)]
+[Authorize]
+[Route("api/v{v:apiVersion}/[controller]")]
+[ApiController]
+public class ProductController : ControllerBase
+{
+    private readonly IFacade _facade;
 
+    public ProductController(IFacade facade)
+    {
+        _facade = facade;
+    }
+
+    [HttpGet("{productId:guid}")]
+    [ProducesResponseType(typeof(Result<ProductServiceModel>), 200)]
+    [ProducesResponseType(typeof(Result<ProductServiceModel>), 404)]
+    [ProducesResponseType(typeof(Result<ProductServiceModel>), 500)]
+    public async Task<IActionResult> FetchProductById(Guid productId)
+    {
+        var result = await _facade.FetchProductByIdAsync(productId);
+        return result.Match();
+    }
+}
 ```
 
-This integrates seamlessly with OpenAPI and Scalar.net for self-documenting APIs.
+**Value**: This approach keeps controllers focused on HTTP concerns while delegating business logic to appropriate layers, improving maintainability and testability.
 
----
+## Cloud-Native Features
 
-### **7. Frontend Integration**
+### 1. .NET Aspire Integration
 
-The Angular-based frontend is integrated into the solution using `.WithNpmApp()`:
+Aspire Cafe leverages .NET Aspire for managing cloud-native application components:
 
+- **Service Discovery**: Automatic registration and discovery of services
+- **Configuration Management**: Centralized configuration through Aspire
+- **Resource Management**: Simplified deployment of cloud resources
+
+### 2. Distributed Tracing and Observability
+
+The application integrates with Seq for logging and distributed tracing:
 
 ```csharp
-var angular = builder.AddNpmApp("aspirecafe-ui", "../AspireCafe.UI/")
-    .WithHttpEndpoint(env: "PORT")
-    .WithExternalHttpEndpoints()
-    .PublishAsDockerFile();
-
+public static void AddSeq(this WebApplicationBuilder builder)
+{
+    builder.AddSeqEndpoint("seq");
+}
 ```
 
-This ensures the frontend is containerized and deployable alongside the backend services.
+### 3. Azure Integration
 
----
+Dedicated AppHost projects for different deployment environments:
 
-## **Modern C# and .NET Features**
+- **AppHost.Azure**: Azure-specific configuration
+- **AppHost.Arm64**: Optimized for ARM architecture (Mac/Apple Silicon)
+- **AppHost.Intel64**: Optimized for Intel-based systems
 
-The solution leverages the latest features of C# 13 and .NET 9:
+### 4. Authentication and Authorization
 
-- **Async/await** for non-blocking operations.
-- **Pattern matching** for functional-style error handling.
-- **Extension methods** for cleaner code organization.
-- **Middleware** for cross-cutting concerns like exception handling.
+JWT-based authentication is implemented across all microservices:
 
----
+```csharp
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? "super-secret-scary-password-a4h-aspire");
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
+    };
+});
+```
 
-## **Conclusion**
+## Frontend Architecture (Angular)
 
-The AspireCafe solution is a prime example of how modern .NET applications can be built using a microservices architecture. By leveraging .NET Aspire, clean design patterns, and cloud-native infrastructure, the solution achieves scalability, maintainability, and ease of deployment.
+The frontend follows component-based architecture using Angular 19:
+
+- **Reactive Programming**: RxJS for state management
+- **Routing**: Angular Router for navigation
+- **Services**: Communication with backend APIs
+- **Component Structure**: Reusable UI components
+
+## Testing Strategy
+
+The solution includes various testing approaches:
+
+- **Unit Tests**: Testing individual components with mocking
+- **Integration Tests**: Using .NET Aspire's DistributedApplicationTestingBuilder to test service interactions
+- **End-to-End Tests**: Testing full user scenarios
+
+## Conclusion
+
+Aspire Cafe demonstrates a modern, cloud-native application architecture using .NET 9 Aspire and Angular 19. By applying established design patterns like Repository, Facade, and Dependency Injection, the solution achieves:
+
+1. **High Modularity**: Easy to extend or modify individual services
+2. **Scalability**: Services can scale independently based on demand
+3. **Maintainability**: Clear separation of concerns and consistent patterns
+4. **Testability**: Design supports effective unit and integration testing
+5. **Cloud-Ready**: Designed for deployment in various environments
+
+This architecture provides a solid foundation for building complex, distributed applications that can evolve with changing business requirements.
