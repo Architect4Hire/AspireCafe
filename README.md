@@ -2,8 +2,6 @@
 
 The AspireCafe solution demonstrates a modern approach to building distributed, cloud-native applications using .NET 9 and the .NET Aspire application stack. This document explores the architecture, components, and design patterns that make this solution scalable, maintainable, and future-proof.
 
-## **System and Functional Requirements**
-
 ## Functional Requirements
 
 1. **Product Management**
