@@ -1,3 +1,4 @@
+using AspireCafe.BaristaApi;
 using AspireCafe.KitchenApiDomainLayer.Business;
 using AspireCafe.KitchenApiDomainLayer.Data;
 using AspireCafe.KitchenApiDomainLayer.Facade;
@@ -96,6 +97,7 @@ void AddScopes(WebApplicationBuilder builder)
     builder.Services.AddScoped<IFacade, Facade>();
     builder.Services.AddScoped<IBusiness, Business>();
     builder.Services.AddScoped<IData, Data>();
+    builder.Services.AddHostedService<KitchenOrderWorker>();
 }
 
 
