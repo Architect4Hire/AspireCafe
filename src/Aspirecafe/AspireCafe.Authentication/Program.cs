@@ -1,27 +1,52 @@
+using AspireCafe.AuthenticationDomainLayer.Business;
+using AspireCafe.AuthenticationDomainLayer.Facade;
+using AspireCafe.Shared.Extensions;
+using AspireCafe.Shared.Middleware;
+
 var builder = WebApplication.CreateBuilder(args);
-
-builder.AddServiceDefaults();
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
+SetUpBuilder(builder);
 var app = builder.Build();
+SetUpApp(app);
+app.Run();
 
-app.MapDefaultEndpoints();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+void SetUpBuilder(WebApplicationBuilder builder)
 {
-    app.MapOpenApi();
+    builder.AddServiceDefaults();
+    AddScopes(builder); //service based configuration - shouldn't be loaded in a shared extension method
+    builder.AddVersioning(1);
+    builder.AddExceptionHandling();
+    builder.AddUniversalConfigurations();
+    builder.AddSeq(); //if you choose to opt in to save your traces
 }
 
-app.UseHttpsRedirection();
+void AddRouteConstraints(WebApplicationBuilder builder)
+{
+    builder.Services.Configure<RouteOptions>(options =>
+    {
+        options.ConstraintMap.Add("OrderProcessStation", typeof(OrderProcessStationRouteConstraint));
+        options.ConstraintMap.Add("OrderProcessStatus", typeof(OrderProcessStatusRouteConstraint));
+    });
+}
 
-app.UseAuthorization();
+void SetUpApp(WebApplication app)
+{
+    app.MapDefaultEndpoints();
+    if (app.Environment.IsDevelopment())
+    {
+        app.ConfigureOpenApiAndScaler();
+    }
 
-app.MapControllers();
+    // Add authentication and authorization middleware before app.ConfigureApplicationDefaults()
+    app.UseAuthentication();
+    app.UseAuthorization();
 
-app.Run();
+    app.ConfigureApplicationDefaults();
+}
+void AddScopes(WebApplicationBuilder builder)
+{
+    builder.Services.AddScoped<IFacade, Facade>();
+    builder.Services.AddScoped<IBusiness, Business>();
+}
+
+
+

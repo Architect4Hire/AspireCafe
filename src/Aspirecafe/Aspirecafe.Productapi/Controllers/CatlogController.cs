@@ -3,11 +3,13 @@ using AspireCafe.Shared.Extensions;
 using AspireCafe.Shared.Models.Service.Product;
 using AspireCafe.Shared.Models.View.Product;
 using AspireCafe.Shared.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspireCafe.ProductApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize]
+    [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     public class CatlogController : ControllerBase
     {
@@ -32,13 +34,10 @@ namespace AspireCafe.ProductApi.Controllers
         [ProducesResponseType(typeof(Result<CatalogServiceModel>), 400)]
         [ProducesResponseType(typeof(Result<CatalogServiceModel>), 500)]
         [HttpGet("fetch")]
-        public async Task<Result<CatalogServiceModel>> FetchCatalog()
+        public async Task<IActionResult> FetchCatalog()
         {
             var result = await _facade.FetchCatalog();
-            return result.Match(
-                onSuccess: () => result,
-                onFailure: error => Result<CatalogServiceModel>.Failure(error, result.Messages)
-            );
+            return result.Match();
         }
 
         /// <summary>
@@ -56,13 +55,10 @@ namespace AspireCafe.ProductApi.Controllers
         [ProducesResponseType(typeof(Result<ProductMetaDataServiceModel>), 200)]
         [ProducesResponseType(typeof(Result<ProductMetaDataServiceModel>), 400)]
         [ProducesResponseType(typeof(Result<ProductMetaDataServiceModel>), 500)]
-        public async Task<Result<ProductMetaDataServiceModel>> FetchProductMetadata(ProductMetaDataViewModel products)
+        public async Task<IActionResult> FetchProductMetadata(ProductMetaDataViewModel products)
         {
             var result = await _facade.FetchProductMetadataAsync(products);
-            return result.Match(
-                onSuccess: () => result,
-                onFailure: error => Result<ProductMetaDataServiceModel>.Failure(error, result.Messages)
-            );
+            return result.Match();
         }
     }
 }
