@@ -13,7 +13,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-256-bit-secret")), // TODO: Use secure config
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("super-secret-scary-password-a4h-aspire")), // TODO: Use secure config
             ValidateIssuer = false,
             ValidateAudience = false,
             ValidateLifetime = true,
