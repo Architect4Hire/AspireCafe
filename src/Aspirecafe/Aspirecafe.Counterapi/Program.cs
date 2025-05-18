@@ -6,7 +6,10 @@ using AspireCafe.CounterApiDomainLayer.Managers.Validators;
 using AspireCafe.Shared.Extensions;
 using AspireCafe.Shared.HttpClients;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Refit;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 SetUpBuilder(builder); 
@@ -26,8 +29,38 @@ void SetUpBuilder(WebApplicationBuilder builder)
     builder.AddSeq(); //if you choose to opt in to save your traces
     AddHttpClient(builder);
     AddServiceBus(builder);
+    AddAuthentication(builder);
 }
 
+void AddAuthentication(WebApplicationBuilder builder)
+{
+    // Add JWT Authentication
+    builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? "your-256-bit-secret");
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false, // In production, set to true with a valid issuer
+            ValidateAudience = false, // In production, set to true with a valid audience
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+    // Add Authorization policies
+    builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("RequireAuthenticatedUser", policy =>
+            policy.RequireAuthenticatedUser());
+    });
+}
 void SetUpApp(WebApplication app)
 {
     app.MapDefaultEndpoints();
@@ -35,6 +68,8 @@ void SetUpApp(WebApplication app)
     {
         app.ConfigureOpenApiAndScaler();
     }
+    app.UseAuthorization();
+    app.UseAuthentication();
     app.ConfigureApplicationDefaults();
 }
 

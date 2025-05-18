@@ -22,4 +22,6 @@ var ordersummaryapi = builder.AddProject<Projects.AspireCafe_OrderSummaryApi>("a
 var angular = builder.AddNpmApp("aspirecafe-ui", "../AspireCafe.UI/")
  .WithHttpEndpoint(env: "PORT", port: 4200)
  .WithExternalHttpEndpoints();
+builder.AddProject<Projects.AspireCafe_AuthenticationApi>("aspirecafe-authenticationapi");
+builder.AddProject<Projects.AspireCafe_Proxy>("aspirecafe-proxy");
 builder.Build().Run();
