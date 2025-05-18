@@ -4,9 +4,11 @@ using AspireCafe.Shared.Models.Service.OrderUpdate;
 using AspireCafe.Shared.Results;
 using Microsoft.AspNetCore.Mvc;
 using AspireCafe.Shared.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AspireCafe.BaristaApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase

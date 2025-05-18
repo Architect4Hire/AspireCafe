@@ -2,67 +2,177 @@
 
 The AspireCafe solution demonstrates a modern approach to building distributed, cloud-native applications using .NET 9 and the .NET Aspire application stack. This document explores the architecture, components, and design patterns that make this solution scalable, maintainable, and future-proof.
 
-## Functional Requirements
+I'll examine the available code to create functional and technical requirements for the AspireCafe system.
+Based on my analysis of the AspireCafe solution code, I'll provide comprehensive functional and technical requirements.
 
-1. **Product Management**
-   - Maintain a catalog of products with categories, subcategories, descriptions, images, and pricing
-   - Support caching of catalog data to improve performance (30-minute cache validity)
-   - Allow product metadata retrieval to determine routing to appropriate preparation stations
+## 1. Functional Requirements
 
-2. **Order Processing**
-   - Enable customers to place orders with multiple items
-   - Capture customer name and table number with each order
-   - Calculate order totals correctly
-   - Generate and display order confirmation with reference numbers
-   - Route order items to appropriate preparation stations (Barista or Kitchen)
+### 1.1 Product Management
+1. **Product Catalog**
+   - System shall maintain a catalog of cafe products
+   - System shall categorize products by type (food, beverage)
+   - System shall support product subcategories
+   - System shall provide metadata for routing products to appropriate preparation stations
 
-3. **Order Workflow Management**
-   - Track order status through various stages (Pending, Processing, Complete)
-   - Support separate workflows for beverage and food preparation
-   - Maintain order history and processing status
+2. **Product Operations**
+   - System shall allow creating new products with details (name, description, price, image)
+   - System shall support updating existing product information
+   - System shall support product deletion
+   - System shall track product availability status
 
-4. **Reporting and Analytics**
-   - Provide order summary and analytics functionality
+3. **Product Querying**
+   - System shall provide product metadata lookup by ID
+   - System shall support retrieval of the full product catalog
+   - System shall return appropriate error messages for invalid product requests
 
-## Technical Requirements
+### 1.2 Order Processing
+1. **Order Creation**
+   - System shall support creating new customer orders
+   - System shall capture order details (customer name, table number, items, quantities)
+   - System shall calculate order totals (subtotal, tax, tip)
+   - System shall assign unique identifiers to orders
 
-1. **Cloud-Native Architecture**
-   - Implement microservices architecture with separate APIs for each functional domain
-   - Use .NET 9 Aspire for cloud-native application development
-   - Support deployment to Azure and local development environments (Intel64/ARM64)
+2. **Order Workflow**
+   - System shall track order status throughout its lifecycle
+   - System shall route order items to appropriate preparation stations (Kitchen or Barista)
+   - System shall support status updates at different preparation stations
+   - System shall track order progress through states: Waiting, Received, Preparing, Ready, Delivered, Cancelled
 
-2. **Event-Driven Communication**
-   - Utilize Azure Service Bus with topics/subscriptions for asynchronous communication
-   - Implement message retry mechanisms (5 max delivery attempts)
-   - Use publisher-subscriber model for order routing
+3. **Payment Processing**
+   - System shall support multiple payment methods (Cash, Card, Mobile Payment)
+   - System shall track payment status for each order
+   - System shall process payments with tip calculations
+   - System shall validate payment information
 
-3. **Data Management**
-   - Use CosmosDB for document storage with appropriate containers
-   - Implement Redis caching with cache-aside pattern for performance optimization
-   - Store different document types in separate containers (orders, barista, kitchen, products)
+### 1.3 Kitchen Operations
+1. **Food Preparation Workflow**
+   - System shall display active food orders to kitchen staff
+   - System shall allow updating food preparation status
+   - System shall support multiple preparation stations (Grill, Fry, Pantry, etc.)
+   - System shall track food item readiness
 
-4. **Security**
-   - Integrate with Azure Key Vault for secrets management
+### 1.4 Barista Operations
+1. **Beverage Preparation Workflow**
+   - System shall display active beverage orders to barista staff
+   - System shall allow updating beverage preparation status
+   - System shall track beverage item readiness
 
-5. **Observability**
-   - Implement comprehensive logging and tracing with OpenTelemetry
-   - Export telemetry to Azure Monitor and OTLP endpoints when configured
-   - Support Seq for local log aggregation and viewing
+### 1.5 Order Summary and Reporting
+1. **Order Analytics**
+   - System shall provide summary views of orders
+   - System shall support querying historical order data
+   - System shall offer reporting capabilities for business insights
 
-6. **UI Requirements**
-   - Develop responsive Angular 19 frontend
-   - Support real-time order status updates
-   - Implement intuitive checkout flow
-   - Follow component-based architecture with reactive programming
+### 1.6 Authentication and Security
+1. **User Authentication**
+   - System shall authenticate users before granting access
+   - System shall validate authentication tokens
+   - System shall support secure login mechanisms
 
-7. **Resilience**
-   - Implement HTTP resilience with retry policies
-   - Configure appropriate timeouts for service communications
-   - Use health checks for service status monitoring
+## 2. Technical Requirements
 
-8. **Testing**
-   - Support integration testing of distributed applications
-   - Enable unit testing for components and services
+### 2.1 Architecture
+1. **Microservices Architecture**
+   - System shall implement a microservices-based architecture
+   - System shall include the following services:
+     - Product API: Managing product catalog
+     - Counter API: Processing orders and payments
+     - Kitchen API: Managing food preparation
+     - Barista API: Managing beverage preparation
+     - Order Summary API: Providing analytics
+     - Authentication API: Handling user authentication
+     - Proxy API: Routing client requests to appropriate services
+
+2. **Cloud-Native Design**
+   - System shall implement .NET Aspire cloud-native application framework
+   - System shall support deployment to Azure cloud services
+   - System shall include application hosts for different deployment targets (Azure, ARM64, Intel64)
+   - System shall use service discovery for inter-service communication
+
+### 2.2 Data Storage
+1. **Database Requirements**
+   - System shall use CosmosDB for persistent data storage
+   - Each microservice shall maintain its own data context
+   - System shall implement proper data models for each domain
+
+2. **Caching**
+   - System shall implement Redis distributed caching
+   - Product catalog shall utilize caching for improved performance
+
+### 2.3 Communication
+1. **Messaging**
+   - System shall use Azure Service Bus for asynchronous communication between services
+   - System shall implement proper messaging patterns for order processing workflow
+
+2. **API Design**
+   - All APIs shall follow RESTful design principles
+   - System shall implement API versioning
+   - System shall provide appropriate error handling and response formatting
+   - System shall use Result pattern for consistent response handling
+
+### 2.4 Frontend
+1. **UI Framework**
+   - System shall implement Angular 19 for the frontend application
+   - UI shall follow component-based architecture
+   - UI shall implement reactive programming with RxJS
+
+2. **Frontend-Backend Integration**
+   - Frontend shall consume backend APIs through HTTP clients
+   - System shall implement strongly-typed API clients using Refit
+
+### 2.5 Cross-Cutting Concerns
+1. **Validation**
+   - System shall implement FluentValidation for input validation
+   - Each API shall validate incoming requests before processing
+
+2. **Observability**
+   - System shall implement distributed tracing
+   - System shall utilize Seq for logging
+   - System shall provide health monitoring endpoints
+
+3. **Security**
+   - System shall implement secure authentication mechanisms
+   - System shall validate authentication tokens for protected operations
+   - System shall handle sensitive data securely
+
+### 2.6 Development and Deployment
+1. **Development Environment**
+   - System shall support local development using .NET Aspire
+   - System shall provide consistent development experience across platforms
+
+2. **Deployment**
+   - System shall support deployment to Azure cloud services
+   - System shall include deployment configurations for different environments
+
+3. **Testing**
+   - System shall include unit testing with appropriate test frameworks
+   - System shall support end-to-end testing of the application
+
+## 3. Non-Functional Requirements
+
+### 3.1 Performance
+1. System shall respond to user interactions within acceptable time limits
+2. System shall handle concurrent orders efficiently
+3. System shall utilize caching for frequently accessed data
+
+### 3.2 Scalability
+1. System architecture shall support horizontal scaling of individual services
+2. System shall handle increased load during peak cafe hours
+
+### 3.3 Reliability
+1. System shall maintain data consistency across services
+2. System shall implement proper error handling and recovery
+3. System shall provide appropriate fallback mechanisms
+
+### 3.4 Usability
+1. UI shall provide intuitive navigation for cafe staff
+2. System shall support responsive design for various device sizes
+3. System shall minimize steps required for common operations
+
+### 3.5 Maintainability
+1. Code shall follow clean architecture principles
+2. System shall implement consistent design patterns across services
+3. System shall include appropriate documentation
 
 ## **Architecture Overview**
 
@@ -77,6 +187,7 @@ AspireCafe is a **microservices-based architecture** designed to manage various 
 3. **Kitchen API**: Manages food preparation workflows.
 4. **Barista API**: Handles beverage preparation workflows.
 5. **Order Summary API**: Aggregates and summarizes order data for reporting and analytics.
+6. **Authentication API**: Handles user identity and authorization using JWT token
 
 ### **Frontend**
 
@@ -110,6 +221,8 @@ The solution integrates with several Azure services for robust infrastructure:
 - **Redis Cache**: Distributed caching for performance optimization.
 - **Azure Service Bus**: Message broker for asynchronous communication between services.
 - **Azure Key Vault**: Secure storage for credentials and configuration.
+- **API Gateway**: YARP reverse proxy routes requests to appropriate microservices
+- **Seq**: Centralized logging and diagnostic service
 
 These services are containerized for local development, ensuring consistency across environments.
 

@@ -4,24 +4,19 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>33caff06-d5b9-419e-86b7-22d670fce1cf</UserSecretsId>
+    <UserSecretsId>34f1cbf7-d62b-4912-8bc7-151377226ad0</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1-Preview.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AspireCafe.OrderSummaryApiDomainLayer\AspireCafe.OrderSummaryApiDomainLayer.csproj" />
+    <ProjectReference Include="..\AspireCafe.AuthenticationDomainLayer\AspireCafe.AuthenticationApiDomainLayer.csproj" />
     <ProjectReference Include="..\AspireCafe.ServiceDefaults\AspireCafe.ServiceDefaults.csproj" />
     <ProjectReference Include="..\AspireCafe.Shared\AspireCafe.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>

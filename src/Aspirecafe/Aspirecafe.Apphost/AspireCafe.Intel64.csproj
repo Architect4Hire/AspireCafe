@@ -25,11 +25,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\AspireCafe.Authentication\AspireCafe.AuthenticationApi.csproj" />
 		<ProjectReference Include="..\AspireCafe.BaristaApi\AspireCafe.BaristaApi.csproj" />
 		<ProjectReference Include="..\AspireCafe.CounterApi\AspireCafe.CounterApi.csproj" />
 		<ProjectReference Include="..\AspireCafe.KitchenApi\AspireCafe.KitchenApi.csproj" />
 		<ProjectReference Include="..\AspireCafe.OderSummaryApi\AspireCafe.OrderSummaryApi.csproj" />
 		<ProjectReference Include="..\AspireCafe.ProductApi\AspireCafe.ProductApi.csproj" />
+		<ProjectReference Include="..\AspireCafe.Proxy\AspireCafe.Proxy.csproj" />
 		<ProjectReference Include="..\AspireCafe.UI\AspireCafe.UI.esproj" />
 	</ItemGroup>
 	<Target Name="RestoreNpm" BeforeTargets="Build" Condition=" '$(DesignTimeBuild)' != 'true' ">
