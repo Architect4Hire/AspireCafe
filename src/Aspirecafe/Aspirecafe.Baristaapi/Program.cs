@@ -1,11 +1,10 @@
+using AspireCafe.BaristaApi.BackgroundWorkers;
 using AspireCafe.BaristaApiDomainLayer.Business;
 using AspireCafe.BaristaApiDomainLayer.Data;
 using AspireCafe.BaristaApiDomainLayer.Facade;
 using AspireCafe.BaristaApiDomainLayer.Managers.Context;
-using AspireCafe.Shared.Enums;
 using AspireCafe.Shared.Extensions;
 using AspireCafe.Shared.Middleware;
-using Microsoft.TeamFoundation.TestManagement.WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 SetUpBuilder(builder);
@@ -61,6 +60,7 @@ void AddScopes(WebApplicationBuilder builder)
     builder.Services.AddScoped<IFacade, Facade>();
     builder.Services.AddScoped<IBusiness, Business>();
     builder.Services.AddScoped<IData, Data>();
+    builder.Services.AddHostedService<BaristaOrderWorker>();
 }
 
 

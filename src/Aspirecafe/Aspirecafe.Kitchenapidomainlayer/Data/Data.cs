@@ -17,10 +17,9 @@ namespace AspireCafe.KitchenApiDomainLayer.Data
         public async Task<ProcessingOrderDomainModel> AddOrderAsync(ProcessingOrderDomainModel order)
         {
             order.DocumentType = DocumentType.BaristaOrder.ToString();
-            order.CreatedDate = DateTime.Now;
-            order.OrderStatus = OrderStatus.Pending;
-            order.ProcessStatus = OrderProcessStatus.Waiting;
+            order.CreatedDate = DateTime.UtcNow;
             order.Id = Guid.NewGuid();
+            order.History = new List<OrderProcessingStatusHistory>() { new OrderProcessingStatusHistory() { CurrentStation = OrderProcessStation.Expo, EntryTime = DateTime.UtcNow } };
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
             return order;
