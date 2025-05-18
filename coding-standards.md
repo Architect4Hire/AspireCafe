@@ -4,7 +4,7 @@
 
 ### Clean Layered Architecture
 
-The AspireCafe solution implements a well-structured layered architecture that promotes separation of concerns, maintainability, and testability:
+The Aspire Cafe solution implements a well-structured layered architecture that promotes separation of concerns, maintainability, and testability:
 
 #### API Layer
 - Contains controllers, middleware, and API configurations
@@ -12,7 +12,7 @@ The AspireCafe solution implements a well-structured layered architecture that p
 - Responsible only for routing requests to the appropriate domain layer
 
 #### Domain Layer
-- Separated into discrete projects (e.g., `AspireCafe.ProductApiDomainLayer`)
+- Separated into discrete projects (e.g., `Aspire Cafe.ProductApiDomainLayer`)
 - Contains business logic, validation, data access, and domain models
 - Organized into sublayers:
   - **Facade**: Acts as the application service layer, coordinating operations
@@ -33,7 +33,7 @@ The AspireCafe solution implements a well-structured layered architecture that p
 
 ### API Project Structure
 ```
-AspireCafe.[ServiceName]Api/
+Aspire Cafe.[ServiceName]Api/
 ├── Controllers/         # REST API endpoints
 ├── Program.cs           # Application configuration and startup
 ├── Dockerfile           # Containerization setup
@@ -41,7 +41,7 @@ AspireCafe.[ServiceName]Api/
 
 ### Domain Layer Structure
 ```
-AspireCafe.[ServiceName]ApiDomainLayer/
+Aspire Cafe.[ServiceName]ApiDomainLayer/
 ├── Business/            # Business logic implementation
 ├── Data/                # Data access layer implementation
 ├── Facade/              # Application service layer
@@ -57,7 +57,7 @@ AspireCafe.[ServiceName]ApiDomainLayer/
 
 ### Shared Project Structure
 ```
-AspireCafe.Shared/
+Aspire Cafe.Shared/
 ├── Enums/               # Common enumerations
 ├── Extensions/          # Extension methods
 ├── Middleware/          # Shared middleware components
@@ -481,7 +481,7 @@ The solution is built with cloud-native principles:
 ```csharp
 void AddDatabases(WebApplicationBuilder builder)
 {
-    builder.AddCosmosDbContext<ProductContext>("aspireCafe", "AspireCafe");
+    builder.AddCosmosDbContext<ProductContext>("Aspire Cafe", "Aspire Cafe");
 }
 
 void AddServiceBus(WebApplicationBuilder builder)
@@ -549,4 +549,4 @@ When implementing a new API endpoint, follow these steps:
 
 ## Conclusion
 
-Following these patterns and practices will ensure consistency across the AspireCafe microservices solution. The architecture provides clean separation of concerns, maintainability, and testability while leveraging cloud-native capabilities for scalability and resilience.
+Following these patterns and practices will ensure consistency across the Aspire Cafe microservices solution. The architecture provides clean separation of concerns, maintainability, and testability while leveraging cloud-native capabilities for scalability and resilience.
