@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AspireCafe.Shared.Models.View.Counter
 {
-    public class LineItemViewModel
+    public class LineItemViewModel:ViewModelBase
     {
         public Guid ProductId { get; set; }
         public int Quantity { get; set; }

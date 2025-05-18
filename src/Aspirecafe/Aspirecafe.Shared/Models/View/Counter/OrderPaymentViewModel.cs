@@ -2,7 +2,7 @@
 
 namespace AspireCafe.Shared.Models.View.Counter
 { 
-    public class OrderPaymentViewModel
+    public class OrderPaymentViewModel:ViewModelBase
     {
         public Guid OrderId { get; set; }
         public PaymentMethod PaymentMethod { get; set; }

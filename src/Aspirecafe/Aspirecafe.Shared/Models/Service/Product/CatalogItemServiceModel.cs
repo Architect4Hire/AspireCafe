@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AspireCafe.Shared.Models.Service.Product
 {
-    public class CatalogItemServiceModel
+    public class CatalogItemServiceModel:ServiceBaseModel
     {
         public string ProductId { get; set; } = string.Empty;
         public string ProductName { get; set; } = string.Empty;
