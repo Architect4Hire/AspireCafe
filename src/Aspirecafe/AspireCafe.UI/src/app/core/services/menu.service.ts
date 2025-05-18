@@ -15,7 +15,7 @@ export class MenuService {
       description: 'Espresso with steamed milk and foam',
       price: 4.5,
       category: 'coffee',
-      imageUrl: 'assets/images/cappuccino.jpg',
+      imageUrl: 'images/cappuccino.jpg',
       available: true
     },
     {
@@ -24,7 +24,7 @@ export class MenuService {
       description: 'Espresso with steamed milk',
       price: 4.0,
       category: 'coffee',
-      imageUrl: 'assets/images/latte.jpg',
+      imageUrl: 'images/latte.jpg',
       available: true
     },
     {
@@ -33,7 +33,7 @@ export class MenuService {
       description: 'Buttery, flaky pastry',
       price: 3.5,
       category: 'pastry',
-      imageUrl: 'assets/images/croissant.jpg',
+      imageUrl: 'images/croissant.jpg',
       available: true
     },
     {
@@ -42,7 +42,7 @@ export class MenuService {
       description: 'Moist muffin with fresh blueberries',
       price: 3.0,
       category: 'pastry',
-      imageUrl: 'assets/images/muffin.jpg',
+      imageUrl: 'images/muffin.jpg',
       available: true
     },
     {
@@ -51,7 +51,7 @@ export class MenuService {
       description: 'Refreshing cold tea',
       price: 3.0,
       category: 'cold-drinks',
-      imageUrl: 'assets/images/iced-tea.jpg',
+      imageUrl: 'images/iced-tea.jpg',
       available: true
     }
   ];

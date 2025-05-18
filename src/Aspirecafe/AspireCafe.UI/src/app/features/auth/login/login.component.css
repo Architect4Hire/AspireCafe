@@ -6,6 +6,7 @@
   background-color: #f5f5f5;
   padding: 20px;
   background-image: url('../../../../../public/images/aspire-cafe-background.jpg');
+  background-size: cover;
 }
 
 .login-card {
