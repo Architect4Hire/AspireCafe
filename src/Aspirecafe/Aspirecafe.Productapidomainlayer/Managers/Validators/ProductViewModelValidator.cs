@@ -9,7 +9,6 @@ namespace AspireCafe.ProductApiDomainLayer.Managers.Validators
         {
             RuleFor(x => x.ProductType).IsInEnum();
             RuleFor(x => x.ProductCategory).IsInEnum();
-            RuleFor(x => x.ProductSubCategory).IsInEnum();
             RuleFor(x => x.ProductStatus).IsInEnum();
             RuleFor(x => x.RouteType).IsInEnum();
             RuleFor(x => x.Name)
