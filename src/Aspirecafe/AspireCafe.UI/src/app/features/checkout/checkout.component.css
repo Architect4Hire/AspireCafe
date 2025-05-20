@@ -80,7 +80,7 @@
 }
 
 .btn-primary {
-  background-color: #4CAF50;
+  background-color: #00008B;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -98,7 +98,7 @@
 }
 
 .btn-primary:hover {
-  background-color: #388E3C;
+  background-color: #4169E1;
 }
 
 .order-items {
@@ -193,7 +193,7 @@
 }
 
 .total-amount {
-  color: #4CAF50;
+  color: #00008B;
 }
 
 .checkout-details h2 {
@@ -225,7 +225,7 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: #00008B;
 }
 
 .checkout-actions {
@@ -257,7 +257,7 @@
 }
 
 .btn-place-order {
-  background-color: #4CAF50;
+  background-color: #00008B;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -274,7 +274,7 @@
 }
 
 .btn-place-order:hover {
-  background-color: #388E3C;
+  background-color: #4169E1;
 }
 
 .btn-place-order:disabled {
@@ -294,7 +294,7 @@
 
 .success-icon {
   font-size: 60px;
-  color: #4CAF50;
+  color: #00008B;
   margin-bottom: 20px;
 }
 

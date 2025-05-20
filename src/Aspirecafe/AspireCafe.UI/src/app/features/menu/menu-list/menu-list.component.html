@@ -41,19 +41,24 @@
     <p>Loading menu items...</p>
   </div>
 
-  <div *ngIf="!isLoading" class="menu-items-grid">
-    <div *ngFor="let item of filteredItems" class="menu-item-card">
-      <div class="menu-item-image" [style.backgroundImage]="'url(' + (item.imageUrl || 'assets/images/default-food.jpg') + ')'">
-        <span class="menu-item-price">{{ item.price | currency }}</span>
-      </div>
-      <div class="menu-item-content">
-        <h3 class="menu-item-name">{{ item.name }}</h3>
-        <p class="menu-item-description">{{ item.description }}</p>
+<div *ngIf="!isLoading" class="menu-items-grid">
+  <div *ngFor="let item of filteredItems" class="menu-item-card">
+    <div class="menu-item-image" [style.backgroundImage]="'url(' + (item.imageUrl || 'assets/images/default-food.jpg') + ')'">
+      <span class="menu-item-price">{{ item.price | currency }}</span>
+    </div>
+    <div class="menu-item-content">
+      <h3 class="menu-item-name">{{ item.name }}</h3>
+      <p class="menu-item-description">{{ item.description }}</p>
+      <div class="menu-item-actions">
         <button (click)="addItemToOrder(item)" class="add-item-button">
-          <i class="fas fa-plus"></i> Add to Order
+          <i class="fas fa-plus"></i> Order
+        </button>
+        <button (click)="customizeOrder(item)" class="add-item-button">
+          <i class="fas fa-list"></i> Customize
         </button>
       </div>
     </div>
+  </div>
 
     <div *ngIf="filteredItems.length === 0 && !isLoading" class="no-items-message">
       <p>No menu items found matching your criteria.</p>
