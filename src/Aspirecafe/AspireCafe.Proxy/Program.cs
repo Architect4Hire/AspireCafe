@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Caching.Distributed;
+using Yarp.ReverseProxy.Transforms;
+using Yarp.ReverseProxy.Forwarder;
 using System.Text;
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,9 +25,26 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Add YARP reverse proxy
+// Register TokenProvider using IDistributedCache
+builder.Services.AddSingleton<TokenProvider>();
+
+// Add YARP reverse proxy with custom transform
 builder.Services.AddReverseProxy()
-    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"))
+    .AddTransforms(builderContext =>
+    {
+        builderContext.AddRequestTransform(async context =>
+        {
+            var tokenProvider = context.HttpContext.RequestServices.GetRequiredService<TokenProvider>();
+            var token = await tokenProvider.GetTokenAsync();
+            if (!string.IsNullOrEmpty(token))
+            {
+                context.ProxyRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+        });
+    });
+
+builder.AddRedisDistributedCache("cache");
 
 var app = builder.Build();
 
@@ -64,3 +85,62 @@ app.MapWhen(ctx => ctx.Request.Path.StartsWithSegments("/auth"), appBuilder =>
 });
 
 app.Run();
+
+// TokenProvider implementation using IDistributedCache
+public class TokenProvider
+{
+    private readonly IDistributedCache _cache;
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IConfiguration _configuration;
+    private static readonly string TokenCacheKey = "AspireCafe_AuthToken";
+    private static readonly TimeSpan TokenLifetime = TimeSpan.FromMinutes(29);
+
+    public TokenProvider(IDistributedCache cache, IHttpClientFactory httpClientFactory, IConfiguration configuration)
+    {
+        _cache = cache;
+        _httpClientFactory = httpClientFactory;
+        _configuration = configuration;
+    }
+
+    public async Task<string?> GetTokenAsync()
+    {
+        var token = await _cache.GetStringAsync(TokenCacheKey);
+        if (!string.IsNullOrEmpty(token))
+        {
+            return token;
+        }
+        // Fetch new token
+        token = await FetchTokenAsync();
+        if (!string.IsNullOrEmpty(token))
+        {
+            await _cache.SetStringAsync(TokenCacheKey, token, new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = TokenLifetime });
+        }
+        return token;
+    }
+
+    private async Task<string?> FetchTokenAsync()
+    {
+        var client = _httpClientFactory.CreateClient();
+        // TODO: Use config for URL and credentials
+        var authApiUrl = _configuration["AuthenticationApi:Url"] ?? "http://localhost:5000/api/v1/authentication/generate";
+        var username = _configuration["AuthenticationApi:Username"] ?? "admin";
+        var password = _configuration["AuthenticationApi:Password"] ?? "password";
+        var payload = new { UserName = username, Password = password };
+        var response = await client.PostAsJsonAsync(authApiUrl, payload);
+        if (response.IsSuccessStatusCode)
+        {
+            var result = await response.Content.ReadFromJsonAsync<AuthResult>();
+            return result?.data?.token;
+        }
+        return null;
+    }
+
+    private class AuthResult
+    {
+        public AuthData? data { get; set; }
+    }
+    private class AuthData
+    {
+        public string? token { get; set; }
+    }
+}

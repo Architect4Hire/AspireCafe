@@ -62,7 +62,7 @@ var angular = builder.AddNpmApp("aspirecafe-ui", "../AspireCafe.UI/")
     .WithExternalHttpEndpoints()
     .PublishAsDockerFile();
 var auth = builder.AddProject<Projects.AspireCafe_AuthenticationApi>("aspirecafe-authenticationapi");
-var proxy = builder.AddProject<Projects.AspireCafe_Proxy>("aspirecafe-proxy");
+var proxy = builder.AddProject<Projects.AspireCafe_Proxy>("aspirecafe-proxy").WithReference(cache).WaitFor(cache);
 builder.Build().Run();
 
 
