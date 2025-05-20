@@ -62,10 +62,13 @@ void SetUpApp(WebApplication app)
     {
         app.ConfigureOpenApiAndScaler();
     }
-    app.UseAuthorization();
+
+    // Add authentication and authorization middleware before app.ConfigureApplicationDefaults()
     app.UseAuthentication();
+    app.UseAuthorization();
     app.ConfigureApplicationDefaults();
 }
+
 void AddDatabases(WebApplicationBuilder builder)
 {
     

@@ -12,12 +12,12 @@ namespace AspireCafe.Shared.Models.Domain.Orders
         public List<OrderProcessingStatusHistory> History { get; set; }
         public string CustomerName { get; set; }
         public int TableNumber { get; set; }
-        public Dictionary<int, OrderProcessingLineItem> Items { get; set; }
+        public List<OrderProcessingLineItem> Items { get; set; }
 
         public ProcessingOrderDomainModel()
         {
             History = new List<OrderProcessingStatusHistory>();
-            Items = new Dictionary<int, OrderProcessingLineItem>();
+            Items = new List<OrderProcessingLineItem>();
         }
     }
 }

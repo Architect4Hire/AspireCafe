@@ -77,7 +77,6 @@ namespace AspireCafe.BaristaApi
 
         private ProcessingOrderDomainModel MapToDomainModel(BaristaOrderMessageModel message)
         {
-            var i = 0;
             return new ProcessingOrderDomainModel
             {
                 OrderId = message.OrderId,
@@ -86,7 +85,13 @@ namespace AspireCafe.BaristaApi
                 ProcessStatus = OrderProcessStatus.Waiting,
                 CustomerName = message.CustomerName,
                 TableNumber = message.TableNumber,
-                Items = message.Items.Select((item, index) => new { index, item }).ToDictionary(x => i++, x => new OrderProcessingLineItem {ProductName = x.item.ProductName,Notes = x.item.Notes ?? string.Empty}),
+                Items = message.Items
+                    .Select(item => new OrderProcessingLineItem
+                    {
+                        ProductName = item.ProductName,
+                        Notes = item.Notes ?? string.Empty
+                    })
+                    .ToList(),
             };
         }
     }
