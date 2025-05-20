@@ -12,12 +12,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aspire.Hosting.AppHost" Version="9.2.1" />
+		<PackageReference Include="Aspire.Hosting.AppHost" Version="9.3.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aspire.Hosting.NodeJs" Version="9.2.1" />
-		<PackageReference Include="Aspire.Hosting.Seq" Version="9.2.1" />
+		<PackageReference Include="Aspire.Hosting.NodeJs" Version="9.3.0" />
+		<PackageReference Include="Aspire.Hosting.Seq" Version="9.3.0" />
 		<ProjectReference Include="..\AspireCafe.Authentication\AspireCafe.AuthenticationApi.csproj" />
 		<ProjectReference Include="..\AspireCafe.BaristaApi\AspireCafe.BaristaApi.csproj" />
 		<ProjectReference Include="..\AspireCafe.CounterApi\AspireCafe.CounterApi.csproj" />
