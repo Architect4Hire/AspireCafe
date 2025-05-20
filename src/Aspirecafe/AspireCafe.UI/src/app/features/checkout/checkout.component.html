@@ -1,126 +1,100 @@
 <app-navbar></app-navbar>
 
 <div class="checkout-container">
-  <div *ngIf="!showOrderSuccess" class="checkout-content">
-    <div class="checkout-header">
-      <h1>Checkout</h1>
-      <p>Review your order and complete checkout</p>
-    </div>
-
-    <div class="checkout-grid">
-      <div class="order-summary">
-        <div class="section-header">
-          <h2>Order Summary</h2>
-          <button *ngIf="currentOrderItems.length > 0" (click)="clearOrder()" class="clear-btn">
-            <i class="fas fa-trash"></i> Clear All
-          </button>
+    <div *ngIf="!showOrderSuccess" class="checkout-content">
+        <div class="checkout-header">
+            <h1>Checkout</h1>
+            <p>Review your order and complete checkout</p>
         </div>
 
-        <div *ngIf="currentOrderItems.length === 0" class="empty-cart">
-          <div class="empty-cart-icon">
-            <i class="fas fa-shopping-cart"></i>
-          </div>
-          <p>Your cart is empty</p>
-          <a href="/menu" class="btn-primary">Go to Menu</a>
-        </div>
+        <div class="checkout-grid">
+            <div class="order-summary">
+                <div class="section-header">
+                    <h2>Order Summary</h2>
+                    <button *ngIf="currentOrderItems.length > 0" (click)="clearOrder()" class="clear-btn"><i class="fas fa-trash"></i> Clear All</button>
+                </div>
 
-        <div *ngIf="currentOrderItems.length > 0" class="order-items">
-          <div *ngFor="let item of currentOrderItems" class="order-item">
-            <div class="item-details">
-              <h3 class="item-name">{{ item.name }}</h3>
-              <p class="item-price">{{ item.unitPrice | currency }}</p>
+                <div *ngIf="currentOrderItems.length === 0" class="empty-cart">
+                    <div class="empty-cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <p>Your cart is empty</p>
+                    <a href="/menu" class="btn-primary">Go to Menu</a>
+                </div>
+
+                <div *ngIf="currentOrderItems.length > 0" class="order-items">
+                    <div *ngFor="let item of currentOrderItems" class="order-item">
+                        <div class="item-details">
+                            <div class="item-name-notes">
+                                <h3 class="item-name">{{ item.name }}</h3>
+                                <p class="item-notes" *ngIf="item.notes">{{ item.notes }}</p>
+                            </div>
+                            <p class="item-price">{{ item.unitPrice | currency }}</p>
+                        </div>
+
+                        <div class="item-actions">
+                            <div class="quantity-control">
+                                <button (click)="updateQuantity(item.menuItemId, item.quantity - 1)" class="quantity-btn">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="quantity">{{ item.quantity }}</span>
+                                <button (click)="updateQuantity(item.menuItemId, item.quantity + 1)" class="quantity-btn">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+
+                            <div class="item-total">
+                                {{ item.quantity * item.unitPrice | currency }}
+                            </div>
+
+                            <button (click)="removeItem(item.menuItemId)" class="remove-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="order-total">
+                        <span>Total:</span>
+                        <span class="total-amount">{{ orderTotal | currency }}</span>
+                    </div>
+                </div>
             </div>
 
-            <div class="item-actions">
-              <div class="quantity-control">
-                <button 
-                  (click)="updateQuantity(item.menuItemId, item.quantity - 1)" 
-                  class="quantity-btn"
-                >
-                  <i class="fas fa-minus"></i>
-                </button>
-                <span class="quantity">{{ item.quantity }}</span>
-                <button 
-                  (click)="updateQuantity(item.menuItemId, item.quantity + 1)" 
-                  class="quantity-btn"
-                >
-                  <i class="fas fa-plus"></i>
-                </button>
-              </div>
+            <div class="checkout-details" *ngIf="currentOrderItems.length > 0">
+                <h2>Order Details</h2>
 
-              <div class="item-total">
-                {{ item.quantity * item.unitPrice | currency }}
-              </div>
+                <div class="form-group">
+                    <label for="customerName">Customer Name (optional)</label>
+                    <input type="text" id="customerName" [(ngModel)]="customerName" placeholder="Enter customer name" />
+                </div>
 
-              <button (click)="removeItem(item.menuItemId)" class="remove-btn">
-                <i class="fas fa-times"></i>
-              </button>
+                <div class="form-group">
+                    <label for="tableNumber">Table Number (optional)</label>
+                    <input type="number" id="tableNumber" [(ngModel)]="tableNumber" placeholder="Enter table number" min="1" />
+                </div>
+
+                <div class="checkout-actions">
+                    <a href="/menu" class="btn-secondary"> <i class="fas fa-arrow-left"></i> Add More Items </a>
+                    <button (click)="placeOrder()" [disabled]="currentOrderItems.length === 0 || isProcessing" class="btn-place-order">
+                        <i class="fas fa-check"></i>
+                        <span *ngIf="!isProcessing">Place Order</span>
+                        <span *ngIf="isProcessing">Processing...</span>
+                    </button>
+                </div>
             </div>
-          </div>
-
-          <div class="order-total">
-            <span>Total:</span>
-            <span class="total-amount">{{ orderTotal | currency }}</span>
-          </div>
         </div>
-      </div>
-
-      <div class="checkout-details" *ngIf="currentOrderItems.length > 0">
-        <h2>Order Details</h2>
-        
-        <div class="form-group">
-          <label for="customerName">Customer Name (optional)</label>
-          <input 
-            type="text" 
-            id="customerName" 
-            [(ngModel)]="customerName" 
-            placeholder="Enter customer name"
-          >
-        </div>
-
-        <div class="form-group">
-          <label for="tableNumber">Table Number (optional)</label>
-          <input 
-            type="number" 
-            id="tableNumber" 
-            [(ngModel)]="tableNumber" 
-            placeholder="Enter table number"
-            min="1"
-          >
-        </div>
-
-        <div class="checkout-actions">
-          <a href="/menu" class="btn-secondary">
-            <i class="fas fa-arrow-left"></i> Add More Items
-          </a>
-          <button 
-            (click)="placeOrder()" 
-            [disabled]="currentOrderItems.length === 0 || isProcessing" 
-            class="btn-place-order"
-          >
-            <i class="fas fa-check"></i>
-            <span *ngIf="!isProcessing">Place Order</span>
-            <span *ngIf="isProcessing">Processing...</span>
-          </button>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <div *ngIf="showOrderSuccess" class="order-success">
-    <div class="success-icon">
-      <i class="fas fa-check-circle"></i>
+    <div *ngIf="showOrderSuccess" class="order-success">
+        <div class="success-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h2>Order Placed Successfully!</h2>
+        <p>Your order #{{ orderNumber }} has been placed and is being processed.</p>
+
+        <div class="success-actions">
+            <button (click)="goToOrders()" class="btn-primary"><i class="fas fa-list"></i> View Orders</button>
+            <button (click)="continueOrdering()" class="btn-secondary"><i class="fas fa-plus"></i> New Order</button>
+        </div>
     </div>
-    <h2>Order Placed Successfully!</h2>
-    <p>Your order #{{ orderNumber }} has been placed and is being processed.</p>
-    
-    <div class="success-actions">
-      <button (click)="goToOrders()" class="btn-primary">
-        <i class="fas fa-list"></i> View Orders
-      </button>
-      <button (click)="continueOrdering()" class="btn-secondary">
-        <i class="fas fa-plus"></i> New Order
-      </button>
-    </div>
-  </div>
 </div>
