@@ -108,6 +108,20 @@ namespace AspireCafe.ProductApi.Controllers
             return result.Match();
         }
 
-
+        // demo GET endpoint
+        [HttpGet("demo")]
+        [ProducesResponseType(typeof(Result<ProductServiceModel>), 200)]
+        [ProducesResponseType(typeof(Result<ProductServiceModel>), 404)]
+        [ProducesResponseType(typeof(Result<ProductServiceModel>), 500)]
+        public IActionResult Demo()
+        {
+            var model = new ProductServiceModel()
+            {
+                Name = "Demo Product",
+                Description = "This is a demo product.",
+                Price = 95.99m
+            };
+            return Ok(model);
+        }
     }
 }

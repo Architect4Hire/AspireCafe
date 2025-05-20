@@ -36,9 +36,18 @@ builder.Services.AddReverseProxy()
         builderContext.AddRequestTransform(async context =>
         {
             var tokenProvider = context.HttpContext.RequestServices.GetRequiredService<TokenProvider>();
-            var token = await tokenProvider.GetTokenAsync();
+            var headerToken = context.ProxyRequest.Headers.Authorization?.ToString();
+            // Console.WriteLine($"[Proxy] Token from header: {headerToken}");
+            var token = headerToken;
+            // Console.WriteLine($"[Proxy] Token fetched {token}");
+            if (string.IsNullOrEmpty(headerToken))
+            {
+                token = await tokenProvider.GetTokenAsync();
+                // Console.WriteLine($"[Proxy] Token overridden from header");
+            }
             if (!string.IsNullOrEmpty(token))
             {
+                // Console.WriteLine($"[Proxy] Token set to header");
                 context.ProxyRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
         });
@@ -49,23 +58,18 @@ builder.AddRedisDistributedCache("cache");
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
-
-// Use authentication and authorization
-app.UseAuthentication();
+app.Use(async (context, next) =>
+{
+    // Console.WriteLine($"[Proxy] {context.Request.Method} {context.Request.Path} - Header Token: {context.Request.Headers["Authorization"]}");
+    await next();
+});
 app.UseRouting();
-app.UseAuthorization();
 
 // Require authentication for all proxied routes except /auth
 app.MapWhen(ctx => !ctx.Request.Path.StartsWithSegments("/auth"), appBuilder =>
 {
     appBuilder.Use(async (context, next) =>
     {
-        if (!context.User.Identity?.IsAuthenticated ?? true)
-        {
-            context.Response.StatusCode = 401;
-            await context.Response.CompleteAsync();
-            return;
-        }
         await next();
     });
     // Use endpoints to map the reverse proxy
@@ -122,10 +126,11 @@ public class TokenProvider
     {
         var client = _httpClientFactory.CreateClient();
         // TODO: Use config for URL and credentials
-        var authApiUrl = _configuration["AuthenticationApi:Url"] ?? "http://localhost:5000/api/v1/authentication/generate";
+        var authApiUrl = _configuration["AuthenticationApi:Url"] ?? "http://localhost:5022/api/v1/authentication/generate";
         var username = _configuration["AuthenticationApi:Username"] ?? "admin";
         var password = _configuration["AuthenticationApi:Password"] ?? "password";
         var payload = new { UserName = username, Password = password };
+        Console.WriteLine($"[Proxy] authApiUrl: {authApiUrl} - UserName: {username} - Password: {password}");
         var response = await client.PostAsJsonAsync(authApiUrl, payload);
         if (response.IsSuccessStatusCode)
         {
