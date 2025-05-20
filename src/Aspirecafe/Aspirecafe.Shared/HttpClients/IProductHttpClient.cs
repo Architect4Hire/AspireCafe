@@ -7,7 +7,7 @@ namespace AspireCafe.Shared.HttpClients
 {
     public interface IProductHttpClient
     {
-        [Post("catalog/fetchmetadata")]
+        [Post("/catalog/fetchmetadata")]
         Task<Result<ProductMetaDataServiceModel>> FetchMetadata(ProductMetaDataViewModel products);
     }
 }

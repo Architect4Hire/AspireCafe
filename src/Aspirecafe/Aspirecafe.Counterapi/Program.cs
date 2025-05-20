@@ -68,8 +68,8 @@ void SetUpApp(WebApplication app)
     {
         app.ConfigureOpenApiAndScaler();
     }
-    app.UseAuthorization();
     app.UseAuthentication();
+    app.UseAuthorization();
     app.ConfigureApplicationDefaults();
 }
 
@@ -81,7 +81,7 @@ void AddServiceBus(WebApplicationBuilder builder)
 void AddHttpClient(WebApplicationBuilder builder)
 {
     builder.Services.AddRefitClient<IProductHttpClient>()
-        .ConfigureHttpClient(c => c.BaseAddress = new Uri(builder.Configuration["productApi"] ?? ""));
+        .ConfigureHttpClient(c => c.BaseAddress = new Uri("https+http://aspirecafe-productapi"));
 }
 
 void AddDatabases(WebApplicationBuilder builder)
