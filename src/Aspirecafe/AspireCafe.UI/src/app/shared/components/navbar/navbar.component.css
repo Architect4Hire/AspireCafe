@@ -25,7 +25,7 @@
 .logo-text {
   font-size: 20px;
   font-weight: 700;
-  color: #4CAF50;
+  color: #00008B;
 }
 
 .navbar-menu {
@@ -53,7 +53,7 @@
 }
 
 .navbar-item:hover, .navbar-item.active {
-  color: #4CAF50;
+  color: #00008B;
 }
 
 .navbar-item.active::after {
@@ -63,7 +63,7 @@
   left: 0;
   right: 0;
   height: 2px;
-  background-color: #4CAF50;
+  background-color: #00008B;
 }
 
 .order-badge {
@@ -72,7 +72,7 @@
   justify-content: center;
   width: 20px;
   height: 20px;
-  background-color: #4CAF50;
+  background-color: #00008B;
   color: white;
   border-radius: 50%;
   font-size: 12px;

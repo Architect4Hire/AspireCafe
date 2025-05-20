@@ -50,7 +50,7 @@
   justify-content: center;
   align-items: center;
   margin-right: 15px;
-  color: #388E3C;
+  color: #4169E1;
   font-size: 20px;
 }
 
@@ -81,7 +81,7 @@
 }
 
 .view-all {
-  color: #4CAF50;
+  color: #00008B;
   text-decoration: none;
   font-size: 14px;
 }
@@ -141,12 +141,12 @@
 
 .status-ready {
   background-color: #E8F5E9;
-  color: #388E3C;
+  color: #4169E1;
 }
 
 .status-completed {
   background-color: #E8F5E9;
-  color: #388E3C;
+  color: #4169E1;
 }
 
 .status-cancelled {
@@ -192,7 +192,7 @@
 
 .action-button i {
   font-size: 24px;
-  color: #4CAF50;
+  color: #00008B;
   margin-bottom: 10px;
 }
 
