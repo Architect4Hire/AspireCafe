@@ -30,23 +30,8 @@ namespace AspireCafe.CounterApiDomainLayer.Business
 
         public async Task<OrderServiceModel> GetOrderAsync(Guid orderId)
         {
-            //var model = await _data.GetOrderAsync(orderId);
-            //return model.MapToServiceModel();
-            var items = new List<ProductInfoMessageModel>();
-            items.Add(new ProductInfoMessageModel
-            {
-                ProductName = "Espresso",
-                Notes = "Extra hot"
-            });
-            await SendOrderToServiceBusAsync("barista", items,
-                () => new BaristaOrderMessageModel
-                {
-                    CustomerName = "Robert",
-                    TableNumber = 1,
-                    Items = items,
-                    RouteType = RouteType.Barista
-                });
-            return new OrderServiceModel(); // Placeholder return statement
+            var model = await _data.GetOrderAsync(orderId);
+            return model.MapToServiceModel();
         }
 
         public async Task<OrderServiceModel> PayOrderAsync(OrderPaymentViewModel model)
