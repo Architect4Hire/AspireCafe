@@ -52,17 +52,60 @@ var seq = builder.AddSeq("seq")
                  .WithEnvironment("ACCEPT_EULA", "Y");
 
 //services
-var baristaapi = builder.AddProject<Projects.AspireCafe_BaristaApi>("aspirecafe-baristaapi").WithReference(keyvault).WaitFor(keyvault).WithReference(cosmos).WaitFor(cosmos).WithReference(cache).WaitFor(cache).WithReference(servicebus).WaitFor(servicebus).WithReference(seq).WaitFor(seq);
-var counterapi = builder.AddProject<Projects.AspireCafe_CounterApi>("aspirecafe-counterapi").WithReference(keyvault).WaitFor(keyvault).WithReference(cosmos).WaitFor(cosmos).WithReference(cache).WaitFor(cache).WithReference(servicebus).WaitFor(servicebus).WithReference(seq).WaitFor(seq);
-var kitchenapi = builder.AddProject<Projects.AspireCafe_KitchenApi>("aspirecafe-kitchenapi").WithReference(keyvault).WaitFor(keyvault).WithReference(cosmos).WaitFor(cosmos).WithReference(cache).WaitFor(cache).WithReference(servicebus).WaitFor(servicebus).WithReference(seq).WaitFor(seq);
-var productapi = builder.AddProject<Projects.AspireCafe_ProductApi>("aspirecafe-productapi").WithReference(keyvault).WaitFor(keyvault).WithReference(cosmos).WaitFor(cosmos).WithReference(cache).WaitFor(cache).WithReference(servicebus).WaitFor(servicebus).WithReference(seq).WaitFor(seq);
-var ordersummaryapi = builder.AddProject<Projects.AspireCafe_OrderSummaryApi>("aspirecafe-odersummaryapi").WithReference(keyvault).WaitFor(keyvault).WithReference(cosmos).WaitFor(cosmos).WithReference(cache).WaitFor(cache).WithReference(servicebus).WaitFor(servicebus).WithReference(seq).WaitFor(seq);
+var ordersummaryapi = builder.AddProject<Projects.AspireCafe_OrderSummaryApi>("aspirecafe-odersummaryapi")
+    .WithReference(keyvault).WaitFor(keyvault)
+    .WithReference(cosmos).WaitFor(cosmos)
+    .WithReference(cache).WaitFor(cache)
+    .WithReference(servicebus).WaitFor(servicebus)
+    .WithReference(seq).WaitFor(seq);
+
+var baristaapi = builder.AddProject<Projects.AspireCafe_BaristaApi>("aspirecafe-baristaapi")
+    .WithReference(keyvault).WaitFor(keyvault)
+    .WithReference(cosmos).WaitFor(cosmos)
+    .WithReference(cache).WaitFor(cache)
+    .WithReference(servicebus).WaitFor(servicebus)
+    .WithReference(seq).WaitFor(seq);
+
+var productapi = builder.AddProject<Projects.AspireCafe_ProductApi>("aspirecafe-productapi")
+    .WithReference(keyvault).WaitFor(keyvault)
+    .WithReference(cosmos).WaitFor(cosmos)
+    .WithReference(cache).WaitFor(cache)
+    .WithReference(servicebus).WaitFor(servicebus)
+    .WithReference(seq).WaitFor(seq);
+
+var counterapi = builder.AddProject<Projects.AspireCafe_CounterApi>("aspirecafe-counterapi")
+    .WithReference(keyvault).WaitFor(keyvault)
+    .WithReference(cosmos).WaitFor(cosmos)
+    .WithReference(cache).WaitFor(cache)
+    .WithReference(servicebus)
+    .WaitFor(servicebus)
+    .WithReference(seq).WaitFor(seq)
+    .WithReference(productapi).WaitFor(productapi)
+    .WithReference(ordersummaryapi).WaitFor(ordersummaryapi);
+
+var kitchenapi = builder.AddProject<Projects.AspireCafe_KitchenApi>("aspirecafe-kitchenapi")
+    .WithReference(keyvault).WaitFor(keyvault)
+    .WithReference(cosmos).WaitFor(cosmos)
+    .WithReference(cache).WaitFor(cache)
+    .WithReference(servicebus).WaitFor(servicebus)
+    .WithReference(seq).WaitFor(seq);
+
 var angular = builder.AddNpmApp("aspirecafe-ui", "../AspireCafe.UI/")
     .WithHttpEndpoint(env: "PORT")
     .WithExternalHttpEndpoints()
     .PublishAsDockerFile();
+
 var auth = builder.AddProject<Projects.AspireCafe_AuthenticationApi>("aspirecafe-authenticationapi");
-var proxy = builder.AddProject<Projects.AspireCafe_Proxy>("aspirecafe-proxy").WithReference(cache).WaitFor(cache);
+
+var proxy = builder.AddProject<Projects.AspireCafe_Proxy>("aspirecafe-proxy")
+    .WithReference(cache).WaitFor(cache)
+    .WithReference(auth).WaitFor(auth)
+    .WithReference(productapi).WaitFor(productapi)
+    .WithReference(baristaapi).WaitFor(baristaapi)
+    .WithReference(counterapi).WaitFor(counterapi)
+    .WithReference(kitchenapi).WaitFor(kitchenapi)
+    .WithReference(ordersummaryapi).WaitFor(ordersummaryapi);
+
 builder.Build().Run();
 
 
